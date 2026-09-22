@@ -1,0 +1,19 @@
+@echo off
+chcp 65001 > nul
+title BlueArchive Icon Canvas v1.0.1
+
+echo ========================================================
+echo   BlueArchive Icon Canvas - v1.0.1
+echo   ブルアカ キャラクターアイコン キャンバス編集ツール
+echo ========================================================
+echo.
+
+if exist "release\BlueArchiveIconCanvas-v1.0.1.exe" (
+    echo [1] ポータブルexeを起動中...
+    start "" "release\BlueArchiveIconCanvas-v1.0.1.exe"
+    exit /b
+)
+
+echo [2] ローカルサーバーを起動してブラウザで開きます...
+call npm run preview -- --port 5173 --open
+pause
