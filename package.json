@@ -1,6 +1,6 @@
 {
   "name": "bluearchive-icon-canvas",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Blue Archive Character Icon Canvas Editor",
   "main": "dist-electron/main.js",
   "scripts": {
@@ -51,7 +51,7 @@
     "win": {
       "target": "portable",
       "signAndEditExecutable": false,
-      "artifactName": "BlueArchiveIconCanvas-v${version}.${ext}"
+      "artifactName": "BlueArchiveIconCanvas.${ext}"
     }
   }
 }

@@ -168,13 +168,12 @@ export function calculateSnap(
   }
 
   if (bestAnchorX && minDiffX <= THRESHOLD) {
-    const minY = Math.min(dragTop, bestAnchorX.sourceYStart);
-    const maxY = Math.max(dragBottom, bestAnchorX.sourceYEnd);
+    // 縦方向のガイドライン: 上下を貫通して画面全体に長く表示（別枠同士の整列も一目で確認可能）
     snapLines.push({
       orientation: 'vertical',
       pos: activeDragXVal,
-      start: Math.max(0, minY - 10),
-      end: Math.min(canvasHeight, maxY + 10),
+      start: 0,
+      end: canvasHeight,
     });
   }
 
@@ -212,13 +211,12 @@ export function calculateSnap(
   }
 
   if (bestAnchorY && minDiffY <= THRESHOLD) {
-    const minX = Math.min(dragLeft, bestAnchorY.sourceXStart);
-    const maxX = Math.max(dragRight, bestAnchorY.sourceXEnd);
+    // 横方向のガイドライン: 左右を貫通して画面全体に長く表示
     snapLines.push({
       orientation: 'horizontal',
       pos: activeDragYVal,
-      start: Math.max(0, minX - 10),
-      end: Math.min(canvasWidth, maxX + 10),
+      start: 0,
+      end: canvasWidth,
     });
   }
 
@@ -227,4 +225,105 @@ export function calculateSnap(
     y: minDiffY <= THRESHOLD ? Math.round(bestY) : dragRect.y,
     snapLines,
   };
+}
+
+/**
+ * キーボード十字キー微調整用ガイド線判定
+ * 座標は変更（吸着）せず、現在位置で揃っている要素があればガイド線のみを返す
+ */
+export function getGuideLinesOnly(
+  rect: Rect,
+  otherRects: Rect[],
+  canvasWidth: number,
+  canvasHeight: number,
+  snapGap: number = 0,
+  threshold: number = 2
+): SnapLine[] {
+  const snapLines: SnapLine[] = [];
+  const foundX = new Set<number>();
+  const foundY = new Set<number>();
+
+  const rectLeft = rect.x;
+  const rectRight = rect.x + rect.width;
+  const rectCenterX = rect.x + rect.width / 2;
+
+  const rectTop = rect.y;
+  const rectBottom = rect.y + rect.height;
+  const rectCenterY = rect.y + rect.height / 2;
+
+  // キャンバス中央
+  if (Math.abs(rectCenterX - canvasWidth / 2) <= threshold) {
+    foundX.add(canvasWidth / 2);
+  }
+  if (Math.abs(rectCenterY - canvasHeight / 2) <= threshold) {
+    foundY.add(canvasHeight / 2);
+  }
+
+  for (const other of otherRects) {
+    if (other.id === rect.id) continue;
+    const oLeft = other.x;
+    const oRight = other.x + other.width;
+    const oCenterX = other.x + other.width / 2;
+    const oTop = other.y;
+    const oBottom = other.y + other.height;
+    const oCenterY = other.y + other.height / 2;
+
+    // X方向の整列チェック (左端、中央、右端、間隔)
+    const xChecks = [
+      { rVal: rectLeft, oVal: oLeft },
+      { rVal: rectLeft, oVal: oRight },
+      { rVal: rectCenterX, oVal: oCenterX },
+      { rVal: rectRight, oVal: oLeft },
+      { rVal: rectRight, oVal: oRight },
+    ];
+    if (snapGap > 0) {
+      xChecks.push({ rVal: rectLeft, oVal: oRight + snapGap });
+      xChecks.push({ rVal: rectRight, oVal: oLeft - snapGap });
+    }
+
+    for (const check of xChecks) {
+      if (Math.abs(check.rVal - check.oVal) <= threshold) {
+        foundX.add(check.oVal);
+      }
+    }
+
+    // Y方向の整列チェック (上端、中央、下端、間隔)
+    const yChecks = [
+      { rVal: rectTop, oVal: oTop },
+      { rVal: rectTop, oVal: oBottom },
+      { rVal: rectCenterY, oVal: oCenterY },
+      { rVal: rectBottom, oVal: oTop },
+      { rVal: rectBottom, oVal: oBottom },
+    ];
+    if (snapGap > 0) {
+      yChecks.push({ rVal: rectTop, oVal: oBottom + snapGap });
+      yChecks.push({ rVal: rectBottom, oVal: oTop - snapGap });
+    }
+
+    for (const check of yChecks) {
+      if (Math.abs(check.rVal - check.oVal) <= threshold) {
+        foundY.add(check.oVal);
+      }
+    }
+  }
+
+  foundX.forEach((pos) => {
+    snapLines.push({
+      orientation: 'vertical',
+      pos,
+      start: 0,
+      end: canvasHeight,
+    });
+  });
+
+  foundY.forEach((pos) => {
+    snapLines.push({
+      orientation: 'horizontal',
+      pos,
+      start: 0,
+      end: canvasWidth,
+    });
+  });
+
+  return snapLines;
 }

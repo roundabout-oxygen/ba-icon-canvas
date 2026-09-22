@@ -19,6 +19,7 @@ interface CanvasProps {
   onAlignBoxChildren: (boxId: string, type: 'grid' | 'row') => void;
   onDropCharacters: (charIds: string[], x: number, y: number) => void;
   canvasRef: React.RefObject<HTMLDivElement | null>;
+  externalSnapLines?: SnapLine[];
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
@@ -36,9 +37,11 @@ export const Canvas: React.FC<CanvasProps> = ({
   onAlignBoxChildren,
   onDropCharacters,
   canvasRef,
+  externalSnapLines,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [snapLines, setSnapLines] = useState<SnapLine[]>([]);
+  const [isDraggingBoxes, setIsDraggingBoxes] = useState(false);
 
   // ドラッグ移動管理
   const dragRef = useRef<{
@@ -118,6 +121,9 @@ export const Canvas: React.FC<CanvasProps> = ({
     }
 
     const isBox = boxes.some((b) => b.id === id);
+    if (isBox) {
+      setIsDraggingBoxes(true);
+    }
 
     // 選択中の全要素の初期座標を記録
     const itemInitPositions = new Map<string, { x: number; y: number }>();
@@ -233,6 +239,7 @@ export const Canvas: React.FC<CanvasProps> = ({
 
     const handleMouseUp = () => {
       dragRef.current = null;
+      setIsDraggingBoxes(false);
       setSnapLines([]);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
@@ -394,6 +401,7 @@ export const Canvas: React.FC<CanvasProps> = ({
             key={box.id}
             box={box}
             isSelected={selectedIds.has(box.id)}
+            isDragging={isDraggingBoxes && selectedIds.has(box.id)}
             onSelect={handleSelectElement}
             onUpdate={(id, updates) => {
               onUpdateBoxes(boxes.map((b) => (b.id === id ? { ...b, ...updates } : b)));
@@ -424,10 +432,10 @@ export const Canvas: React.FC<CanvasProps> = ({
           );
         })}
 
-        {/* PowerPoint風スマートガイド線（スナップライン）SVGオーバーレイ */}
-        {snapLines.length > 0 && (
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-50">
-            {snapLines.map((line, idx) => {
+        {/* PowerPoint風スマートガイド線（スナップライン）SVGオーバーレイ (最前面 z-[100]) */}
+        {((externalSnapLines && externalSnapLines.length > 0) || snapLines.length > 0) && (
+          <svg className="absolute inset-0 w-full h-full pointer-events-none z-[100]">
+            {(externalSnapLines && externalSnapLines.length > 0 ? externalSnapLines : snapLines).map((line, idx) => {
               if (line.orientation === 'vertical') {
                 return (
                   <line

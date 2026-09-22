@@ -30,7 +30,7 @@ export const CanvasItemView: React.FC<CanvasItemViewProps> = ({
         top: `${item.y}px`,
         width: `${item.size}px`,
         height: `${item.size}px`,
-        zIndex: isSelected ? 50 : item.zIndex,
+        zIndex: isSelected ? 50 : Math.max(20, item.zIndex),
         borderRadius: `${borderRadius}px`,
       }}
       onClick={(e) => {

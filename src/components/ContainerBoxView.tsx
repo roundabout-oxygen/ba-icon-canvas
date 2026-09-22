@@ -6,6 +6,7 @@ import { PRESET_BOX_THEMES } from '../utils/constants';
 interface ContainerBoxViewProps {
   box: ContainerBox;
   isSelected: boolean;
+  isDragging?: boolean;
   onSelect: (id: string, e: React.MouseEvent) => void;
   onUpdate: (id: string, updates: Partial<ContainerBox>) => void;
   onDelete: (id: string) => void;
@@ -18,6 +19,7 @@ interface ContainerBoxViewProps {
 export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
   box,
   isSelected,
+  isDragging = false,
   onSelect,
   onUpdate,
   onDelete,
@@ -107,26 +109,33 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
         top: `${box.y}px`,
         width: `${box.width}px`,
         height: `${box.height}px`,
-        border: `${box.borderWidth}px solid ${box.borderColor}`,
-        borderRadius: `${box.borderRadius}px`,
-        backgroundColor: box.bgColor,
-        // 要望対応: パレットがアイコンの下に隠れないよう、選択時またはポップアップ表示時は zIndex を最前面に引き上げる
-        zIndex: isSelected || showColorPicker || showRadiusPicker ? 45 : box.zIndex,
       }}
       onClick={(e) => {
         // 単純クリック時の選択はCanvasのhandleMouseUpで処理
         e.stopPropagation();
       }}
       onMouseDown={handleMouseDown}
-      className={`group transition-shadow ${
-        isSelected
-          ? 'ring-2 ring-cyan-400 shadow-xl shadow-cyan-500/10 cursor-move'
-          : 'hover:ring-1 hover:ring-slate-400/50 cursor-default'
-      }`}
+      className="group select-none"
     >
-      {/* 枠ヘッダー / コントロールバー (選択時またはホバー時表示) */}
+      {/* 枠本体レイヤー (背景・枠線) : 常にアイコン(z-20)の後ろ z-4 / 選択時 z-8、ドラッグ移動時は半透明 */}
       <div
-        className={`absolute -top-9 left-0 flex items-center gap-1 bg-slate-900/95 backdrop-blur border border-slate-700 px-2 py-1 rounded-md shadow-2xl text-xs z-50 transition-opacity ${
+        className={`absolute inset-0 transition-all ${
+          isSelected
+            ? 'ring-2 ring-cyan-400 shadow-xl shadow-cyan-500/10 cursor-move'
+            : 'hover:ring-1 hover:ring-slate-400/50 cursor-default'
+        }`}
+        style={{
+          border: `${box.borderWidth}px solid ${box.borderColor}`,
+          borderRadius: `${box.borderRadius}px`,
+          backgroundColor: box.bgColor,
+          opacity: isDragging ? 0.4 : 1.0,
+          zIndex: isSelected ? 8 : 4,
+        }}
+      />
+
+      {/* 枠ヘッダー / コントロールバー (アイコンより前面 z-[60]) */}
+      <div
+        className={`absolute -top-9 left-0 flex items-center gap-1 bg-slate-900/95 backdrop-blur border border-slate-700 px-2 py-1 rounded-md shadow-2xl text-xs z-[60] transition-opacity ${
           isSelected || showColorPicker || showRadiusPicker
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto'

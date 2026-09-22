@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Character, CanvasIconItem, ContainerBox, CanvasConfig, HistoryState } from './types';
+import { Character, CanvasIconItem, ContainerBox, CanvasConfig, HistoryState, SnapLine } from './types';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { Toolbar } from './components/Toolbar';
 import { PRESET_BOX_THEMES, APP_VERSION } from './utils/constants';
 import { toPng, toBlob } from 'html-to-image';
+import { getGuideLinesOnly, Rect } from './utils/snapGuide';
 
 export function App() {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -27,6 +28,9 @@ export function App() {
   const [boxes, setBoxes] = useState<ContainerBox[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectedSidebarCharIds, setSelectedSidebarCharIds] = useState<Set<string>>(new Set());
+  const [keyboardSnapLines, setKeyboardSnapLines] = useState<SnapLine[]>([]);
+  const snapLinesTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const historyDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // アンドゥ・リドゥ履歴スタック
   const historyRef = useRef<HistoryState[]>([]);
@@ -324,23 +328,31 @@ export function App() {
 
     const itemW = childItems[0].size;
     const gap = 10;
-    const availWidth = box.width - padding * 2;
+    const minPadding = 12;
+    const availWidth = box.width - minPadding * 2;
+
+    // グリッド計算
+    const maxCols = Math.max(1, Math.floor((availWidth + gap) / (itemW + gap)));
+    const actualCols = alignType === 'row' ? childItems.length : Math.min(maxCols, childItems.length);
+    const totalGridWidth = actualCols * itemW + (actualCols - 1) * gap;
+
+    // 要望対応: 左右の端の余白が同じになるようにセンタリング
+    const startX = Math.max(minPadding, Math.round((box.width - totalGridWidth) / 2));
 
     const nextItems = items.map((it) => {
       const idx = childItems.findIndex((c) => c.id === it.id);
       if (idx === -1) return it;
 
       if (alignType === 'row') {
-        const x = box.x + padding + idx * (itemW + gap);
-        const y = box.y + padding;
+        const x = box.x + startX + idx * (itemW + gap);
+        const y = box.y + minPadding;
         return { ...it, x, y };
       } else {
         // グリッド
-        const cols = Math.max(1, Math.floor(availWidth / (itemW + gap)));
-        const col = idx % cols;
-        const row = Math.floor(idx / cols);
-        const x = box.x + padding + col * (itemW + gap);
-        const y = box.y + padding + row * (itemW + gap);
+        const col = idx % maxCols;
+        const row = Math.floor(idx / maxCols);
+        const x = box.x + startX + col * (itemW + gap);
+        const y = box.y + minPadding + row * (itemW + gap);
         return { ...it, x, y };
       }
     });
@@ -536,11 +548,84 @@ export function App() {
       // Escape 選択解除
       if (e.key === 'Escape') {
         setSelectedIds(new Set());
+        setKeyboardSnapLines([]);
+      }
+
+      // 十字キーによるアイコン・要素の微調整移動（吸着なし・スマートガイド線表示）
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        if (selectedIds.size === 0) return;
+        e.preventDefault();
+
+        const step = e.shiftKey ? 10 : 1;
+        let dx = 0;
+        let dy = 0;
+        if (e.key === 'ArrowUp') dy = -step;
+        if (e.key === 'ArrowDown') dy = step;
+        if (e.key === 'ArrowLeft') dx = -step;
+        if (e.key === 'ArrowRight') dx = step;
+
+        const nextItems = items.map((it) =>
+          selectedIds.has(it.id) ? { ...it, x: it.x + dx, y: it.y + dy } : it
+        );
+        const nextBoxes = boxes.map((b) =>
+          selectedIds.has(b.id) ? { ...b, x: b.x + dx, y: b.y + dy } : b
+        );
+
+        setItems(nextItems);
+        setBoxes(nextBoxes);
+
+        // 代表要素の位置からガイド線を判定
+        const selectedItem = nextItems.find((it) => selectedIds.has(it.id));
+        const selectedBox = nextBoxes.find((b) => selectedIds.has(b.id));
+        const activeRect: Rect | null = selectedItem
+          ? { id: selectedItem.id, x: selectedItem.x, y: selectedItem.y, width: selectedItem.size, height: selectedItem.size }
+          : selectedBox
+          ? { id: selectedBox.id, x: selectedBox.x, y: selectedBox.y, width: selectedBox.width, height: selectedBox.height }
+          : null;
+
+        if (activeRect) {
+          const otherRects: Rect[] = [];
+          nextItems.forEach((it) => {
+            if (!selectedIds.has(it.id)) {
+              otherRects.push({ id: it.id, x: it.x, y: it.y, width: it.size, height: it.size });
+            }
+          });
+          nextBoxes.forEach((b) => {
+            if (!selectedIds.has(b.id)) {
+              otherRects.push({ id: b.id, x: b.x, y: b.y, width: b.width, height: b.height });
+            }
+          });
+
+          const lines = getGuideLinesOnly(
+            activeRect,
+            otherRects,
+            config.width,
+            config.height,
+            config.snapGap ?? 8,
+            2
+          );
+          setKeyboardSnapLines(lines);
+
+          if (snapLinesTimerRef.current) clearTimeout(snapLinesTimerRef.current);
+          snapLinesTimerRef.current = setTimeout(() => {
+            setKeyboardSnapLines([]);
+          }, 1200);
+        }
+
+        // 連続押しを考慮した履歴のデバウンス保存
+        if (historyDebounceRef.current) clearTimeout(historyDebounceRef.current);
+        historyDebounceRef.current = setTimeout(() => {
+          pushHistory(nextItems, nextBoxes, config);
+        }, 300);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      if (snapLinesTimerRef.current) clearTimeout(snapLinesTimerRef.current);
+      if (historyDebounceRef.current) clearTimeout(historyDebounceRef.current);
+    };
   }, [items, boxes, selectedIds, config, handleUndo, handleRedo, pushHistory]);
 
   return (
@@ -590,6 +675,7 @@ export function App() {
           onAlignBoxChildren={handleAlignBoxChildren}
           onDropCharacters={handleDropCharacters}
           canvasRef={canvasRef}
+          externalSnapLines={keyboardSnapLines}
         />
       </div>
     </div>
