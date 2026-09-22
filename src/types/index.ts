@@ -58,6 +58,8 @@ export interface CanvasConfig {
   bgColor: string;
   zoom: number;
   snapEnabled: boolean;
+  snapGap: number; // アイコン間の吸着間隔(px)
+  iconBorderRadius: number; // アイコンの角丸(px)
   showGrid: boolean;
 }
 

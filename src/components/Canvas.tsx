@@ -187,7 +187,8 @@ export const Canvas: React.FC<CanvasProps> = ({
         otherRects,
         config.width,
         config.height,
-        config.snapEnabled
+        config.snapEnabled,
+        config.snapGap ?? 8
       );
 
       setSnapLines(snap.snapLines);
@@ -241,35 +242,56 @@ export const Canvas: React.FC<CanvasProps> = ({
     window.addEventListener('mouseup', handleMouseUp);
   };
 
-  // キャンバスの背景クリックで範囲選択または選択解除
+  // キャンバスの背景または非アクティブ枠からの範囲選択・クリック選択
   const handleCanvasMouseDown = (e: React.MouseEvent) => {
-    if (e.target !== canvasRef.current && (e.target as HTMLElement).id !== 'canvas-bg') {
+    const target = e.target as HTMLElement;
+
+    // 生徒アイコン自体、リサイズハンドル、ヘッダー操作ボタンなどの直接操作時はキャンバス選択を開始しない
+    if (
+      target.closest('[data-item-id]') ||
+      target.closest('[data-resize-handle]') ||
+      target.closest('button') ||
+      target.closest('.box-drag-handle')
+    ) {
       return;
     }
 
-    if (!e.shiftKey && !e.ctrlKey) {
-      onSelectIds(new Set());
+    // クリックされた位置にある枠（もしあれば）を取得
+    const clickedBoxEl = target.closest('[data-box-id]');
+    const clickedBoxId = clickedBoxEl?.getAttribute('data-box-id');
+
+    // すでにアクティブ（選択状態）の枠の上でのマウスダウンは、ContainerBoxViewの枠ドラッグ移動に任せる
+    if (clickedBoxId && selectedIds.has(clickedBoxId)) {
+      return;
     }
 
-    const rect = canvasRef.current!.getBoundingClientRect();
+    if (!canvasRef.current) return;
+    const rect = canvasRef.current.getBoundingClientRect();
     const startX = (e.clientX - rect.left) / config.zoom;
     const startY = (e.clientY - rect.top) / config.zoom;
 
-    setSelectionBox({ startX, startY, currentX: startX, currentY: startY });
+    let hasDragged = false;
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const curX = (moveEvent.clientX - rect.left) / config.zoom;
       const curY = (moveEvent.clientY - rect.top) / config.zoom;
+
+      const dist = Math.hypot(moveEvent.clientX - e.clientX, moveEvent.clientY - e.clientY);
+      if (dist > 4) {
+        hasDragged = true;
+      }
+
+      if (!hasDragged) return;
+
       setSelectionBox({ startX, startY, currentX: curX, currentY: curY });
 
-      // 選択矩形に交差する要素を選択
+      // 選択矩形に交差する要素を検出
       const selLeft = Math.min(startX, curX);
       const selRight = Math.max(startX, curX);
       const selTop = Math.min(startY, curY);
       const selBottom = Math.max(startY, curY);
 
-      const newSelected = new Set<string>(e.shiftKey ? selectedIds : []);
-
+      const intersectingItemIds: string[] = [];
       items.forEach((it) => {
         if (
           it.x < selRight &&
@@ -277,28 +299,56 @@ export const Canvas: React.FC<CanvasProps> = ({
           it.y < selBottom &&
           it.y + it.size > selTop
         ) {
-          newSelected.add(it.id);
+          intersectingItemIds.push(it.id);
         }
       });
 
-      boxes.forEach((b) => {
-        if (
-          b.x < selRight &&
-          b.x + b.width > selLeft &&
-          b.y < selBottom &&
-          b.y + b.height > selTop
-        ) {
-          newSelected.add(b.id);
-        }
-      });
+      const newSelected = new Set<string>(e.shiftKey ? selectedIds : []);
+
+      if (intersectingItemIds.length > 0) {
+        // 要望対応: 範囲内に生徒アイコンがある場合はアイコンを選択（枠は除外してアイコン選択を快適に）
+        intersectingItemIds.forEach((id) => newSelected.add(id));
+      } else {
+        // 要望対応: 「ドラッグ範囲内にアイコンなしで枠だけの時は枠を選択」
+        boxes.forEach((b) => {
+          if (
+            b.x < selRight &&
+            b.x + b.width > selLeft &&
+            b.y < selBottom &&
+            b.y + b.height > selTop
+          ) {
+            newSelected.add(b.id);
+          }
+        });
+      }
 
       onSelectIds(newSelected);
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (upEvent: MouseEvent) => {
       setSelectionBox(null);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+
+      // 移動量が小さかった（単なるクリック）場合
+      if (!hasDragged) {
+        if (clickedBoxId) {
+          // 非アクティブな枠の上でクリックした時はその枠を選択
+          if (upEvent.shiftKey || upEvent.ctrlKey) {
+            const next = new Set(selectedIds);
+            if (next.has(clickedBoxId)) next.delete(clickedBoxId);
+            else next.add(clickedBoxId);
+            onSelectIds(next);
+          } else {
+            onSelectIds(new Set([clickedBoxId]));
+          }
+        } else {
+          // 何もないキャンバス背景をクリックした時は選択解除
+          if (!upEvent.shiftKey && !upEvent.ctrlKey) {
+            onSelectIds(new Set());
+          }
+        }
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -366,6 +416,7 @@ export const Canvas: React.FC<CanvasProps> = ({
               item={item}
               character={char}
               isSelected={selectedIds.has(item.id)}
+              borderRadius={config.iconBorderRadius ?? 8}
               onSelect={handleSelectElement}
               onDelete={onDeleteItem}
               onStartDrag={handleStartDrag}

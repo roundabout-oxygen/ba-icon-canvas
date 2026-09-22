@@ -17,6 +17,8 @@ export function App() {
     bgColor: '#0f172a',
     zoom: 1.0,
     snapEnabled: true,
+    snapGap: 8,
+    iconBorderRadius: 8,
     showGrid: false,
   });
 

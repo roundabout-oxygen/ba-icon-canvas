@@ -223,7 +223,23 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             className="w-16 accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
             title={`アイコンサイズ: ${iconSize}px`}
           />
-          <span className="font-mono text-[10px] w-6">{iconSize}</span>
+          <span className="font-mono text-[10px] w-5">{iconSize}</span>
+        </div>
+
+        {/* アイコン角丸スライダー */}
+        <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <span className="text-[11px]">丸み:</span>
+          <input
+            type="range"
+            min="0"
+            max="24"
+            step="2"
+            value={config.iconBorderRadius ?? 8}
+            onChange={(e) => onUpdateConfig({ iconBorderRadius: Number(e.target.value) })}
+            className="w-14 accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
+            title={`アイコン角の丸み: ${config.iconBorderRadius ?? 8}px`}
+          />
+          <span className="font-mono text-[10px] w-4">{config.iconBorderRadius ?? 8}</span>
         </div>
 
         <div className="h-5 w-[1px] bg-slate-700 mx-1" />
@@ -241,6 +257,22 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           <Magnet className="w-3.5 h-3.5" />
           <span>吸着</span>
         </button>
+
+        {/* 吸着間隔シークバー */}
+        <div className="flex items-center gap-1.5 text-xs text-slate-400" title="吸着時に開ける間隔(px)">
+          <span className="text-[11px]">間隔:</span>
+          <input
+            type="range"
+            min="0"
+            max="32"
+            step="2"
+            disabled={!config.snapEnabled}
+            value={config.snapGap ?? 8}
+            onChange={(e) => onUpdateConfig({ snapGap: Number(e.target.value) })}
+            className="w-16 accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg disabled:opacity-30"
+          />
+          <span className="font-mono text-[10px] w-4">{config.snapGap ?? 8}</span>
+        </div>
 
         {/* グリッド表示トグル */}
         <button

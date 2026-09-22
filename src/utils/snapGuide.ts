@@ -25,7 +25,8 @@ export function calculateSnap(
   otherRects: Rect[],
   canvasWidth: number,
   canvasHeight: number,
-  enabled: boolean = true
+  enabled: boolean = true,
+  snapGap: number = 0
 ): SnapResult {
   if (!enabled) {
     return { x: dragRect.x, y: dragRect.y, snapLines: [] };
@@ -46,7 +47,7 @@ export function calculateSnap(
 
   const snapLines: SnapLine[] = [];
 
-  // 比較対象のXアンカー候補 (left, center, right)
+  // 比較対象のXアンカー候補 (left, center, right, gapRight, gapLeft)
   interface AnchorX {
     pos: number;
     type: 'left' | 'center' | 'right';
@@ -60,7 +61,7 @@ export function calculateSnap(
   anchorsX.push({ pos: canvasWidth / 2, type: 'center', sourceYStart: 0, sourceYEnd: canvasHeight });
   anchorsX.push({ pos: canvasWidth, type: 'right', sourceYStart: 0, sourceYEnd: canvasHeight });
 
-  // 比較対象のYアンカー候補 (top, center, bottom)
+  // 比較対象のYアンカー候補 (top, center, bottom, gapBottom, gapTop)
   interface AnchorY {
     pos: number;
     type: 'top' | 'center' | 'bottom';
@@ -84,6 +85,7 @@ export function calculateSnap(
     const oBottom = other.y + other.height;
     const oCenterY = other.y + other.height / 2;
 
+    // 端同士・中心同士のアライメント
     anchorsX.push({ pos: oLeft, type: 'left', sourceYStart: oTop, sourceYEnd: oBottom });
     anchorsX.push({ pos: oCenterX, type: 'center', sourceYStart: oTop, sourceYEnd: oBottom });
     anchorsX.push({ pos: oRight, type: 'right', sourceYStart: oTop, sourceYEnd: oBottom });
@@ -91,6 +93,45 @@ export function calculateSnap(
     anchorsY.push({ pos: oTop, type: 'top', sourceXStart: oLeft, sourceXEnd: oRight });
     anchorsY.push({ pos: oCenterY, type: 'center', sourceXStart: oLeft, sourceXEnd: oRight });
     anchorsY.push({ pos: oBottom, type: 'bottom', sourceXStart: oLeft, sourceXEnd: oRight });
+
+    // 間隔（Gap）吸着アンカー
+    if (snapGap > 0) {
+      // 他要素の右側に snapGap だけ離して配置 (dragLeft === oRight + snapGap)
+      const gapR = oRight + snapGap;
+      let diff = Math.abs(dragLeft - gapR);
+      if (diff < minDiffX) {
+        minDiffX = diff;
+        bestX = gapR;
+        anchorsX.push({ pos: gapR, type: 'left', sourceYStart: oTop, sourceYEnd: oBottom });
+      }
+
+      // 他要素の左側に snapGap だけ離して配置 (dragRight === oLeft - snapGap)
+      const gapL = oLeft - snapGap;
+      diff = Math.abs(dragRight - gapL);
+      if (diff < minDiffX) {
+        minDiffX = diff;
+        bestX = gapL - dragRect.width;
+        anchorsX.push({ pos: gapL, type: 'right', sourceYStart: oTop, sourceYEnd: oBottom });
+      }
+
+      // 他要素の下側に snapGap だけ離して配置 (dragTop === oBottom + snapGap)
+      const gapB = oBottom + snapGap;
+      let diffY = Math.abs(dragTop - gapB);
+      if (diffY < minDiffY) {
+        minDiffY = diffY;
+        bestY = gapB;
+        anchorsY.push({ pos: gapB, type: 'top', sourceXStart: oLeft, sourceXEnd: oRight });
+      }
+
+      // 他要素の上側に snapGap だけ離して配置 (dragBottom === oTop - snapGap)
+      const gapT = oTop - snapGap;
+      diffY = Math.abs(dragBottom - gapT);
+      if (diffY < minDiffY) {
+        minDiffY = diffY;
+        bestY = gapT - dragRect.height;
+        anchorsY.push({ pos: gapT, type: 'bottom', sourceXStart: oLeft, sourceXEnd: oRight });
+      }
+    }
   }
 
   // --- X方向スナップ計算 ---
