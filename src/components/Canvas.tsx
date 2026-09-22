@@ -301,11 +301,131 @@ export const Canvas: React.FC<CanvasProps> = ({
       const dx = (moveEvent.clientX - startX) / config.zoom;
       const dy = (moveEvent.clientY - startY) / config.zoom;
 
-      // プライマリ枠の新しい端の絶対座標
-      const targetRightX = primaryStart.x + Math.max(80, primaryStart.width + dx);
-      const targetBottomY = primaryStart.y + Math.max(60, primaryStart.height + dy);
-      const targetLeftX = handle.includes('l') ? primaryStart.x + dx : null;
-      const targetTopY = handle.includes('t') ? primaryStart.y + dy : null;
+      // プライマリ枠の新しい端の絶対座標 (仮値)
+      let targetRightX = primaryStart.x + Math.max(80, primaryStart.width + dx);
+      let targetBottomY = primaryStart.y + Math.max(60, primaryStart.height + dy);
+      let targetLeftX = handle.includes('l') ? primaryStart.x + dx : null;
+      let targetTopY = handle.includes('t') ? primaryStart.y + dy : null;
+
+      // 要望対応: 枠の幅や高さを変える時も他の枠のガイド線が出るようにする
+      const otherRects: Rect[] = [];
+      boxes.forEach((b) => {
+        if (!targetBoxIds.includes(b.id)) {
+          otherRects.push({ id: b.id, x: b.x, y: b.y, width: b.width, height: b.height });
+        }
+      });
+      items.forEach((it) => {
+        otherRects.push({ id: it.id, x: it.x, y: it.y, width: it.size, height: it.size });
+      });
+
+      const currentSnapLines: SnapLine[] = [];
+      const threshold = 6;
+
+      // X方向の比較アンカー (他枠の左端、中央、右端、キャンバス境界)
+      const xAnchors: number[] = [0, config.width / 2, config.width];
+      otherRects.forEach((r) => {
+        xAnchors.push(r.x);
+        xAnchors.push(r.x + r.width / 2);
+        xAnchors.push(r.x + r.width);
+      });
+
+      // Y方向の比較アンカー (他枠の上端、中央、下端、キャンバス境界)
+      const yAnchors: number[] = [0, config.height / 2, config.height];
+      otherRects.forEach((r) => {
+        yAnchors.push(r.y);
+        yAnchors.push(r.y + r.height / 2);
+        yAnchors.push(r.y + r.height);
+      });
+
+      // 右端リサイズ時のガイド線 & スナップ
+      if (handle.includes('r')) {
+        let bestDiff = threshold + 1;
+        let snapVal = targetRightX;
+        for (const anchor of xAnchors) {
+          const diff = Math.abs(targetRightX - anchor);
+          if (diff < bestDiff) {
+            bestDiff = diff;
+            snapVal = anchor;
+          }
+        }
+        if (bestDiff <= threshold) {
+          if (config.snapEnabled) targetRightX = snapVal;
+          currentSnapLines.push({
+            orientation: 'vertical',
+            pos: snapVal,
+            start: 0,
+            end: config.height,
+          });
+        }
+      }
+
+      // 左端リサイズ時のガイド線 & スナップ
+      if (handle.includes('l') && targetLeftX !== null) {
+        let bestDiff = threshold + 1;
+        let snapVal = targetLeftX;
+        for (const anchor of xAnchors) {
+          const diff = Math.abs(targetLeftX - anchor);
+          if (diff < bestDiff) {
+            bestDiff = diff;
+            snapVal = anchor;
+          }
+        }
+        if (bestDiff <= threshold) {
+          if (config.snapEnabled) targetLeftX = snapVal;
+          currentSnapLines.push({
+            orientation: 'vertical',
+            pos: snapVal,
+            start: 0,
+            end: config.height,
+          });
+        }
+      }
+
+      // 下端リサイズ時のガイド線 & スナップ
+      if (handle.includes('b')) {
+        let bestDiff = threshold + 1;
+        let snapVal = targetBottomY;
+        for (const anchor of yAnchors) {
+          const diff = Math.abs(targetBottomY - anchor);
+          if (diff < bestDiff) {
+            bestDiff = diff;
+            snapVal = anchor;
+          }
+        }
+        if (bestDiff <= threshold) {
+          if (config.snapEnabled) targetBottomY = snapVal;
+          currentSnapLines.push({
+            orientation: 'horizontal',
+            pos: snapVal,
+            start: 0,
+            end: config.width,
+          });
+        }
+      }
+
+      // 上端リサイズ時のガイド線 & スナップ
+      if (handle.includes('t') && targetTopY !== null) {
+        let bestDiff = threshold + 1;
+        let snapVal = targetTopY;
+        for (const anchor of yAnchors) {
+          const diff = Math.abs(targetTopY - anchor);
+          if (diff < bestDiff) {
+            bestDiff = diff;
+            snapVal = anchor;
+          }
+        }
+        if (bestDiff <= threshold) {
+          if (config.snapEnabled) targetTopY = snapVal;
+          currentSnapLines.push({
+            orientation: 'horizontal',
+            pos: snapVal,
+            start: 0,
+            end: config.width,
+          });
+        }
+      }
+
+      setSnapLines(currentSnapLines);
 
       const nextBoxes = boxes.map((b) => {
         const init = startBoxesMap.get(b.id);
@@ -347,6 +467,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     };
 
     const handleMouseUp = () => {
+      setSnapLines([]);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };

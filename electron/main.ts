@@ -9,7 +9,7 @@ function createWindow() {
     height: 920,
     minWidth: 1024,
     minHeight: 700,
-    title: 'BlueArchive Icon Canvas - v1.0.6',
+    title: 'BlueArchive Icon Canvas - v1.0.7',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
