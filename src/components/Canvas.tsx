@@ -17,7 +17,7 @@ interface CanvasProps {
   onDeleteBox: (id: string) => void;
   onDuplicateBox: (id: string) => void;
   onAlignBoxChildren: (boxId: string, type: 'grid' | 'row') => void;
-  onDropCharacter: (charId: string, x: number, y: number) => void;
+  onDropCharacters: (charIds: string[], x: number, y: number) => void;
   canvasRef: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -34,7 +34,7 @@ export const Canvas: React.FC<CanvasProps> = ({
   onDeleteBox,
   onDuplicateBox,
   onAlignBoxChildren,
-  onDropCharacter,
+  onDropCharacters,
   canvasRef,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,11 +75,13 @@ export const Canvas: React.FC<CanvasProps> = ({
       const dataStr = e.dataTransfer.getData('application/json');
       if (dataStr) {
         const data = JSON.parse(dataStr);
-        if (data.charId) {
-          // アイコンサイズ64pxを考慮して中央揃え
-          const x = Math.max(0, Math.round(rawX - 32));
-          const y = Math.max(0, Math.round(rawY - 32));
-          onDropCharacter(data.charId, x, y);
+        const x = Math.max(0, Math.round(rawX - 32));
+        const y = Math.max(0, Math.round(rawY - 32));
+
+        if (data.charIds && Array.isArray(data.charIds) && data.charIds.length > 0) {
+          onDropCharacters(data.charIds, x, y);
+        } else if (data.charId) {
+          onDropCharacters([data.charId], x, y);
         }
       }
     } catch (err) {

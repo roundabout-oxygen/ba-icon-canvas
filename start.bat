@@ -1,16 +1,16 @@
 @echo off
 chcp 65001 > nul
-title BlueArchive Icon Canvas v1.0.1
+title BlueArchive Icon Canvas v1.0.2
 
 echo ========================================================
-echo   BlueArchive Icon Canvas - v1.0.1
+echo   BlueArchive Icon Canvas - v1.0.2
 echo   ブルアカ キャラクターアイコン キャンバス編集ツール
 echo ========================================================
 echo.
 
-if exist "release\BlueArchiveIconCanvas-v1.0.1.exe" (
+if exist "release\BlueArchiveIconCanvas-v1.0.2.exe" (
     echo [1] ポータブルexeを起動中...
-    start "" "release\BlueArchiveIconCanvas-v1.0.1.exe"
+    start "" "release\BlueArchiveIconCanvas-v1.0.2.exe"
     exit /b
 )
 

@@ -24,6 +24,7 @@ export function App() {
   const [items, setItems] = useState<CanvasIconItem[]>([]);
   const [boxes, setBoxes] = useState<ContainerBox[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectedSidebarCharIds, setSelectedSidebarCharIds] = useState<Set<string>>(new Set());
 
   // アンドゥ・リドゥ履歴スタック
   const historyRef = useRef<HistoryState[]>([]);
@@ -44,103 +45,22 @@ export function App() {
     return new Set(items.map((it) => it.charId));
   }, [items]);
 
-  // 初回データ読み込み
+  // 初回データ読み込み (キャンバスは完全な無地スタート)
   useEffect(() => {
     fetch('characters.json')
       .then((res) => res.json())
       .then((data: Character[]) => {
-        setCharacters(data);
+        // あいうえお順（日本語五十音順）にソートして格納
+        const sorted = data.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+        setCharacters(sorted);
         setLoading(false);
 
-        // 初期デモ枠（添付画像のような赤・黄・青・緑枠を1つ用意）
-        const initialBoxes: ContainerBox[] = [
-          {
-            id: 'box_red',
-            type: 'box',
-            label: '赤枠',
-            x: 40,
-            y: 30,
-            width: 720,
-            height: 160,
-            borderColor: '#ef4444',
-            borderWidth: 4,
-            borderRadius: 6,
-            bgColor: '#fee2e2',
-            bgOpacity: 0.15,
-            zIndex: 1,
-          },
-          {
-            id: 'box_yellow',
-            type: 'box',
-            label: '黄枠',
-            x: 40,
-            y: 210,
-            width: 720,
-            height: 160,
-            borderColor: '#eab308',
-            borderWidth: 4,
-            borderRadius: 6,
-            bgColor: '#fef9c3',
-            bgOpacity: 0.2,
-            zIndex: 1,
-          },
-          {
-            id: 'box_blue',
-            type: 'box',
-            label: '青枠',
-            x: 40,
-            y: 390,
-            width: 720,
-            height: 160,
-            borderColor: '#3b82f6',
-            borderWidth: 4,
-            borderRadius: 6,
-            bgColor: '#dbeafe',
-            bgOpacity: 0.15,
-            zIndex: 1,
-          },
-          {
-            id: 'box_green',
-            type: 'box',
-            label: '緑枠',
-            x: 40,
-            y: 570,
-            width: 720,
-            height: 160,
-            borderColor: '#22c55e',
-            borderWidth: 4,
-            borderRadius: 6,
-            bgColor: '#dcfce7',
-            bgOpacity: 0.15,
-            zIndex: 1,
-          },
-        ];
-        setBoxes(initialBoxes);
-
-        // 添付画像の生徒の一部を初期配置（赤枠内に数名）
-        const sampleNames = ['ハスミ', 'ノノミ', 'チェリノ', 'モモイ', 'ミドリ', 'ジュンコ'];
-        const sampleItems: CanvasIconItem[] = [];
-        let curX = 55;
-        let curY = 45;
-
-        data.forEach((c) => {
-          if (sampleNames.some((sn) => c.name.startsWith(sn)) && sampleItems.length < 6) {
-            sampleItems.push({
-              id: `item_${Date.now()}_${sampleItems.length}`,
-              type: 'icon',
-              charId: c.id,
-              x: curX,
-              y: curY,
-              size: 64,
-              zIndex: 10,
-            });
-            curX += 74;
-          }
-        });
-        setItems(sampleItems);
+        // 要望: キャンバス部は最初は何も配置していない無地スタート
+        setBoxes([]);
+        setItems([]);
 
         // 履歴初期化
-        historyRef.current = [{ items: sampleItems, boxes: initialBoxes, config }];
+        historyRef.current = [{ items: [], boxes: [], config }];
         historyIndexRef.current = 0;
       })
       .catch((err) => {
@@ -229,28 +149,95 @@ export function App() {
     }
   };
 
-  // 生徒アイコンをキャンバスへドロップ
-  const handleDropCharacter = (charId: string, x: number, y: number) => {
-    const newItem: CanvasIconItem = {
-      id: `item_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      type: 'icon',
-      charId,
-      x,
-      y,
-      size: iconSize,
-      zIndex: 10 + items.length,
-    };
-    const nextItems = [...items, newItem];
+  // ドラッグ＆ドロップで任意位置に複数配置
+  const handleDropCharacters = (charIds: string[], dropX: number, dropY: number) => {
+    const cols = 6;
+    const gap = 8;
+    const newItems: CanvasIconItem[] = charIds.map((charId, idx) => {
+      const col = idx % cols;
+      const row = Math.floor(idx / cols);
+      return {
+        id: `item_${Date.now()}_${idx}_${Math.random().toString(36).substring(2, 6)}`,
+        type: 'icon',
+        charId,
+        x: Math.min(config.width - iconSize - 10, Math.max(10, dropX + col * (iconSize + gap))),
+        y: Math.min(config.height - iconSize - 10, Math.max(10, dropY + row * (iconSize + gap))),
+        size: iconSize,
+        zIndex: 10 + items.length + idx,
+      };
+    });
+
+    const nextItems = [...items, ...newItems];
     setItems(nextItems);
-    setSelectedIds(new Set([newItem.id]));
+    setSelectedIds(new Set(newItems.map((it) => it.id)));
     pushHistory(nextItems, boxes, config);
   };
 
-  // サイドバーからダブルクリックで中央に追加
-  const handleAddCharacter = (charId: string) => {
-    const centerX = Math.max(20, Math.round(config.width / 2 - iconSize / 2 + (Math.random() * 40 - 20)));
-    const centerY = Math.max(20, Math.round(config.height / 2 - iconSize / 2 + (Math.random() * 40 - 20)));
-    handleDropCharacter(charId, centerX, centerY);
+  /**
+   * 要望対応: 「＋で追加すると中央に出てくるので右上端に重ならないように配置されていくようにしてください」
+   * 右上端から左方向・下方向にスロットを探索し、既存アイテムと重ならない位置に配置
+   */
+  const handleAddCharactersToTopRight = (charIds: string[]) => {
+    const padRight = 20;
+    const padTop = 20;
+    const gap = 8;
+    const poolCols = 5; // 右上の横並び列数
+
+    const currentItems = [...items];
+    const newlyCreated: CanvasIconItem[] = [];
+
+    charIds.forEach((charId, i) => {
+      // 既存アイテムと重複しない空きスロットを探す
+      let slot = 0;
+      let foundX = 0;
+      let foundY = 0;
+
+      while (slot < 300) {
+        const col = slot % poolCols;
+        const row = Math.floor(slot / poolCols);
+        // 右上角から左へ col 列、下へ row 行
+        const testX = config.width - padRight - iconSize - col * (iconSize + gap);
+        const testY = padTop + row * (iconSize + gap);
+
+        // 現在のアイテムおよび今回追加済みのアイテムと重なっていないか判定
+        const overlaps = [...currentItems, ...newlyCreated].some((it) => {
+          return (
+            Math.abs(it.x - testX) < iconSize * 0.75 &&
+            Math.abs(it.y - testY) < iconSize * 0.75
+          );
+        });
+
+        if (!overlaps) {
+          foundX = testX;
+          foundY = testY;
+          break;
+        }
+        slot++;
+      }
+
+      if (slot >= 300) {
+        // 万が一スロットが見つからなかった場合のフォールバック
+        foundX = Math.max(20, config.width - padRight - iconSize - (i % poolCols) * (iconSize + gap));
+        foundY = padTop + Math.floor(i / poolCols) * (iconSize + gap);
+      }
+
+      const newItem: CanvasIconItem = {
+        id: `item_${Date.now()}_${i}_${Math.random().toString(36).substring(2, 6)}`,
+        type: 'icon',
+        charId,
+        x: Math.round(foundX),
+        y: Math.round(foundY),
+        size: iconSize,
+        zIndex: 10 + currentItems.length + i,
+      };
+
+      newlyCreated.push(newItem);
+    });
+
+    const nextItems = [...items, ...newlyCreated];
+    setItems(nextItems);
+    setSelectedIds(new Set(newlyCreated.map((it) => it.id)));
+    pushHistory(nextItems, boxes, config);
   };
 
   // アイテム削除
@@ -296,10 +283,10 @@ export function App() {
       id: `box_${Date.now()}`,
       type: 'box',
       label: theme.name,
-      x: 60 + boxes.length * 20,
-      y: 60 + boxes.length * 20,
-      width: 600,
-      height: 180,
+      x: 40 + boxes.length * 20,
+      y: 40 + boxes.length * 20,
+      width: 680,
+      height: 160,
       borderColor: theme.borderColor,
       borderWidth: 4,
       borderRadius: 6,
@@ -330,8 +317,8 @@ export function App() {
 
     if (childItems.length === 0) return;
 
-    // X座標昇順（左から右）でソート
-    childItems.sort((a, b) => (a.y === b.y ? a.x - b.x : a.y - b.y));
+    // Y座標・X座標順でソート
+    childItems.sort((a, b) => (Math.abs(a.y - b.y) > 20 ? a.y - b.y : a.x - b.x));
 
     const itemW = childItems[0].size;
     const gap = 10;
@@ -422,13 +409,12 @@ export function App() {
   const handleExportPng = async () => {
     if (!canvasRef.current) return;
     try {
-      // 選択ハイライトを一時解除して画像生成
       const prevSelected = new Set(selectedIds);
       setSelectedIds(new Set());
 
       await new Promise((r) => setTimeout(r, 50));
       const dataUrl = await toPng(canvasRef.current, {
-        pixelRatio: 2, // 高解像度出力
+        pixelRatio: 2,
         cacheBust: true,
       });
 
@@ -581,8 +567,10 @@ export function App() {
       <div className="flex-1 flex overflow-hidden relative">
         <Sidebar
           characters={characters}
-          onAddCharacter={handleAddCharacter}
+          onAddCharacters={handleAddCharactersToTopRight}
           placedCharIds={placedCharIds}
+          selectedSidebarCharIds={selectedSidebarCharIds}
+          onSelectSidebarCharIds={setSelectedSidebarCharIds}
         />
 
         <Canvas
@@ -598,7 +586,7 @@ export function App() {
           onDeleteBox={handleDeleteBox}
           onDuplicateBox={handleDuplicateBox}
           onAlignBoxChildren={handleAlignBoxChildren}
-          onDropCharacter={handleDropCharacter}
+          onDropCharacters={handleDropCharacters}
           canvasRef={canvasRef}
         />
       </div>
