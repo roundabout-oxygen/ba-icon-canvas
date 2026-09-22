@@ -23,8 +23,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAttack, setSelectedAttack] = useState<string>('all');
   const [selectedDefense, setSelectedDefense] = useState<string>('all');
-  const [selectedSchool, setSelectedSchool] = useState<string>('all');
   const [selectedRole, setSelectedRole] = useState<string>('all');
+  const [selectedClass, setSelectedClass] = useState<string>('all');
+  const [selectedSchool, setSelectedSchool] = useState<string>('all');
   const [hoveredChar, setHoveredChar] = useState<Character | null>(null);
 
   // 範囲選択用ref
@@ -51,14 +52,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       }
       if (selectedAttack !== 'all' && char.attack_type !== selectedAttack) return false;
       if (selectedDefense !== 'all' && char.defense_type !== selectedDefense) return false;
-      if (selectedSchool !== 'all' && char.school !== selectedSchool) return false;
       if (selectedRole !== 'all' && char.role !== selectedRole) return false;
+      if (selectedClass !== 'all' && char.class !== selectedClass) return false;
+      if (selectedSchool !== 'all' && char.school !== selectedSchool) return false;
       return true;
     });
 
     // あいうえお順（日本語ロケール）でソート
     return list.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
-  }, [characters, searchQuery, selectedAttack, selectedDefense, selectedSchool, selectedRole]);
+  }, [characters, searchQuery, selectedAttack, selectedDefense, selectedRole, selectedClass, selectedSchool]);
 
   // ドラッグ開始（複数選択時は選択中の全員、未選択アイコンをドラッグした場合はその1人）
   const handleDragStart = (e: React.DragEvent, char: Character) => {
@@ -350,29 +352,97 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {/* 学校 & 役割 */}
-        <div className="grid grid-cols-2 gap-1 pt-0.5">
+        {/* 部隊区分（役割 / Role: ストライカー / スペシャル） */}
+        <div className="flex items-center gap-1">
+          <span className="text-[10px] text-slate-400 w-10 shrink-0">部隊:</span>
+          <div className="grid grid-cols-3 gap-1 flex-1 text-[10px]">
+            <button
+              onClick={() => setSelectedRole('all')}
+              className={`py-0.5 rounded text-center transition font-medium ${
+                selectedRole === 'all'
+                  ? 'bg-slate-700 text-white shadow-sm'
+                  : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800'
+              }`}
+            >
+              全
+            </button>
+            <button
+              onClick={() => setSelectedRole(selectedRole === 'STRIKER' ? 'all' : 'STRIKER')}
+              className={`py-0.5 rounded text-center transition font-medium border ${
+                selectedRole === 'STRIKER'
+                  ? 'bg-red-950 text-red-300 border-red-500 font-bold shadow'
+                  : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
+              }`}
+            >
+              STRIKER
+            </button>
+            <button
+              onClick={() => setSelectedRole(selectedRole === 'SPECIAL' ? 'all' : 'SPECIAL')}
+              className={`py-0.5 rounded text-center transition font-medium border ${
+                selectedRole === 'SPECIAL'
+                  ? 'bg-blue-950 text-blue-300 border-blue-500 font-bold shadow'
+                  : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
+              }`}
+            >
+              SPECIAL
+            </button>
+          </div>
+        </div>
+
+        {/* クラス（アタッカー・サポーター・タンク・ヒーラー・T.S） */}
+        <div className="flex items-center gap-1">
+          <span className="text-[10px] text-slate-400 w-10 shrink-0">クラス:</span>
+          <div className="grid grid-cols-6 gap-0.5 flex-1 text-[9px]">
+            <button
+              onClick={() => setSelectedClass('all')}
+              className={`py-0.5 rounded text-center transition font-medium ${
+                selectedClass === 'all'
+                  ? 'bg-slate-700 text-white shadow-sm'
+                  : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800'
+              }`}
+            >
+              全
+            </button>
+            {[
+              { label: '火力', full: 'アタッカー' },
+              { label: '支援', full: 'サポーター' },
+              { label: '盾', full: 'タンク' },
+              { label: '回復', full: 'ヒーラー' },
+              { label: 'T.S', full: 'T.S' },
+            ].map(({ label, full }) => {
+              const isSelected = selectedClass === full;
+              return (
+                <button
+                  key={full}
+                  onClick={() => setSelectedClass(isSelected ? 'all' : full)}
+                  className={`py-0.5 rounded text-center transition font-medium border truncate px-0.5 ${
+                    isSelected
+                      ? 'bg-cyan-950 text-cyan-300 border-cyan-500 font-bold shadow'
+                      : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
+                  }`}
+                  title={full}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 学校 */}
+        <div className="flex items-center gap-1 pt-0.5">
+          <span className="text-[10px] text-slate-400 w-10 shrink-0">学校:</span>
           <select
             value={selectedSchool}
             onChange={(e) => setSelectedSchool(e.target.value)}
-            className="bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-[10px] text-slate-300 focus:outline-none focus:border-cyan-500"
+            className="flex-1 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-[10px] text-slate-300 focus:outline-none focus:border-cyan-500"
           >
-            <option value="all">学校: すべて</option>
+            <option value="all">すべての学校</option>
             {schools.map((sc) => (
               <option key={sc} value={sc}>
                 {sc}
               </option>
             ))}
-          </select>
-
-          <select
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-            className="bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-[10px] text-slate-300 focus:outline-none focus:border-cyan-500"
-          >
-            <option value="all">役割: すべて</option>
-            <option value="STRIKER">STRIKER</option>
-            <option value="SPECIAL">SPECIAL</option>
           </select>
         </div>
 
@@ -515,6 +585,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="font-bold text-slate-200 truncate text-[11px]">{hoveredChar.name}</div>
               <div className="text-[9px] text-slate-400 flex items-center gap-1.5">
                 <span>{hoveredChar.school}</span>
+                <span className="font-bold text-slate-300">{hoveredChar.role}</span>
+                <span className="bg-slate-800 px-1 rounded text-cyan-300">{hoveredChar.class}</span>
                 <span style={{ color: ATTACK_COLORS[hoveredChar.attack_type]?.border }}>
                   {hoveredChar.attack_type}
                 </span>
