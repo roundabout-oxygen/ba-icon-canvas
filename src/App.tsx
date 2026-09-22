@@ -331,13 +331,16 @@ export function App() {
     const minPadding = 12;
     const availWidth = box.width - minPadding * 2;
 
-    // グリッド計算
+    // グリッド計算 (左右センタリング)
     const maxCols = Math.max(1, Math.floor((availWidth + gap) / (itemW + gap)));
     const actualCols = alignType === 'row' ? childItems.length : Math.min(maxCols, childItems.length);
     const totalGridWidth = actualCols * itemW + (actualCols - 1) * gap;
-
-    // 要望対応: 左右の端の余白が同じになるようにセンタリング
     const startX = Math.max(minPadding, Math.round((box.width - totalGridWidth) / 2));
+
+    // 要望対応: 上下方向も枠の中央に配置（上下センタリング）
+    const totalRows = alignType === 'row' ? 1 : Math.ceil(childItems.length / maxCols);
+    const totalGridHeight = totalRows * itemW + (totalRows - 1) * gap;
+    const startY = Math.max(minPadding, Math.round((box.height - totalGridHeight) / 2));
 
     const nextItems = items.map((it) => {
       const idx = childItems.findIndex((c) => c.id === it.id);
@@ -345,14 +348,14 @@ export function App() {
 
       if (alignType === 'row') {
         const x = box.x + startX + idx * (itemW + gap);
-        const y = box.y + minPadding;
+        const y = box.y + startY;
         return { ...it, x, y };
       } else {
         // グリッド
         const col = idx % maxCols;
         const row = Math.floor(idx / maxCols);
         const x = box.x + startX + col * (itemW + gap);
-        const y = box.y + minPadding + row * (itemW + gap);
+        const y = box.y + startY + row * (itemW + gap);
         return { ...it, x, y };
       }
     });
@@ -676,6 +679,7 @@ export function App() {
           onDropCharacters={handleDropCharacters}
           canvasRef={canvasRef}
           externalSnapLines={keyboardSnapLines}
+          onUpdateConfig={handleUpdateConfig}
         />
       </div>
     </div>

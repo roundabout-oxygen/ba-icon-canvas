@@ -13,6 +13,7 @@ interface ContainerBoxViewProps {
   onDuplicate: (id: string) => void;
   onAlignChildren: (boxId: string, type: 'grid' | 'row') => void;
   onStartDrag: (id: string, startX: number, startY: number, e: React.MouseEvent) => void;
+  onStartResize?: (boxId: string, handle: string, e: React.MouseEvent) => void;
   zoom: number;
 }
 
@@ -26,6 +27,7 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
   onDuplicate,
   onAlignChildren,
   onStartDrag,
+  onStartResize,
   zoom,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -35,6 +37,10 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
   // リサイズドラッグの開始
   const handleResizeStart = (handle: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (onStartResize) {
+      onStartResize(box.id, handle, e);
+      return;
+    }
     resizeRef.current = {
       handle,
       startX: e.clientX,

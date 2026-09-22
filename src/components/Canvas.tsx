@@ -1,8 +1,11 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { CanvasIconItem, ContainerBox, Character, SnapLine, CanvasConfig } from '../types';
 import { CanvasItemView } from './CanvasItemView';
 import { ContainerBoxView } from './ContainerBoxView';
 import { calculateSnap, Rect } from '../utils/snapGuide';
+import { adjustClusterSpacing, SpacingAdjustOptions } from '../utils/spacingCluster';
+import { SpacingAdjustModal } from './SpacingAdjustModal';
+import { Sliders } from 'lucide-react';
 
 interface CanvasProps {
   items: CanvasIconItem[];
@@ -20,6 +23,7 @@ interface CanvasProps {
   onDropCharacters: (charIds: string[], x: number, y: number) => void;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   externalSnapLines?: SnapLine[];
+  onUpdateConfig?: (updates: Partial<CanvasConfig>) => void;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
@@ -38,12 +42,35 @@ export const Canvas: React.FC<CanvasProps> = ({
   onDropCharacters,
   canvasRef,
   externalSnapLines,
+  onUpdateConfig,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [snapLines, setSnapLines] = useState<SnapLine[]>([]);
   const [isDraggingBoxes, setIsDraggingBoxes] = useState(false);
 
-  // ドラッグ移動管理
+  // 右クリックコンテキストメニュー & 間隔調整モーダル
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [showSpacingModal, setShowSpacingModal] = useState(false);
+
+  // マウスホイールによるスクロール拡大縮小
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || !onUpdateConfig) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.08 : 0.92;
+      const nextZoom = Math.min(3.0, Math.max(0.25, Math.round(config.zoom * factor * 100) / 100));
+      if (nextZoom !== config.zoom) {
+        onUpdateConfig({ zoom: nextZoom });
+      }
+    };
+
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => el.removeEventListener('wheel', handleWheel);
+  }, [config.zoom, onUpdateConfig]);
+
+  // ドラグラフ移動管理
   const dragRef = useRef<{
     activeId: string;
     isBox: boolean;
@@ -249,8 +276,113 @@ export const Canvas: React.FC<CanvasProps> = ({
     window.addEventListener('mouseup', handleMouseUp);
   };
 
+  // 複数枠の連動サイズ変更
+  const handleBoxResizeStart = (primaryBoxId: string, handle: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // プライマリ枠が選択中なら選択中の全枠、そうでなければプライマリ枠のみ
+    const targetBoxIds = selectedIds.has(primaryBoxId)
+      ? boxes.filter((b) => selectedIds.has(b.id)).map((b) => b.id)
+      : [primaryBoxId];
+
+    const startBoxesMap = new Map<string, ContainerBox>();
+    targetBoxIds.forEach((id) => {
+      const b = boxes.find((bx) => bx.id === id);
+      if (b) startBoxesMap.set(id, { ...b });
+    });
+
+    const primaryStart = startBoxesMap.get(primaryBoxId);
+    if (!primaryStart) return;
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const dx = (moveEvent.clientX - startX) / config.zoom;
+      const dy = (moveEvent.clientY - startY) / config.zoom;
+
+      // プライマリ枠の新しい端の絶対座標
+      const targetRightX = primaryStart.x + Math.max(80, primaryStart.width + dx);
+      const targetBottomY = primaryStart.y + Math.max(60, primaryStart.height + dy);
+      const targetLeftX = handle.includes('l') ? primaryStart.x + dx : null;
+      const targetTopY = handle.includes('t') ? primaryStart.y + dy : null;
+
+      const nextBoxes = boxes.map((b) => {
+        const init = startBoxesMap.get(b.id);
+        if (!init) return b;
+
+        let nextX = init.x;
+        let nextY = init.y;
+        let nextW = init.width;
+        let nextH = init.height;
+
+        // 要望対応: 複数枠連動 - 右端のサイズ変更すると同じ位置まで全部幅が変わる
+        if (handle.includes('r')) {
+          nextW = Math.max(80, targetRightX - init.x);
+        }
+        if (handle.includes('b')) {
+          nextH = Math.max(60, targetBottomY - init.y);
+        }
+        if (targetLeftX !== null) {
+          const maxLeft = init.x + init.width - 80;
+          nextX = Math.min(maxLeft, targetLeftX);
+          nextW = Math.max(80, init.x + init.width - nextX);
+        }
+        if (targetTopY !== null) {
+          const maxTop = init.y + init.height - 60;
+          nextY = Math.min(maxTop, targetTopY);
+          nextH = Math.max(60, init.y + init.height - nextY);
+        }
+
+        return {
+          ...b,
+          x: Math.round(nextX),
+          y: Math.round(nextY),
+          width: Math.round(nextW),
+          height: Math.round(nextH),
+        };
+      });
+
+      onUpdateBoxes(nextBoxes);
+    };
+
+    const handleMouseUp = () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
+
+  // 右クリックコンテキストメニュー
+  const handleContextMenu = (e: React.MouseEvent) => {
+    const selectedIconCount = items.filter((it) => selectedIds.has(it.id)).length;
+    if (selectedIconCount >= 2) {
+      e.preventDefault();
+      setContextMenu({ x: e.clientX, y: e.clientY });
+    } else {
+      setContextMenu(null);
+    }
+  };
+
+  // アイコン間隔の適用
+  const handleApplySpacing = (options: SpacingAdjustOptions) => {
+    const selectedItems = items.filter((it) => selectedIds.has(it.id));
+    if (selectedItems.length < 2) return;
+
+    const adjustedItems = adjustClusterSpacing(selectedItems, options);
+    const adjustedMap = new Map(adjustedItems.map((it) => [it.id, it]));
+
+    const nextItems = items.map((it) => adjustedMap.get(it.id) || it);
+    onUpdateItems(nextItems);
+  };
+
   // キャンバスの背景または非アクティブ枠からの範囲選択・クリック選択
   const handleCanvasMouseDown = (e: React.MouseEvent) => {
+    if (contextMenu) {
+      setContextMenu(null);
+    }
     const target = e.target as HTMLElement;
 
     // 生徒アイコン自体、リサイズハンドル、ヘッダー操作ボタンなどの直接操作時はキャンバス選択を開始しない
@@ -367,6 +499,7 @@ export const Canvas: React.FC<CanvasProps> = ({
       ref={containerRef}
       className="flex-1 h-full overflow-auto bg-slate-950 flex items-center justify-center p-8 relative"
       onMouseDown={handleCanvasMouseDown}
+      onContextMenu={handleContextMenu}
     >
       {/* ズーム拡大縮小を適用するキャンバス本体 */}
       <div
@@ -410,6 +543,7 @@ export const Canvas: React.FC<CanvasProps> = ({
             onDuplicate={onDuplicateBox}
             onAlignChildren={onAlignBoxChildren}
             onStartDrag={handleStartDrag}
+            onStartResize={handleBoxResizeStart}
             zoom={config.zoom}
           />
         ))}
@@ -480,6 +614,34 @@ export const Canvas: React.FC<CanvasProps> = ({
           />
         )}
       </div>
+
+      {/* 右クリックコンテキストメニュー */}
+      {contextMenu && (
+        <div
+          className="fixed bg-slate-900/95 backdrop-blur border border-slate-700 shadow-2xl rounded-lg py-1 px-1 z-[150] min-w-[160px] animate-in fade-in zoom-in-95 duration-100"
+          style={{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => {
+              setContextMenu(null);
+              setShowSpacingModal(true);
+            }}
+            className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-200 hover:bg-cyan-600/30 hover:text-cyan-300 rounded transition font-medium"
+          >
+            <Sliders className="w-3.5 h-3.5 text-cyan-400" />
+            <span>間隔を調整する...</span>
+          </button>
+        </div>
+      )}
+
+      {/* アイコン間隔調整ダイアログ */}
+      <SpacingAdjustModal
+        isOpen={showSpacingModal}
+        selectedCount={items.filter((it) => selectedIds.has(it.id)).length}
+        onConfirm={handleApplySpacing}
+        onClose={() => setShowSpacingModal(false)}
+      />
     </div>
   );
 };

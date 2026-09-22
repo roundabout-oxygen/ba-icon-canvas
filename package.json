@@ -1,6 +1,6 @@
 {
   "name": "bluearchive-icon-canvas",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Blue Archive Character Icon Canvas Editor",
   "main": "dist-electron/main.js",
   "scripts": {
