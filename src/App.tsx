@@ -445,11 +445,11 @@ export function App() {
       borderColor = 'transparent';
       borderWidth = 0;
     } else if (preset === 'tag') {
-      defaultText = '1凸編成（メイン）';
+      defaultText = '枠タイトル / タグ';
       fontSize = 14;
-      color = '#e2e8f0';
-      bgColor = 'rgba(30, 41, 59, 0.85)';
-      borderColor = 'rgba(56, 189, 248, 0.4)';
+      color = '#ffffff';
+      bgColor = '#1e293b';
+      borderColor = '#38bdf8';
       borderWidth = 1;
     } else {
       defaultText = '編成メモ・解説';
@@ -472,9 +472,9 @@ export function App() {
       bgColor,
       borderColor,
       borderWidth,
-      borderRadius: preset === 'tag' ? 6 : 0,
+      borderRadius: preset === 'tag' ? 6 : preset === 'title' ? 4 : 0,
       stylePreset: preset,
-      zIndex: 20 + texts.length,
+      zIndex: 30 + texts.length,
     };
 
     const nextTexts = [...texts, newText];
