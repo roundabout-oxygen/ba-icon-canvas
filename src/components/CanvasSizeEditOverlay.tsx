@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Check, X, Palette, Maximize2, Crop, RotateCcw } from 'lucide-react';
 import { CanvasConfig, CanvasIconItem, ContainerBox, CanvasTextItem } from '../types';
 
@@ -188,157 +189,160 @@ export const CanvasSizeEditOverlay: React.FC<CanvasSizeEditOverlayProps> = ({
 
   return (
     <>
-      {/* ─── 画面上部中央ドッキング型 設定ツールバー (ドラッグ操作を絶対に邪魔しない位置) ─── */}
-      <div
-        className="fixed top-16 left-1/2 -translate-x-1/2 z-[200] bg-slate-900/95 backdrop-blur-xl border border-cyan-500/80 rounded-2xl shadow-2xl px-4 py-2 flex items-center gap-3 animate-in fade-in slide-in-from-top-3 duration-200 select-none"
-        onClick={(e) => e.stopPropagation()}
-        onMouseDown={(e) => e.stopPropagation()}
-      >
-        {/* モードバッジ */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 text-xs font-bold shadow-sm whitespace-nowrap">
-          <Crop className="w-3.5 h-3.5 text-cyan-400" />
-          <span>キャンバスサイズ編集</span>
-        </div>
-
-        <div className="h-5 w-[1px] bg-slate-700" />
-
-        {/* アスペクト比プリセット */}
-        <div className="flex items-center gap-1 bg-slate-950/70 p-1 rounded-xl border border-slate-800 text-xs">
-          {ASPECT_RATIO_PRESETS.map((preset) => (
-            <button
-              key={preset.id}
-              onClick={() => handleSelectAspectRatio(preset.id)}
-              className={`px-2.5 py-1 rounded-lg transition font-medium text-xs whitespace-nowrap ${
-                aspectRatio === preset.id
-                  ? 'bg-cyan-600 text-white font-bold shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
-              }`}
-            >
-              {preset.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="h-5 w-[1px] bg-slate-700" />
-
-        {/* 幅・高さの直接入力 */}
-        <div className="flex items-center gap-1.5 text-xs text-slate-300 font-mono">
-          <div className="flex items-center gap-1 bg-slate-950 px-2 py-1 rounded-lg border border-slate-800">
-            <span className="text-slate-500 text-[10px]">W:</span>
-            <input
-              type="number"
-              min="300"
-              max="4000"
-              step="10"
-              value={config.width}
-              onChange={(e) => {
-                const w = Math.max(300, Math.min(4000, Number(e.target.value)));
-                const preset = ASPECT_RATIO_PRESETS.find((p) => p.id === aspectRatio);
-                if (preset && preset.ratio) {
-                  onUpdateTempConfig({ width: w, height: Math.round(w / preset.ratio) });
-                } else {
-                  onUpdateTempConfig({ width: w });
-                }
-              }}
-              className="w-14 bg-transparent text-right text-cyan-300 font-bold focus:outline-none"
-            />
-            <span className="text-[10px] text-slate-500">px</span>
+      {/* ─── 画面上部中央ドッキング型 設定ツールバー (createPortalでdocument.body直下に描画し、キャンバスのtransform影響を完全排除) ─── */}
+      {createPortal(
+        <div
+          className="fixed top-16 left-1/2 -translate-x-1/2 z-[9999] bg-slate-900/95 backdrop-blur-xl border border-cyan-500/80 rounded-2xl shadow-2xl px-3.5 py-2 flex items-center gap-2.5 animate-in fade-in slide-in-from-top-3 duration-200 select-none max-w-[calc(100vw-32px)] overflow-x-auto scrollbar-none"
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          {/* モードバッジ */}
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 text-xs font-bold shadow-sm whitespace-nowrap shrink-0">
+            <Crop className="w-3.5 h-3.5 text-cyan-400" />
+            <span>キャンバスサイズ編集</span>
           </div>
 
-          <span className="text-slate-600 font-bold">×</span>
+          <div className="h-5 w-[1px] bg-slate-700 shrink-0" />
 
-          <div className="flex items-center gap-1 bg-slate-950 px-2 py-1 rounded-lg border border-slate-800">
-            <span className="text-slate-500 text-[10px]">H:</span>
-            <input
-              type="number"
-              min="200"
-              max="3000"
-              step="10"
-              value={config.height}
-              onChange={(e) => {
-                const h = Math.max(200, Math.min(3000, Number(e.target.value)));
-                const preset = ASPECT_RATIO_PRESETS.find((p) => p.id === aspectRatio);
-                if (preset && preset.ratio) {
-                  onUpdateTempConfig({ height: h, width: Math.round(h * preset.ratio) });
-                } else {
-                  onUpdateTempConfig({ height: h });
-                }
-              }}
-              className="w-14 bg-transparent text-right text-cyan-300 font-bold focus:outline-none"
-            />
-            <span className="text-[10px] text-slate-500">px</span>
+          {/* アスペクト比プリセット */}
+          <div className="flex items-center gap-0.5 bg-slate-950/70 p-1 rounded-xl border border-slate-800 text-xs shrink-0">
+            {ASPECT_RATIO_PRESETS.map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => handleSelectAspectRatio(preset.id)}
+                className={`px-2 py-1 rounded-lg transition font-medium text-xs whitespace-nowrap ${
+                  aspectRatio === preset.id
+                    ? 'bg-cyan-600 text-white font-bold shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                {preset.label}
+              </button>
+            ))}
           </div>
-        </div>
 
-        <div className="h-5 w-[1px] bg-slate-700" />
+          <div className="h-5 w-[1px] bg-slate-700 shrink-0" />
 
-        {/* 背景色変更 (統合) */}
-        <div className="relative">
-          <button
-            onClick={() => setShowBgPalette(!showBgPalette)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition text-xs font-medium"
-            title="キャンバス背景色を変更"
-          >
-            <span
-              className="w-3.5 h-3.5 rounded border border-slate-600 shadow-sm"
-              style={{ backgroundColor: config.bgColor }}
-            />
-            <span>背景色</span>
-          </button>
-
-          {showBgPalette && (
-            <div className="absolute top-full left-0 mt-2 bg-slate-900 border border-slate-700 rounded-xl p-3 shadow-2xl z-[210] w-60 flex flex-col gap-2.5 animate-in fade-in zoom-in-95 duration-100">
-              <div className="text-[10px] text-slate-400 font-bold">背景色プリセット</div>
-              <div className="grid grid-cols-4 gap-1.5">
-                {PRESET_BG_COLORS.map((bg) => (
-                  <button
-                    key={bg.color}
-                    onClick={() => {
-                      onUpdateTempConfig({ bgColor: bg.color });
-                      setShowBgPalette(false);
-                    }}
-                    className="h-7 rounded-lg border border-slate-700 hover:scale-105 transition shadow-sm flex items-center justify-center"
-                    style={{ backgroundColor: bg.color }}
-                    title={bg.label}
-                  />
-                ))}
-              </div>
-              <div className="flex items-center justify-between pt-1.5 border-t border-slate-800 text-xs">
-                <span className="text-slate-400 text-[11px]">カスタム色:</span>
-                <input
-                  type="color"
-                  value={config.bgColor}
-                  onChange={(e) => onUpdateTempConfig({ bgColor: e.target.value })}
-                  className="w-7 h-7 rounded cursor-pointer bg-transparent border-0 p-0"
-                />
-              </div>
+          {/* 幅・高さの直接入力 */}
+          <div className="flex items-center gap-1.5 text-xs text-slate-300 font-mono shrink-0">
+            <div className="flex items-center gap-1 bg-slate-950 px-2 py-1 rounded-lg border border-slate-800">
+              <span className="text-slate-500 text-[10px]">W:</span>
+              <input
+                type="number"
+                min="300"
+                max="4000"
+                step="10"
+                value={config.width}
+                onChange={(e) => {
+                  const w = Math.max(300, Math.min(4000, Number(e.target.value)));
+                  const preset = ASPECT_RATIO_PRESETS.find((p) => p.id === aspectRatio);
+                  if (preset && preset.ratio) {
+                    onUpdateTempConfig({ width: w, height: Math.round(w / preset.ratio) });
+                  } else {
+                    onUpdateTempConfig({ width: w });
+                  }
+                }}
+                className="w-12 bg-transparent text-right text-cyan-300 font-bold focus:outline-none"
+              />
+              <span className="text-[10px] text-slate-500">px</span>
             </div>
-          )}
-        </div>
 
-        <div className="h-5 w-[1px] bg-slate-700" />
+            <span className="text-slate-600 font-bold">×</span>
 
-        {/* 確定 & キャンセルボタン */}
-        <div className="flex items-center gap-1.5">
-          <button
-            onClick={onCancel}
-            className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs font-semibold transition"
-            title="変更を破棄して戻る (Escape)"
-          >
-            <X className="w-3.5 h-3.5" />
-            <span>キャンセル</span>
-          </button>
+            <div className="flex items-center gap-1 bg-slate-950 px-2 py-1 rounded-lg border border-slate-800">
+              <span className="text-slate-500 text-[10px]">H:</span>
+              <input
+                type="number"
+                min="200"
+                max="3000"
+                step="10"
+                value={config.height}
+                onChange={(e) => {
+                  const h = Math.max(200, Math.min(3000, Number(e.target.value)));
+                  const preset = ASPECT_RATIO_PRESETS.find((p) => p.id === aspectRatio);
+                  if (preset && preset.ratio) {
+                    onUpdateTempConfig({ height: h, width: Math.round(h * preset.ratio) });
+                  } else {
+                    onUpdateTempConfig({ height: h });
+                  }
+                }}
+                className="w-12 bg-transparent text-right text-cyan-300 font-bold focus:outline-none"
+              />
+              <span className="text-[10px] text-slate-500">px</span>
+            </div>
+          </div>
 
-          <button
-            onClick={onConfirm}
-            className="flex items-center gap-1 px-4 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black rounded-xl text-xs shadow-lg shadow-cyan-500/20 transition transform active:scale-95"
-            title="キャンバスサイズを確定 (Enter)"
-          >
-            <Check className="w-4 h-4 stroke-[3]" />
-            <span>OK (確定)</span>
-          </button>
-        </div>
-      </div>
+          <div className="h-5 w-[1px] bg-slate-700 shrink-0" />
+
+          {/* 背景色変更 (統合) */}
+          <div className="relative shrink-0">
+            <button
+              onClick={() => setShowBgPalette(!showBgPalette)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition text-xs font-medium"
+              title="キャンバス背景色を変更"
+            >
+              <span
+                className="w-3.5 h-3.5 rounded border border-slate-600 shadow-sm"
+                style={{ backgroundColor: config.bgColor }}
+              />
+              <span>背景色</span>
+            </button>
+
+            {showBgPalette && (
+              <div className="absolute top-full left-0 mt-2 bg-slate-900 border border-slate-700 rounded-xl p-3 shadow-2xl z-[10000] w-60 flex flex-col gap-2.5 animate-in fade-in zoom-in-95 duration-100">
+                <div className="text-[10px] text-slate-400 font-bold">背景色プリセット</div>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {PRESET_BG_COLORS.map((bg) => (
+                    <button
+                      key={bg.color}
+                      onClick={() => {
+                        onUpdateTempConfig({ bgColor: bg.color });
+                        setShowBgPalette(false);
+                      }}
+                      className="h-7 rounded-lg border border-slate-700 hover:scale-105 transition shadow-sm flex items-center justify-center"
+                      style={{ backgroundColor: bg.color }}
+                      title={bg.label}
+                    />
+                  ))}
+                </div>
+                <div className="flex items-center justify-between pt-1.5 border-t border-slate-800 text-xs">
+                  <span className="text-slate-400 text-[11px]">カスタム色:</span>
+                  <input
+                    type="color"
+                    value={config.bgColor}
+                    onChange={(e) => onUpdateTempConfig({ bgColor: e.target.value })}
+                    className="w-7 h-7 rounded cursor-pointer bg-transparent border-0 p-0"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="h-5 w-[1px] bg-slate-700 shrink-0" />
+
+          {/* 確定 & キャンセルボタン (最優先・常に確実に見える位置) */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={onCancel}
+              className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs font-semibold transition"
+              title="変更を破棄して戻る (Escape)"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>キャンセル</span>
+            </button>
+
+            <button
+              onClick={onConfirm}
+              className="flex items-center gap-1 px-4 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black rounded-xl text-xs shadow-lg shadow-cyan-500/20 transition transform active:scale-95 whitespace-nowrap"
+              title="キャンバスサイズを確定 (Enter)"
+            >
+              <Check className="w-4 h-4 stroke-[3]" />
+              <span>OK (確定)</span>
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
 
       {/* ─── キャンバス外枠ハイライト ＆ 8箇所のリサイズハンドル ─── */}
       <div
