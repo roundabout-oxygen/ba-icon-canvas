@@ -81,6 +81,7 @@ export const CanvasTextView: React.FC<CanvasTextViewProps> = ({
   return (
     <div
       data-item-id={item.id}
+      data-text-id={item.id}
       style={{
         position: 'absolute',
         left: `${item.x}px`,
@@ -111,7 +112,7 @@ export const CanvasTextView: React.FC<CanvasTextViewProps> = ({
       {isSelected && !isEditing && (
         <div
           className={`absolute left-0 bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl px-1.5 py-1 flex items-center gap-1 z-50 animate-in fade-in zoom-in-95 duration-100 whitespace-nowrap ${
-            item.y < 55 ? 'top-full mt-2.5' : '-top-12'
+            item.y < 80 ? 'top-full mt-2.5' : '-top-12'
           }`}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}

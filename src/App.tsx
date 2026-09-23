@@ -90,8 +90,18 @@ export function App() {
         setItems([]);
         setTexts([]);
 
+        // 画面サイズに応じて初期ズームを自動計算して画面に綺麗に収める（上部ツールバーや左右マージン考慮）
+        const availW = Math.max(300, window.innerWidth - 420);
+        const availH = Math.max(200, window.innerHeight - 56 - 96);
+        const scaleW = availW / 1200;
+        const scaleH = availH / 800;
+        const fitScale = Math.min(scaleW, scaleH);
+        const initialZoom = Math.min(1.0, Math.max(0.3, Math.round(fitScale * 100) / 100));
+        const initialConfig = { ...config, zoom: initialZoom };
+        setConfig(initialConfig);
+
         // 履歴初期化
-        historyRef.current = [{ items: [], boxes: [], texts: [], config }];
+        historyRef.current = [{ items: [], boxes: [], texts: [], config: initialConfig }];
         historyIndexRef.current = 0;
       })
       .catch((err) => {
@@ -402,7 +412,7 @@ export function App() {
       type: 'box',
       label: theme.name,
       x: 40 + (boxes.length % 5) * 20,
-      y: 70 + (boxes.length % 5) * 25,
+      y: 80 + (boxes.length % 5) * 25,
       width: 680,
       height: 160,
       borderColor: theme.borderColor,
@@ -455,7 +465,7 @@ export function App() {
       type: 'text',
       text: defaultText,
       x: 60,
-      y: 70 + (texts.length % 6) * 45,
+      y: 90 + (texts.length % 6) * 45,
       fontSize,
       fontWeight: 'bold',
       color,

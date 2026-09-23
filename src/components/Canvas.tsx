@@ -117,9 +117,9 @@ export const Canvas: React.FC<CanvasProps> = ({
     const containerW = containerRef.current.clientWidth;
     const containerH = containerRef.current.clientHeight;
 
-    // 上下左右に余裕ある余白 (64px) を確保
-    const availW = Math.max(200, containerW - 64);
-    const availH = Math.max(200, containerH - 64);
+    // 上下左右に余裕ある余白 (80px) を確保
+    const availW = Math.max(200, containerW - 80);
+    const availH = Math.max(200, containerH - 80);
 
     const scaleW = availW / config.width;
     const scaleH = availH / config.height;
@@ -131,6 +131,19 @@ export const Canvas: React.FC<CanvasProps> = ({
     onUpdateConfig({ zoom: nextZoom });
     setPan({ x: 0, y: 0 });
   }, [config.width, config.height, onUpdateConfig]);
+
+  // 初回マウント時、画面に収まるように自動Fit実行
+  const hasAutoFittedRef = useRef(false);
+  useEffect(() => {
+    if (hasAutoFittedRef.current) return;
+    const timer = setTimeout(() => {
+      if (containerRef.current && containerRef.current.clientWidth > 100) {
+        handleFitToScreen();
+        hasAutoFittedRef.current = true;
+      }
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [handleFitToScreen]);
 
   // ドラッグ移動管理
   const dragRef = useRef<{
@@ -321,8 +334,37 @@ export const Canvas: React.FC<CanvasProps> = ({
         : isText
         ? textInitPositions.get(activeId)!
         : itemInitPositions.get(activeId)!;
-      const effectiveDx = snap.x - initActive.x;
-      const effectiveDy = snap.y - initActive.y;
+      let effectiveDx = snap.x - initActive.x;
+      let effectiveDy = snap.y - initActive.y;
+
+      // キャンバス上端・左端からのはみ出し・突き抜け防止（クランプ）
+      let minTargetX = Infinity;
+      let minTargetY = Infinity;
+      if (itemInitPositions.size > 0) {
+        itemInitPositions.forEach((pos: { x: number; y: number }) => {
+          minTargetX = Math.min(minTargetX, pos.x + effectiveDx);
+          minTargetY = Math.min(minTargetY, pos.y + effectiveDy);
+        });
+      }
+      if (boxInitPositions.size > 0) {
+        boxInitPositions.forEach((pos: { x: number; y: number }) => {
+          minTargetX = Math.min(minTargetX, pos.x + effectiveDx);
+          minTargetY = Math.min(minTargetY, pos.y + effectiveDy);
+        });
+      }
+      if (textInitPositions && textInitPositions.size > 0) {
+        textInitPositions.forEach((pos: { x: number; y: number }) => {
+          minTargetX = Math.min(minTargetX, pos.x + effectiveDx);
+          minTargetY = Math.min(minTargetY, pos.y + effectiveDy);
+        });
+      }
+
+      if (minTargetX < 8) {
+        effectiveDx += 8 - minTargetX;
+      }
+      if (minTargetY < 8) {
+        effectiveDy += 8 - minTargetY;
+      }
 
       // 選択中の全アイテムの位置を一括更新
       if (itemInitPositions.size > 0) {
@@ -847,7 +889,7 @@ export const Canvas: React.FC<CanvasProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`flex-1 h-full overflow-hidden bg-slate-950 flex items-center justify-center relative select-none ${
+      className={`flex-1 h-full overflow-auto bg-slate-950 flex relative select-none scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent ${
         isPanning ? 'cursor-grabbing' : ''
       }`}
       onMouseDown={handleCanvasMouseDown}
@@ -859,17 +901,23 @@ export const Canvas: React.FC<CanvasProps> = ({
         }
       }}
     >
-      {/* ビューパン移動ラッパー */}
+      {/* ビューパン移動ラッパー: 画面より大きくても上端が Toolbar の裏に突き抜けないよう padding と min-size を確保 */}
       <div
         style={{
           transform: `translate(${pan.x}px, ${pan.y}px)`,
           transition: isPanning ? 'none' : 'transform 0.05s ease-out',
+          minWidth: '100%',
+          minHeight: '100%',
+          display: 'flex',
+          padding: '48px',
+          boxSizing: 'border-box',
         }}
-        className="flex items-center justify-center p-8 shrink-0"
+        className="shrink-0"
       >
-        {/* スケーリングラッパー: ズーム後の実サイズを親のレイアウトに反映させ、上下左右のはみ出し・見切れを防止 */}
+        {/* スケーリングラッパー: margin: auto により、小さい時は完全中央揃え、大きい時は上端・左端から48pxパディングで配置（突き抜け防止） */}
         <div
           style={{
+            margin: 'auto',
             width: `${Math.round(config.width * config.zoom)}px`,
             height: `${Math.round(config.height * config.zoom)}px`,
             position: 'relative',
