@@ -1,9 +1,8 @@
 @echo off
 chcp 65001 > nul
-title BlueArchive Icon Canvas v1.0.10
-
-echo ========================================================
-echo   BlueArchive Icon Canvas - v1.0.10
+title BlueArchive Icon Canvas v1.0.11
+echo ===================================================
+echo   BlueArchive Icon Canvas - v1.0.11
 echo   ブルアカ キャラクターアイコン キャンバス編集ツール
 echo ========================================================
 echo.

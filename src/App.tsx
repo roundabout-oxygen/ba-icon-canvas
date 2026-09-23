@@ -310,145 +310,151 @@ export function App() {
   };
 
   // 枠内のアイテムを整列（横一列 or 行・間隔保持型スマートグリッド）
-  // 要望対応: 「左右の中央に配置するようにしてもらいましたが、やはり左寄せでお願いします。ただしグリッド整列を選んだときにシークバーが出て左端から〇ピクセル間隔を空けるかを設定できるようにしてください」
+  // 要望対応: 複数枠選択時は、それぞれの枠内で同じ設定（余白・間隔）で一括整列
   const handleAlignBoxChildren = (
     boxId: string,
     alignType: 'grid' | 'row',
     leftPadding: number = 16,
     iconGap?: number
   ) => {
-    const box = boxes.find((b) => b.id === boxId);
-    if (!box) return;
+    const originBox = boxes.find((b) => b.id === boxId);
+    if (!originBox) return;
 
-    // 枠の領域内にあるアイコンを抽出
-    const childItems = items.filter(
-      (it) =>
-        it.x >= box.x - 20 &&
-        it.x + it.size <= box.x + box.width + 20 &&
-        it.y >= box.y - 20 &&
-        it.y + it.size <= box.y + box.height + 20
-    );
+    // 複数枠が選択されている状態でそのいずれかが操作された場合、選択されている全枠を対象にする
+    const selectedBoxes = boxes.filter((b) => selectedIds.has(b.id));
+    const targetBoxes =
+      selectedBoxes.some((b) => b.id === boxId) && selectedBoxes.length > 1
+        ? selectedBoxes
+        : [originBox];
 
-    if (childItems.length === 0) return;
-
-    // 枠内のアイコンサイズを統一 (現在設定値の iconSize または枠内最初のアイテムサイズ)
-    const itemW = iconSize || childItems[0].size;
     const gap = iconGap !== undefined ? iconGap : (config.snapGap ?? 8);
     const minPadding = 8;
-    const cellStep = itemW + gap;
 
-    if (alignType === 'row') {
-      // 横一列整列: X順にソートして指定の左端余白で左寄せ
-      const sorted = [...childItems].sort((a, b) => a.x - b.x);
-      const startX = leftPadding;
-      const startY = Math.max(minPadding, Math.round((box.height - itemW) / 2));
+    const allPosUpdates = new Map<string, { x: number; y: number; size: number }>();
 
-      const nextItems = items.map((it) => {
-        const idx = sorted.findIndex((c) => c.id === it.id);
-        if (idx === -1) return it;
-        return {
-          ...it,
-          size: itemW, // サイズも均一化
-          x: box.x + startX + idx * cellStep,
-          y: box.y + startY,
-        };
-      });
-      handleUpdateItems(nextItems);
-      return;
-    }
+    for (const box of targetBoxes) {
+      // 枠の領域内にあるアイコンを抽出
+      const childItems = items.filter(
+        (it) =>
+          it.x >= box.x - 20 &&
+          it.x + it.size <= box.x + box.width + 20 &&
+          it.y >= box.y - 20 &&
+          it.y + it.size <= box.y + box.height + 20
+      );
 
-    // === 行・間隔保持型スマートグリッド整列 ===
-    // 要望対応: 「１行目は範囲、２行目は単体のように意味があって行を分けていたり１マス分以上開けていたりする場合に詰められるのは意図しない。行や１マス分以上空いてる時はそれを維持した上で整列」
+      if (childItems.length === 0) continue;
 
-    // 1. 行（Row）のクラスタリング: Y座標の近接度（アイコンサイズの半分以内）で行を判別
-    const sortedByY = [...childItems].sort((a, b) => a.y - b.y || a.x - b.x);
-    const rowGroups: CanvasIconItem[][] = [];
+      // 枠内のアイコンサイズを統一 (現在設定値の iconSize または枠内最初のアイテムサイズ)
+      const itemW = iconSize || childItems[0].size;
+      const cellStep = itemW + gap;
 
-    for (const item of sortedByY) {
-      let placed = false;
-      for (const row of rowGroups) {
-        if (Math.abs(row[0].y - item.y) < itemW * 0.5) {
-          row.push(item);
-          placed = true;
-          break;
-        }
+      if (alignType === 'row') {
+        // 横一列整列: X順にソートして指定の左端余白で左寄せ
+        const sorted = [...childItems].sort((a, b) => a.x - b.x);
+        const startX = leftPadding;
+        const startY = Math.max(minPadding, Math.round((box.height - itemW) / 2));
+
+        sorted.forEach((it, idx) => {
+          allPosUpdates.set(it.id, {
+            size: itemW,
+            x: box.x + startX + idx * cellStep,
+            y: box.y + startY,
+          });
+        });
+        continue;
       }
-      if (!placed) {
-        rowGroups.push([item]);
-      }
-    }
 
-    // 行をY座標順にソート
-    rowGroups.sort((a, b) => a[0].y - b[0].y);
+      // === 行・間隔保持型スマートグリッド整列 ===
+      // 1. 行（Row）のクラスタリング: Y座標の近接度（アイコンサイズの半分以内）で行を判別
+      const sortedByY = [...childItems].sort((a, b) => a.y - b.y || a.x - b.x);
+      const rowGroups: CanvasIconItem[][] = [];
 
-    // 枠内全体の基準最小X座標
-    const globalMinX = Math.min(...childItems.map((c) => c.x));
-
-    // 2. 各アイテムの (row, col) インデックスを決定
-    interface GridItemPos {
-      item: CanvasIconItem;
-      row: number;
-      col: number;
-    }
-    const gridPositions: GridItemPos[] = [];
-
-    rowGroups.forEach((rowItems, rowIndex) => {
-      // 行内を X 座標順にソート
-      rowItems.sort((a, b) => a.x - b.x);
-
-      let lastCol = -1;
-      let lastRightX = -Infinity;
-
-      rowItems.forEach((item, itemIdx) => {
-        // 全体最小Xからの概算セルインデックス
-        let col = Math.max(0, Math.round((item.x - globalMinX) / cellStep));
-
-        if (itemIdx > 0) {
-          // 直前のアイテムとの実際の隙間
-          const actualGap = item.x - lastRightX;
-          if (actualGap < itemW * 0.6) {
-            // 隣接（1マス未満）なら連続した次の列
-            col = lastCol + 1;
-          } else {
-            // 1マス分以上空いている場合は、空きマス数を計算してスペースを維持
-            const emptyCells = Math.max(1, Math.round(actualGap / cellStep));
-            col = Math.max(lastCol + 1 + emptyCells, col);
+      for (const item of sortedByY) {
+        let placed = false;
+        for (const row of rowGroups) {
+          if (Math.abs(row[0].y - item.y) < itemW * 0.5) {
+            row.push(item);
+            placed = true;
+            break;
           }
         }
+        if (!placed) {
+          rowGroups.push([item]);
+        }
+      }
 
-        gridPositions.push({ item, row: rowIndex, col });
-        lastCol = col;
-        lastRightX = item.x + itemW;
+      // 行をY座標順にソート
+      rowGroups.sort((a, b) => a[0].y - b[0].y);
+
+      // 枠内全体の基準最小X座標
+      const globalMinX = Math.min(...childItems.map((c) => c.x));
+
+      // 2. 各アイテムの (row, col) インデックスを決定
+      interface GridItemPos {
+        item: CanvasIconItem;
+        row: number;
+        col: number;
+      }
+      const gridPositions: GridItemPos[] = [];
+
+      rowGroups.forEach((rowItems, rowIndex) => {
+        // 行内を X 座標順にソート
+        rowItems.sort((a, b) => a.x - b.x);
+
+        let lastCol = -1;
+        let lastRightX = -Infinity;
+
+        rowItems.forEach((item, itemIdx) => {
+          // 全体最小Xからの概算セルインデックス
+          let col = Math.max(0, Math.round((item.x - globalMinX) / cellStep));
+
+          if (itemIdx > 0) {
+            // 直前のアイテムとの実際の隙間
+            const actualGap = item.x - lastRightX;
+            if (actualGap < itemW * 0.6) {
+              // 隣接（1マス未満）なら連続した次の列
+              col = lastCol + 1;
+            } else {
+              // 1マス分以上空いている場合は、空きマス数を計算してスペースを維持
+              const emptyCells = Math.max(1, Math.round(actualGap / cellStep));
+              col = Math.max(lastCol + 1 + emptyCells, col);
+            }
+          }
+
+          gridPositions.push({ item, row: rowIndex, col });
+          lastCol = col;
+          lastRightX = item.x + itemW;
+        });
       });
-    });
 
-    // 3. 行間での列同期（上下の行で概ね揃っているブロックの列位置を一致させる）
-    // 例えば上行の col=3 と下行の col=4 が同じブロックなら揃える
-    const colUsage = new Map<number, number>();
-    gridPositions.forEach((p) => {
-      colUsage.set(p.col, (colUsage.get(p.col) || 0) + 1);
-    });
+      // 3. 左端間隔 (leftPadding) による左寄せ ＆ 上下中央センタリング
+      const maxRow = Math.max(...gridPositions.map((g) => g.row));
+      const totalGridHeight = (maxRow + 1) * itemW + maxRow * gap;
 
-    // 4. 左端間隔 (leftPadding) による左寄せ ＆ 上下中央センタリング
-    const maxRow = Math.max(...gridPositions.map((g) => g.row));
-    const totalGridHeight = (maxRow + 1) * itemW + maxRow * gap;
+      const startX = leftPadding; // 指定された左端間隔で左寄せ！
+      const startY = Math.max(minPadding, Math.round((box.height - totalGridHeight) / 2));
 
-    const startX = leftPadding; // 指定された左端間隔で左寄せ！
-    const startY = Math.max(minPadding, Math.round((box.height - totalGridHeight) / 2));
-
-    // 5. 新しい座標を適用
-    const posMap = new Map<string, { x: number; y: number }>();
-    gridPositions.forEach(({ item, row, col }) => {
-      posMap.set(item.id, {
-        x: Math.round(box.x + startX + col * cellStep),
-        y: Math.round(box.y + startY + row * cellStep),
+      // 4. 新しい座標を蓄積
+      gridPositions.forEach(({ item, row, col }) => {
+        allPosUpdates.set(item.id, {
+          size: itemW,
+          x: Math.round(box.x + startX + col * cellStep),
+          y: Math.round(box.y + startY + row * cellStep),
+        });
       });
-    });
+    }
+
+    if (allPosUpdates.size === 0) return;
 
     const nextItems = items.map((it) => {
-      const pos = posMap.get(it.id);
-      if (!pos) return it;
-      return { ...it, size: itemW, x: pos.x, y: pos.y };
+      const update = allPosUpdates.get(it.id);
+      if (!update) return it;
+      return {
+        ...it,
+        size: update.size,
+        x: update.x,
+        y: update.y,
+      };
     });
 
     handleUpdateItems(nextItems);

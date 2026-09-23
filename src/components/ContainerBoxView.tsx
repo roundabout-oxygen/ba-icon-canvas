@@ -6,6 +6,7 @@ import { PRESET_BOX_THEMES } from '../utils/constants';
 interface ContainerBoxViewProps {
   box: ContainerBox;
   isSelected: boolean;
+  selectedBoxCount?: number;
   isDragging?: boolean;
   onSelect: (id: string, e: React.MouseEvent) => void;
   onUpdate: (id: string, updates: Partial<ContainerBox>) => void;
@@ -21,6 +22,7 @@ interface ContainerBoxViewProps {
 export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
   box,
   isSelected,
+  selectedBoxCount = 1,
   isDragging = false,
   onSelect,
   onUpdate,
@@ -280,10 +282,11 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
         </div>
 
         {/* 枠内整列ボタン */}
+        {/* 横一列整列 */}
         <button
-          onClick={() => onAlignChildren(box.id, 'row', gridPaddingLeft)}
+          onClick={() => onAlignChildren(box.id, 'row', gridPaddingLeft, gridIconGap)}
           className="p-1 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition"
-          title="枠内のアイコンを横一列に整列 (左寄せ)"
+          title={selectedBoxCount > 1 && isSelected ? `選択中の${selectedBoxCount}枠を横一列に整列` : "枠内のアイコンを横一列に整列 (左寄せ)"}
         >
           <span className="text-[10px] font-bold">横列</span>
         </button>
@@ -301,7 +304,7 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
                 ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
                 : 'text-slate-300 hover:text-white hover:bg-slate-800'
             }`}
-            title="枠内のアイコンをグリッド整列 (左端余白・アイコン間隔を設定)"
+            title={selectedBoxCount > 1 && isSelected ? `選択中の${selectedBoxCount}枠を一括グリッド整列` : "枠内のアイコンをグリッド整列 (左端余白・アイコン間隔を設定)"}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
           </button>
@@ -317,7 +320,13 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
                   <LayoutGrid className="w-3.5 h-3.5" />
                   グリッド整列設定
                 </span>
-                <span className="text-[10px] text-slate-400 font-normal">左寄せ</span>
+                {selectedBoxCount > 1 && isSelected ? (
+                  <span className="text-[10px] text-cyan-300 bg-cyan-950/80 border border-cyan-700/60 px-1.5 py-0.5 rounded font-medium">
+                    選択中 {selectedBoxCount} 枠に適用
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-slate-400 font-normal">左寄せ</span>
+                )}
               </div>
 
               {/* アイコン同士の間隔 (Gap) */}
@@ -339,10 +348,24 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
                   }}
                   className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
                 />
-                <div className="flex justify-between text-[9px] text-slate-500">
-                  <span>0px (密着)</span>
-                  <span>8px (標準)</span>
-                  <span>32px</span>
+                {/* プリセットボタン (0px, 4px, 8px, 12px, 16px) */}
+                <div className="grid grid-cols-5 gap-1 pt-0.5">
+                  {[0, 4, 8, 12, 16].map((gapVal) => (
+                    <button
+                      key={gapVal}
+                      onClick={() => {
+                        setGridIconGap(gapVal);
+                        onAlignChildren(box.id, 'grid', gridPaddingLeft, gapVal);
+                      }}
+                      className={`py-0.5 rounded text-[9px] font-mono transition border ${
+                        gridIconGap === gapVal
+                          ? 'border-cyan-400 bg-cyan-950/60 text-cyan-300 font-bold'
+                          : 'border-slate-800 bg-slate-950/50 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {gapVal}px
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -390,7 +413,7 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
                   onClick={() => onAlignChildren(box.id, 'grid', gridPaddingLeft, gridIconGap)}
                   className="flex-1 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-md shadow-cyan-600/30 transition flex items-center justify-center gap-1"
                 >
-                  <span>整列を実行</span>
+                  <span>{selectedBoxCount > 1 && isSelected ? `${selectedBoxCount}枠を一括整列` : '整列を実行'}</span>
                 </button>
                 <button
                   onClick={() => setShowGridAlignPicker(false)}

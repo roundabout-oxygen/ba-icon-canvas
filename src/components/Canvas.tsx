@@ -772,6 +772,7 @@ export const Canvas: React.FC<CanvasProps> = ({
             key={box.id}
             box={box}
             isSelected={selectedIds.has(box.id)}
+            selectedBoxCount={boxes.filter((b) => selectedIds.has(b.id)).length}
             isDragging={isDraggingBoxes && selectedIds.has(box.id)}
             onSelect={handleSelectElement}
             onUpdate={(id, updates) => {
