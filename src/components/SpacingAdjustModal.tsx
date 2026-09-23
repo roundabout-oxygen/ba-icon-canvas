@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { SpacingAdjustOptions } from '../utils/spacingCluster';
 import { Sliders, X, Check } from 'lucide-react';
 
@@ -26,14 +27,16 @@ export const SpacingAdjustModal: React.FC<SpacingAdjustModalProps> = ({
     onClose();
   };
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 select-none"
       onClick={onClose}
+      onMouseDown={(e) => e.stopPropagation()}
     >
       <div
         className="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         {/* ヘッダー */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-950/60">
@@ -140,6 +143,7 @@ export const SpacingAdjustModal: React.FC<SpacingAdjustModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

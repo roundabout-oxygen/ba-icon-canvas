@@ -146,11 +146,14 @@ export function App() {
     [config, items, boxes, pushHistory]
   );
 
-  // アイコンサイズ一括変更
+  // アイコンサイズ一括変更 (選択中があれば選択中のみ、未選択時は配置済みの全アイコンを一括変更)
   const handleChangeIconSize = (size: number) => {
     setIconSize(size);
     if (selectedIds.size > 0) {
       const nextItems = items.map((it) => (selectedIds.has(it.id) ? { ...it, size } : it));
+      handleUpdateItems(nextItems);
+    } else if (items.length > 0) {
+      const nextItems = items.map((it) => ({ ...it, size }));
       handleUpdateItems(nextItems);
     }
   };
@@ -307,12 +310,12 @@ export function App() {
   };
 
   // 枠内のアイテムを整列（横一列 or グリッド）
+  // 枠内のアイテムを整列（横一列 or 行・間隔保持型スマートグリッド）
   const handleAlignBoxChildren = (boxId: string, alignType: 'grid' | 'row') => {
     const box = boxes.find((b) => b.id === boxId);
     if (!box) return;
 
     // 枠の領域内にあるアイコンを抽出
-    const padding = 12;
     const childItems = items.filter(
       (it) =>
         it.x >= box.x - 20 &&
@@ -323,41 +326,128 @@ export function App() {
 
     if (childItems.length === 0) return;
 
-    // Y座標・X座標順でソート
-    childItems.sort((a, b) => (Math.abs(a.y - b.y) > 20 ? a.y - b.y : a.x - b.x));
-
-    const itemW = childItems[0].size;
+    // 枠内のアイコンサイズを統一 (現在設定値の iconSize または枠内最初のアイテムサイズ)
+    const itemW = iconSize || childItems[0].size;
     const gap = 10;
     const minPadding = 12;
-    const availWidth = box.width - minPadding * 2;
+    const cellStep = itemW + gap;
 
-    // グリッド計算 (左右センタリング)
-    const maxCols = Math.max(1, Math.floor((availWidth + gap) / (itemW + gap)));
-    const actualCols = alignType === 'row' ? childItems.length : Math.min(maxCols, childItems.length);
-    const totalGridWidth = actualCols * itemW + (actualCols - 1) * gap;
+    if (alignType === 'row') {
+      // 横一列整列: X順にソートして左から右へ
+      const sorted = [...childItems].sort((a, b) => a.x - b.x);
+      const totalW = sorted.length * itemW + (sorted.length - 1) * gap;
+      const startX = Math.max(minPadding, Math.round((box.width - totalW) / 2));
+      const startY = Math.max(minPadding, Math.round((box.height - itemW) / 2));
+
+      const nextItems = items.map((it) => {
+        const idx = sorted.findIndex((c) => c.id === it.id);
+        if (idx === -1) return it;
+        return {
+          ...it,
+          size: itemW, // サイズも均一化
+          x: box.x + startX + idx * cellStep,
+          y: box.y + startY,
+        };
+      });
+      handleUpdateItems(nextItems);
+      return;
+    }
+
+    // === 行・間隔保持型スマートグリッド整列 ===
+    // 要望対応: 「１行目は範囲、２行目は単体のように意味があって行を分けていたり１マス分以上開けていたりする場合に詰められるのは意図しない。行や１マス分以上空いてる時はそれを維持した上で整列」
+
+    // 1. 行（Row）のクラスタリング: Y座標の近接度（アイコンサイズの半分以内）で行を判別
+    const sortedByY = [...childItems].sort((a, b) => a.y - b.y || a.x - b.x);
+    const rowGroups: CanvasIconItem[][] = [];
+
+    for (const item of sortedByY) {
+      let placed = false;
+      for (const row of rowGroups) {
+        if (Math.abs(row[0].y - item.y) < itemW * 0.5) {
+          row.push(item);
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        rowGroups.push([item]);
+      }
+    }
+
+    // 行をY座標順にソート
+    rowGroups.sort((a, b) => a[0].y - b[0].y);
+
+    // 枠内全体の基準最小X座標
+    const globalMinX = Math.min(...childItems.map((c) => c.x));
+
+    // 2. 各アイテムの (row, col) インデックスを決定
+    interface GridItemPos {
+      item: CanvasIconItem;
+      row: number;
+      col: number;
+    }
+    const gridPositions: GridItemPos[] = [];
+
+    rowGroups.forEach((rowItems, rowIndex) => {
+      // 行内を X 座標順にソート
+      rowItems.sort((a, b) => a.x - b.x);
+
+      let lastCol = -1;
+      let lastRightX = -Infinity;
+
+      rowItems.forEach((item, itemIdx) => {
+        // 全体最小Xからの概算セルインデックス
+        let col = Math.max(0, Math.round((item.x - globalMinX) / cellStep));
+
+        if (itemIdx > 0) {
+          // 直前のアイテムとの実際の隙間
+          const actualGap = item.x - lastRightX;
+          if (actualGap < itemW * 0.6) {
+            // 隣接（1マス未満）なら連続した次の列
+            col = lastCol + 1;
+          } else {
+            // 1マス分以上空いている場合は、空きマス数を計算してスペースを維持
+            const emptyCells = Math.max(1, Math.round(actualGap / cellStep));
+            col = Math.max(lastCol + 1 + emptyCells, col);
+          }
+        }
+
+        gridPositions.push({ item, row: rowIndex, col });
+        lastCol = col;
+        lastRightX = item.x + itemW;
+      });
+    });
+
+    // 3. 行間での列同期（上下の行で概ね揃っているブロックの列位置を一致させる）
+    // 例えば上行の col=3 と下行の col=4 が同じブロックなら揃える
+    const colUsage = new Map<number, number>();
+    gridPositions.forEach((p) => {
+      colUsage.set(p.col, (colUsage.get(p.col) || 0) + 1);
+    });
+
+    // 4. 全体のグリッド幅・高さを算出して上下左右センタリング
+    const maxCol = Math.max(...gridPositions.map((g) => g.col));
+    const maxRow = Math.max(...gridPositions.map((g) => g.row));
+
+    const totalGridWidth = (maxCol + 1) * itemW + maxCol * gap;
+    const totalGridHeight = (maxRow + 1) * itemW + maxRow * gap;
+
     const startX = Math.max(minPadding, Math.round((box.width - totalGridWidth) / 2));
-
-    // 要望対応: 上下方向も枠の中央に配置（上下センタリング）
-    const totalRows = alignType === 'row' ? 1 : Math.ceil(childItems.length / maxCols);
-    const totalGridHeight = totalRows * itemW + (totalRows - 1) * gap;
     const startY = Math.max(minPadding, Math.round((box.height - totalGridHeight) / 2));
 
-    const nextItems = items.map((it) => {
-      const idx = childItems.findIndex((c) => c.id === it.id);
-      if (idx === -1) return it;
+    // 5. 新しい座標を適用
+    const posMap = new Map<string, { x: number; y: number }>();
+    gridPositions.forEach(({ item, row, col }) => {
+      posMap.set(item.id, {
+        x: Math.round(box.x + startX + col * cellStep),
+        y: Math.round(box.y + startY + row * cellStep),
+      });
+    });
 
-      if (alignType === 'row') {
-        const x = box.x + startX + idx * (itemW + gap);
-        const y = box.y + startY;
-        return { ...it, x, y };
-      } else {
-        // グリッド
-        const col = idx % maxCols;
-        const row = Math.floor(idx / maxCols);
-        const x = box.x + startX + col * (itemW + gap);
-        const y = box.y + startY + row * (itemW + gap);
-        return { ...it, x, y };
-      }
+    const nextItems = items.map((it) => {
+      const pos = posMap.get(it.id);
+      if (!pos) return it;
+      return { ...it, size: itemW, x: pos.x, y: pos.y };
     });
 
     handleUpdateItems(nextItems);
@@ -680,6 +770,7 @@ export function App() {
           canvasRef={canvasRef}
           externalSnapLines={keyboardSnapLines}
           onUpdateConfig={handleUpdateConfig}
+          currentIconSize={iconSize}
         />
       </div>
     </div>

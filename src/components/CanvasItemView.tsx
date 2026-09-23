@@ -41,18 +41,18 @@ export const CanvasItemView: React.FC<CanvasItemViewProps> = ({
         e.stopPropagation();
         onStartDrag(item.id, item.x, item.y, e);
       }}
-      className={`group cursor-grab active:cursor-grabbing transition-transform duration-75 select-none overflow-hidden shadow-sm ${
+      className={`group cursor-grab active:cursor-grabbing select-none overflow-hidden shadow-sm transition-shadow duration-75 ${
         isSelected
-          ? 'ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900 shadow-xl shadow-cyan-500/30 scale-[1.02]'
-          : 'hover:scale-105'
+          ? 'ring-2 ring-cyan-400 ring-offset-1 ring-offset-slate-900 shadow-xl shadow-cyan-500/30'
+          : 'hover:brightness-105 hover:shadow-md'
       }`}
       title={`${character.name} (ドラッグで移動 / Delで削除)`}
     >
-      {/* アイコン画像 (端の1px線をクリップするため微小スケールアップ＆角丸クリッピング) */}
+      {/* アイコン画像 (アスペクト比を維持して正方形に正確にフィット) */}
       <img
         src={character.icon}
         alt={character.name}
-        className="w-full h-full object-cover pointer-events-none scale-[1.03] transition-transform"
+        className="w-full h-full object-cover pointer-events-none"
         draggable={false}
       />
 

@@ -1,4 +1,4 @@
-export const APP_VERSION = 'v1.0.7';
+export const APP_VERSION = 'v1.0.8';
 
 export const ATTACK_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   '爆発': { bg: '#fee2e2', text: '#dc2626', border: '#ef4444' },

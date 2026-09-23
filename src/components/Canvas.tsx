@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { CanvasIconItem, ContainerBox, Character, SnapLine, CanvasConfig } from '../types';
 import { CanvasItemView } from './CanvasItemView';
 import { ContainerBoxView } from './ContainerBoxView';
 import { calculateSnap, Rect } from '../utils/snapGuide';
 import { adjustClusterSpacing, SpacingAdjustOptions } from '../utils/spacingCluster';
 import { SpacingAdjustModal } from './SpacingAdjustModal';
-import { Sliders } from 'lucide-react';
+import { Sliders, Maximize2 } from 'lucide-react';
 
 interface CanvasProps {
   items: CanvasIconItem[];
@@ -24,6 +25,7 @@ interface CanvasProps {
   canvasRef: React.RefObject<HTMLDivElement | null>;
   externalSnapLines?: SnapLine[];
   onUpdateConfig?: (updates: Partial<CanvasConfig>) => void;
+  currentIconSize?: number;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
@@ -43,6 +45,7 @@ export const Canvas: React.FC<CanvasProps> = ({
   canvasRef,
   externalSnapLines,
   onUpdateConfig,
+  currentIconSize = 64,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [snapLines, setSnapLines] = useState<SnapLine[]>([]);
@@ -476,15 +479,38 @@ export const Canvas: React.FC<CanvasProps> = ({
     window.addEventListener('mouseup', handleMouseUp);
   };
 
-  // 右クリックコンテキストメニュー
+  // コンテキストメニュー外クリック監視
+  useEffect(() => {
+    if (!contextMenu) return;
+    const handleOutsideClick = () => {
+      setContextMenu(null);
+    };
+    window.addEventListener('mousedown', handleOutsideClick);
+    return () => window.removeEventListener('mousedown', handleOutsideClick);
+  }, [contextMenu]);
+
+  // 右クリックコンテキストメニュー (アイコン選択時)
   const handleContextMenu = (e: React.MouseEvent) => {
     const selectedIconCount = items.filter((it) => selectedIds.has(it.id)).length;
-    if (selectedIconCount >= 2) {
+    if (selectedIconCount >= 1) {
       e.preventDefault();
-      setContextMenu({ x: e.clientX, y: e.clientY });
+      e.stopPropagation();
+      const menuW = 200;
+      const menuH = 90;
+      const posX = Math.min(e.clientX, window.innerWidth - menuW - 10);
+      const posY = Math.min(e.clientY, window.innerHeight - menuH - 10);
+      setContextMenu({ x: Math.max(10, posX), y: Math.max(10, posY) });
     } else {
       setContextMenu(null);
     }
+  };
+
+  // 選択中アイコンのサイズを基準サイズに一括統一
+  const handleUnifySelectedSizes = () => {
+    const nextItems = items.map((it) =>
+      selectedIds.has(it.id) ? { ...it, size: currentIconSize } : it
+    );
+    onUpdateItems(nextItems);
   };
 
   // アイコン間隔の適用
@@ -736,25 +762,42 @@ export const Canvas: React.FC<CanvasProps> = ({
         )}
       </div>
 
-      {/* 右クリックコンテキストメニュー */}
-      {contextMenu && (
-        <div
-          className="fixed bg-slate-900/95 backdrop-blur border border-slate-700 shadow-2xl rounded-lg py-1 px-1 z-[150] min-w-[160px] animate-in fade-in zoom-in-95 duration-100"
-          style={{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            onClick={() => {
-              setContextMenu(null);
-              setShowSpacingModal(true);
-            }}
-            className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-200 hover:bg-cyan-600/30 hover:text-cyan-300 rounded transition font-medium"
+      {/* 右クリックコンテキストメニュー (最前面 portal) */}
+      {contextMenu &&
+        createPortal(
+          <div
+            className="fixed bg-slate-900/95 backdrop-blur border border-slate-700 shadow-2xl rounded-lg py-1 px-1 z-[9999] min-w-[190px] animate-in fade-in zoom-in-95 duration-100 select-none"
+            style={{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
           >
-            <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-            <span>間隔を調整する...</span>
-          </button>
-        </div>
-      )}
+            {items.filter((it) => selectedIds.has(it.id)).length >= 2 && (
+              <button
+                onClick={() => {
+                  setContextMenu(null);
+                  setShowSpacingModal(true);
+                }}
+                onMouseDown={(e) => e.stopPropagation()}
+                className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-200 hover:bg-cyan-600/30 hover:text-cyan-300 rounded transition font-medium text-left"
+              >
+                <Sliders className="w-3.5 h-3.5 text-cyan-400" />
+                <span>間隔を調整する...</span>
+              </button>
+            )}
+            <button
+              onClick={() => {
+                setContextMenu(null);
+                handleUnifySelectedSizes();
+              }}
+              onMouseDown={(e) => e.stopPropagation()}
+              className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-200 hover:bg-cyan-600/30 hover:text-cyan-300 rounded transition font-medium text-left"
+            >
+              <Maximize2 className="w-3.5 h-3.5 text-cyan-400" />
+              <span>アイコンサイズを揃える ({currentIconSize}px)</span>
+            </button>
+          </div>,
+          document.body
+        )}
 
       {/* アイコン間隔調整ダイアログ */}
       <SpacingAdjustModal
