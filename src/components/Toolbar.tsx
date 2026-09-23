@@ -22,7 +22,8 @@ import {
   FolderOpen,
   Save,
   Check,
-  Maximize2
+  Maximize2,
+  Sliders,
 } from 'lucide-react';
 
 interface ToolbarProps {
@@ -44,6 +45,7 @@ interface ToolbarProps {
   onClearAll: () => void;
   iconSize: number;
   onChangeIconSize: (size: number) => void;
+  onOpenIconSettings: () => void;
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({
@@ -63,6 +65,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onClearAll,
   iconSize,
   onChangeIconSize,
+  onOpenIconSettings,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showBoxDropdown, setShowBoxDropdown] = useState(false);
@@ -208,38 +211,69 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         )}
       </div>
 
-      {/* 中央エリア: アイコンサイズ調整・スナップ切り替え・キャンバス設定 */}
-      <div className="flex items-center gap-3">
-        {/* アイコンサイズスライダー */}
-        <div className="flex items-center gap-1.5 text-xs text-slate-400">
+      {/* 中央エリア: アイコン設定・サイズ・丸み・スナップ切り替え */}
+      <div className="flex items-center gap-2.5">
+        {/* アイコン詳細設定ボタン */}
+        <button
+          onClick={onOpenIconSettings}
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white border border-cyan-800/60 shadow-sm transition text-xs font-semibold"
+          title="アイコンのサイズ・丸み・枠線の太さ・属性連動カラーの詳細設定"
+        >
+          <Sliders className="w-3.5 h-3.5 text-cyan-400" />
+          <span>アイコン設定</span>
+          {config.iconBorderWidth && config.iconBorderWidth > 0 ? (
+            <span
+              className="text-[9px] px-1 py-0.5 rounded font-mono border"
+              style={{
+                borderColor:
+                  config.iconBorderColorMode === 'attack'
+                    ? '#ef4444'
+                    : config.iconBorderColorMode === 'defense'
+                    ? '#3b82f6'
+                    : (config.iconBorderColor || '#ffffff'),
+                color:
+                  config.iconBorderColorMode === 'attack'
+                    ? '#f87171'
+                    : config.iconBorderColorMode === 'defense'
+                    ? '#60a5fa'
+                    : (config.iconBorderColor || '#ffffff'),
+              }}
+            >
+              枠線{config.iconBorderWidth}px
+            </span>
+          ) : null}
+        </button>
+
+        {/* 簡易アイコンサイズスライダー */}
+        <div className="flex items-center gap-1 text-xs text-slate-400">
           <span className="text-[11px]">サイズ:</span>
           <input
             type="range"
-            min="48"
-            max="100"
+            min="40"
+            max="120"
             step="4"
             value={iconSize}
             onChange={(e) => onChangeIconSize(Number(e.target.value))}
-            className="w-16 accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
+            className="w-14 accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
             title={`アイコンサイズ: ${iconSize}px`}
           />
-          <span className="font-mono text-[10px] w-5">{iconSize}</span>
+          <span className="font-mono text-[10px] w-5 text-slate-300">{iconSize}</span>
         </div>
 
-        {/* アイコン角丸スライダー */}
-        <div className="flex items-center gap-1.5 text-xs text-slate-400">
+        {/* 簡易アイコン角丸スライダー */}
+        <div className="flex items-center gap-1 text-xs text-slate-400">
           <span className="text-[11px]">丸み:</span>
           <input
             type="range"
             min="0"
-            max="24"
+            max="32"
             step="2"
             value={config.iconBorderRadius ?? 8}
             onChange={(e) => onUpdateConfig({ iconBorderRadius: Number(e.target.value) })}
-            className="w-14 accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
+            className="w-12 accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
             title={`アイコン角の丸み: ${config.iconBorderRadius ?? 8}px`}
           />
-          <span className="font-mono text-[10px] w-4">{config.iconBorderRadius ?? 8}</span>
+          <span className="font-mono text-[10px] w-4 text-slate-300">{config.iconBorderRadius ?? 8}</span>
         </div>
 
         <div className="h-5 w-[1px] bg-slate-700 mx-1" />

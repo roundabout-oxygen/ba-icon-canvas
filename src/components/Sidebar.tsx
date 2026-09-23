@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Character, AttackType, DefenseType } from '../types';
 import { ATTACK_COLORS, DEFENSE_COLORS } from '../utils/constants';
+import { matchFuzzyJapanese } from '../utils/textUtils';
 import { Search, ChevronLeft, ChevronRight, Check, CheckSquare, Square, Plus, ArrowDownAZ } from 'lucide-react';
 
 interface SidebarProps {
@@ -47,8 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const filteredCharacters = useMemo(() => {
     const list = characters.filter((char) => {
       if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        if (!char.name.toLowerCase().includes(q)) return false;
+        if (!matchFuzzyJapanese(char.name, searchQuery)) return false;
       }
       if (selectedAttack !== 'all' && char.attack_type !== selectedAttack) return false;
       if (selectedDefense !== 'all' && char.defense_type !== selectedDefense) return false;
@@ -278,7 +278,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* 攻撃タイプ */}
         <div className="flex items-center gap-1">
           <span className="text-[10px] text-slate-400 w-12 shrink-0">攻撃:</span>
-          <div className="grid grid-cols-5 gap-1 flex-1 text-[10px]">
+          <div className="grid grid-cols-6 gap-1 flex-1 text-[10px]">
             <button
               onClick={() => setSelectedAttack('all')}
               className={`py-0.5 rounded text-center transition font-medium ${
@@ -289,7 +289,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               全
             </button>
-            {(['爆発', '貫通', '神秘', '振動'] as AttackType[]).map((atk) => {
+            {(['爆発', '貫通', '神秘', '振動', '分解'] as AttackType[]).map((atk) => {
               const col = ATTACK_COLORS[atk];
               const isSelected = selectedAttack === atk;
               return (
@@ -300,8 +300,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     isSelected ? 'border-white text-white font-bold' : 'border-transparent text-slate-300'
                   }`}
                   style={{
-                    backgroundColor: isSelected ? col.border : col.border + '33',
-                    color: isSelected ? '#ffffff' : col.border,
+                    backgroundColor: isSelected ? col?.border : (col ? col.border + '33' : '#334155'),
+                    color: isSelected ? '#ffffff' : (col?.border || '#cbd5e1'),
                   }}
                 >
                   {atk}
@@ -314,7 +314,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* 防御タイプ */}
         <div className="flex items-center gap-1">
           <span className="text-[10px] text-slate-400 w-12 shrink-0">防御:</span>
-          <div className="grid grid-cols-5 gap-1 flex-1 text-[10px]">
+          <div className="grid grid-cols-6 gap-1 flex-1 text-[10px]">
             <button
               onClick={() => setSelectedDefense('all')}
               className={`py-0.5 rounded text-center transition font-medium ${
@@ -330,6 +330,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               { label: '重装', full: '重装甲' },
               { label: '特殊', full: '特殊装甲' },
               { label: '弾力', full: '弾力装甲' },
+              { label: '複合', full: '複合装甲' },
             ].map(({ label, full }) => {
               const col = DEFENSE_COLORS[full];
               const isSelected = selectedDefense === full;
@@ -341,8 +342,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     isSelected ? 'border-white text-white font-bold' : 'border-transparent text-slate-300'
                   }`}
                   style={{
-                    backgroundColor: isSelected ? col.border : col.border + '33',
-                    color: isSelected ? '#ffffff' : col.border,
+                    backgroundColor: isSelected ? col?.border : (col ? col.border + '33' : '#334155'),
+                    color: isSelected ? '#ffffff' : (col?.border || '#cbd5e1'),
                   }}
                 >
                   {label}

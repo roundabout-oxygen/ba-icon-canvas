@@ -1,10 +1,11 @@
-export const APP_VERSION = 'v1.0.11';
+export const APP_VERSION = 'v1.0.12';
 
 export const ATTACK_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   '爆発': { bg: '#fee2e2', text: '#dc2626', border: '#ef4444' },
   '貫通': { bg: '#fef3c7', text: '#d97706', border: '#f59e0b' },
   '神秘': { bg: '#dbeafe', text: '#2563eb', border: '#3b82f6' },
   '振動': { bg: '#f3e8ff', text: '#9333ea', border: '#a855f7' },
+  '分解': { bg: '#d1fae5', text: '#059669', border: '#10b981' },
 };
 
 export const DEFENSE_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -12,7 +13,7 @@ export const DEFENSE_COLORS: Record<string, { bg: string; text: string; border: 
   '重装甲': { bg: '#fef3c7', text: '#d97706', border: '#f59e0b' },
   '特殊装甲': { bg: '#dbeafe', text: '#2563eb', border: '#3b82f6' },
   '弾力装甲': { bg: '#f3e8ff', text: '#9333ea', border: '#a855f7' },
-  '複合装甲': { bg: '#f1f5f9', text: '#475569', border: '#94a3b8' },
+  '複合装甲': { bg: '#d1fae5', text: '#059669', border: '#10b981' },
 };
 
 export const PRESET_BOX_THEMES = [

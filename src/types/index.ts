@@ -1,6 +1,8 @@
-export type AttackType = '爆発' | '貫通' | '神秘' | '振動';
+export type AttackType = '爆発' | '貫通' | '神秘' | '振動' | '分解';
 export type DefenseType = '軽装備' | '重装甲' | '特殊装甲' | '弾力装甲' | '複合装甲';
 export type Role = 'STRIKER' | 'SPECIAL';
+
+export type IconBorderColorMode = 'custom' | 'attack' | 'defense';
 
 export interface Character {
   id: string;
@@ -25,6 +27,10 @@ export interface CanvasIconItem {
   y: number;
   size: number; // width and height (square icon)
   zIndex: number;
+  borderWidth?: number; // アイコン枠線の太さ (0〜8px)
+  borderColorMode?: IconBorderColorMode; // 'custom' | 'attack' | 'defense'
+  borderColor?: string; // カスタム枠線色
+  borderRadius?: number; // 個別角丸
 }
 
 export interface ContainerBox {
@@ -61,6 +67,9 @@ export interface CanvasConfig {
   snapGap: number; // アイコン間の吸着間隔(px)
   iconBorderRadius: number; // アイコンの角丸(px)
   showGrid: boolean;
+  iconBorderWidth?: number; // デフォルトアイコン枠線の太さ
+  iconBorderColorMode?: IconBorderColorMode; // デフォルト色モード
+  iconBorderColor?: string; // デフォルト枠線色
 }
 
 export interface HistoryState {

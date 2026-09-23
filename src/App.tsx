@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Character, CanvasIconItem, ContainerBox, CanvasConfig, HistoryState, SnapLine } from './types';
+import { Character, CanvasIconItem, ContainerBox, CanvasConfig, HistoryState, SnapLine, IconBorderColorMode } from './types';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { Toolbar } from './components/Toolbar';
+import { IconSettingsModal } from './components/IconSettingsModal';
 import { PRESET_BOX_THEMES, APP_VERSION } from './utils/constants';
 import { toPng, toBlob } from 'html-to-image';
 import { getGuideLinesOnly, Rect } from './utils/snapGuide';
@@ -21,9 +22,13 @@ export function App() {
     snapGap: 8,
     iconBorderRadius: 8,
     showGrid: false,
+    iconBorderWidth: 0,
+    iconBorderColorMode: 'attack',
+    iconBorderColor: '#ffffff',
   });
 
   const [iconSize, setIconSize] = useState<number>(64);
+  const [isIconSettingsOpen, setIsIconSettingsOpen] = useState(false);
   const [items, setItems] = useState<CanvasIconItem[]>([]);
   const [boxes, setBoxes] = useState<ContainerBox[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -829,6 +834,75 @@ export function App() {
     };
   }, [items, boxes, selectedIds, config, handleUndo, handleRedo, pushHistory]);
 
+  // プレビュー用に各属性の代表生徒をピックアップ（ヒナ:爆発、イオリ:貫通、アリス:神秘、ユカリ:振動、ケイ/臨戦アリス:複合装甲）
+  const previewCharacters = useMemo(() => {
+    const list: Character[] = [];
+    const targets = ['ヒナ', 'イオリ', 'アリス', 'ユカリ', 'ケイ'];
+    for (const t of targets) {
+      const found = characters.find((c) => c.name === t || c.name.startsWith(t));
+      if (found) list.push(found);
+    }
+    if (list.length < 5) {
+      characters.forEach((c) => {
+        if (list.length < 5 && !list.some((it) => it.id === c.id)) list.push(c);
+      });
+    }
+    return list;
+  }, [characters]);
+
+  // 選択中の生徒アイコンの数
+  const selectedIconCount = useMemo(() => {
+    return items.filter((it) => selectedIds.has(it.id)).length;
+  }, [items, selectedIds]);
+
+  // アイコン詳細設定の適用
+  const handleApplyIconSettings = (settings: {
+    size: number;
+    radius: number;
+    borderWidth: number;
+    colorMode: IconBorderColorMode;
+    color: string;
+    applyTo: 'all' | 'selected';
+  }) => {
+    setIconSize(settings.size);
+
+    const nextConfig: CanvasConfig = {
+      ...config,
+      iconBorderRadius: settings.radius,
+      iconBorderWidth: settings.borderWidth,
+      iconBorderColorMode: settings.colorMode,
+      iconBorderColor: settings.color,
+    };
+    setConfig(nextConfig);
+
+    let nextItems: CanvasIconItem[] = [];
+    if (settings.applyTo === 'selected') {
+      nextItems = items.map((it) => {
+        if (!selectedIds.has(it.id)) return it;
+        return {
+          ...it,
+          size: settings.size,
+          borderRadius: settings.radius,
+          borderWidth: settings.borderWidth,
+          borderColorMode: settings.colorMode,
+          borderColor: settings.color,
+        };
+      });
+    } else {
+      nextItems = items.map((it) => ({
+        ...it,
+        size: settings.size,
+        borderRadius: settings.radius,
+        borderWidth: settings.borderWidth,
+        borderColorMode: settings.colorMode,
+        borderColor: settings.color,
+      }));
+    }
+
+    setItems(nextItems);
+    pushHistory(nextItems, boxes, nextConfig);
+  };
+
   return (
     <div className="w-screen h-screen flex flex-col bg-slate-950 text-slate-100 overflow-hidden font-sans">
       {/* ツールバー */}
@@ -849,6 +923,7 @@ export function App() {
         onClearAll={handleClearAll}
         iconSize={iconSize}
         onChangeIconSize={handleChangeIconSize}
+        onOpenIconSettings={() => setIsIconSettingsOpen(true)}
       />
 
       {/* メインエリア: 左サイドバー + 右キャンバス */}
@@ -881,6 +956,20 @@ export function App() {
           currentIconSize={iconSize}
         />
       </div>
+
+      {/* アイコン詳細設定モーダル */}
+      <IconSettingsModal
+        isOpen={isIconSettingsOpen}
+        onClose={() => setIsIconSettingsOpen(false)}
+        currentSize={iconSize}
+        currentRadius={config.iconBorderRadius ?? 8}
+        currentBorderWidth={config.iconBorderWidth ?? 0}
+        currentColorMode={config.iconBorderColorMode ?? 'attack'}
+        currentColor={config.iconBorderColor ?? '#ffffff'}
+        selectedCount={selectedIconCount}
+        previewCharacters={previewCharacters}
+        onApply={handleApplyIconSettings}
+      />
     </div>
   );
 }

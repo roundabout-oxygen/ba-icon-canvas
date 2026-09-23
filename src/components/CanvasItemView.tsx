@@ -1,5 +1,6 @@
 import React from 'react';
-import { CanvasIconItem, Character } from '../types';
+import { CanvasIconItem, Character, IconBorderColorMode } from '../types';
+import { ATTACK_COLORS, DEFENSE_COLORS } from '../utils/constants';
 import { Trash2 } from 'lucide-react';
 
 interface CanvasItemViewProps {
@@ -7,6 +8,9 @@ interface CanvasItemViewProps {
   character: Character;
   isSelected: boolean;
   borderRadius?: number;
+  defaultBorderWidth?: number;
+  defaultColorMode?: IconBorderColorMode;
+  defaultBorderColor?: string;
   onSelect: (id: string, e: React.MouseEvent) => void;
   onDelete: (id: string) => void;
   onStartDrag: (id: string, startX: number, startY: number, e: React.MouseEvent) => void;
@@ -17,10 +21,25 @@ export const CanvasItemView: React.FC<CanvasItemViewProps> = ({
   character,
   isSelected,
   borderRadius = 8,
+  defaultBorderWidth = 0,
+  defaultColorMode = 'custom',
+  defaultBorderColor = '#ffffff',
   onSelect,
   onDelete,
   onStartDrag,
 }) => {
+  const bWidth = item.borderWidth !== undefined ? item.borderWidth : defaultBorderWidth;
+  const colorMode = item.borderColorMode || defaultColorMode;
+  const customColor = item.borderColor || defaultBorderColor;
+  const finalRadius = item.borderRadius !== undefined ? item.borderRadius : borderRadius;
+
+  let computedBorderColor = customColor;
+  if (colorMode === 'attack') {
+    computedBorderColor = ATTACK_COLORS[character.attack_type]?.border || customColor;
+  } else if (colorMode === 'defense') {
+    computedBorderColor = DEFENSE_COLORS[character.defense_type]?.border || customColor;
+  }
+
   return (
     <div
       data-item-id={item.id}
@@ -31,7 +50,11 @@ export const CanvasItemView: React.FC<CanvasItemViewProps> = ({
         width: `${item.size}px`,
         height: `${item.size}px`,
         zIndex: isSelected ? 50 : Math.max(20, item.zIndex),
-        borderRadius: `${borderRadius}px`,
+        borderRadius: `${finalRadius}px`,
+        borderWidth: `${bWidth}px`,
+        borderStyle: bWidth > 0 ? 'solid' : 'none',
+        borderColor: computedBorderColor,
+        boxSizing: 'border-box',
       }}
       onClick={(e) => {
         e.stopPropagation();
