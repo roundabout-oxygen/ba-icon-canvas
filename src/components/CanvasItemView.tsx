@@ -38,8 +38,11 @@ export const CanvasItemView: React.FC<CanvasItemViewProps> = ({
         onSelect(item.id, e);
       }}
       onMouseDown={(e) => {
-        e.stopPropagation();
-        onStartDrag(item.id, item.x, item.y, e);
+        if (e.button === 0) {
+          e.stopPropagation();
+          onStartDrag(item.id, item.x, item.y, e);
+        }
+        // 右クリック(button===2)や中クリック(button===1)は親のパン移動を可能にするためスルー
       }}
       className={`group cursor-grab active:cursor-grabbing select-none overflow-hidden shadow-sm transition-shadow duration-75 ${
         isSelected

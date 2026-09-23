@@ -309,9 +309,9 @@ export function App() {
     pushHistory(items, nextBoxes, config);
   };
 
-  // 枠内のアイテムを整列（横一列 or グリッド）
   // 枠内のアイテムを整列（横一列 or 行・間隔保持型スマートグリッド）
-  const handleAlignBoxChildren = (boxId: string, alignType: 'grid' | 'row') => {
+  // 要望対応: 「左右の中央に配置するようにしてもらいましたが、やはり左寄せでお願いします。ただしグリッド整列を選んだときにシークバーが出て左端から〇ピクセル間隔を空けるかを設定できるようにしてください」
+  const handleAlignBoxChildren = (boxId: string, alignType: 'grid' | 'row', leftPadding: number = 16) => {
     const box = boxes.find((b) => b.id === boxId);
     if (!box) return;
 
@@ -329,14 +329,13 @@ export function App() {
     // 枠内のアイコンサイズを統一 (現在設定値の iconSize または枠内最初のアイテムサイズ)
     const itemW = iconSize || childItems[0].size;
     const gap = 10;
-    const minPadding = 12;
+    const minPadding = 8;
     const cellStep = itemW + gap;
 
     if (alignType === 'row') {
-      // 横一列整列: X順にソートして左から右へ
+      // 横一列整列: X順にソートして指定の左端余白で左寄せ
       const sorted = [...childItems].sort((a, b) => a.x - b.x);
-      const totalW = sorted.length * itemW + (sorted.length - 1) * gap;
-      const startX = Math.max(minPadding, Math.round((box.width - totalW) / 2));
+      const startX = leftPadding;
       const startY = Math.max(minPadding, Math.round((box.height - itemW) / 2));
 
       const nextItems = items.map((it) => {
@@ -425,14 +424,11 @@ export function App() {
       colUsage.set(p.col, (colUsage.get(p.col) || 0) + 1);
     });
 
-    // 4. 全体のグリッド幅・高さを算出して上下左右センタリング
-    const maxCol = Math.max(...gridPositions.map((g) => g.col));
+    // 4. 左端間隔 (leftPadding) による左寄せ ＆ 上下中央センタリング
     const maxRow = Math.max(...gridPositions.map((g) => g.row));
-
-    const totalGridWidth = (maxCol + 1) * itemW + maxCol * gap;
     const totalGridHeight = (maxRow + 1) * itemW + maxRow * gap;
 
-    const startX = Math.max(minPadding, Math.round((box.width - totalGridWidth) / 2));
+    const startX = leftPadding; // 指定された左端間隔で左寄せ！
     const startY = Math.max(minPadding, Math.round((box.height - totalGridHeight) / 2));
 
     // 5. 新しい座標を適用

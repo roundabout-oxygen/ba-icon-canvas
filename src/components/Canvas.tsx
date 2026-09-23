@@ -6,7 +6,7 @@ import { ContainerBoxView } from './ContainerBoxView';
 import { calculateSnap, Rect } from '../utils/snapGuide';
 import { adjustClusterSpacing, SpacingAdjustOptions } from '../utils/spacingCluster';
 import { SpacingAdjustModal } from './SpacingAdjustModal';
-import { Sliders, Maximize2 } from 'lucide-react';
+import { Sliders, Maximize2, RotateCcw } from 'lucide-react';
 
 interface CanvasProps {
   items: CanvasIconItem[];
@@ -20,7 +20,7 @@ interface CanvasProps {
   onDeleteItem: (id: string) => void;
   onDeleteBox: (id: string) => void;
   onDuplicateBox: (id: string) => void;
-  onAlignBoxChildren: (boxId: string, type: 'grid' | 'row') => void;
+  onAlignBoxChildren: (boxId: string, type: 'grid' | 'row', leftPadding?: number) => void;
   onDropCharacters: (charIds: string[], x: number, y: number) => void;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   externalSnapLines?: SnapLine[];
@@ -50,6 +50,18 @@ export const Canvas: React.FC<CanvasProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [snapLines, setSnapLines] = useState<SnapLine[]>([]);
   const [isDraggingBoxes, setIsDraggingBoxes] = useState(false);
+
+  // ビュー移動（パン）状態
+  const [pan, setPan] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const panStartRef = useRef<{
+    startX: number;
+    startY: number;
+    initX: number;
+    initY: number;
+    moved: boolean;
+  } | null>(null);
+  const lastPanMovedRef = useRef<boolean>(false);
 
   // 右クリックコンテキストメニュー & 間隔調整モーダル
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
@@ -491,9 +503,16 @@ export const Canvas: React.FC<CanvasProps> = ({
 
   // 右クリックコンテキストメニュー (アイコン選択時)
   const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    // 右クリックドラッグでパン移動を行った直後はメニューを開かない
+    if (lastPanMovedRef.current) {
+      lastPanMovedRef.current = false;
+      return;
+    }
+
     const selectedIconCount = items.filter((it) => selectedIds.has(it.id)).length;
     if (selectedIconCount >= 1) {
-      e.preventDefault();
       e.stopPropagation();
       const menuW = 200;
       const menuH = 90;
@@ -525,11 +544,57 @@ export const Canvas: React.FC<CanvasProps> = ({
     onUpdateItems(nextItems);
   };
 
-  // キャンバスの背景または非アクティブ枠からの範囲選択・クリック選択
+  // キャンバスの背景または非アクティブ枠からの範囲選択・クリック選択・右ドラッグによるパン
   const handleCanvasMouseDown = (e: React.MouseEvent) => {
     if (contextMenu) {
       setContextMenu(null);
     }
+
+    // === 要望対応: 右クリック(button===2) またはホイールクリック(button===1) のドラッグでビュー移動（パン） ===
+    if (e.button === 2 || e.button === 1) {
+      if (e.button === 1) {
+        e.preventDefault();
+      }
+      panStartRef.current = {
+        startX: e.clientX,
+        startY: e.clientY,
+        initX: pan.x,
+        initY: pan.y,
+        moved: false,
+      };
+      setIsPanning(true);
+
+      const handlePanMove = (moveEvent: MouseEvent) => {
+        if (!panStartRef.current) return;
+        const dx = moveEvent.clientX - panStartRef.current.startX;
+        const dy = moveEvent.clientY - panStartRef.current.startY;
+        if (Math.hypot(dx, dy) > 3) {
+          panStartRef.current.moved = true;
+        }
+        setPan({
+          x: Math.round(panStartRef.current.initX + dx),
+          y: Math.round(panStartRef.current.initY + dy),
+        });
+      };
+
+      const handlePanUp = () => {
+        if (panStartRef.current) {
+          lastPanMovedRef.current = panStartRef.current.moved;
+          panStartRef.current = null;
+        }
+        setIsPanning(false);
+        window.removeEventListener('mousemove', handlePanMove);
+        window.removeEventListener('mouseup', handlePanUp);
+      };
+
+      window.addEventListener('mousemove', handlePanMove);
+      window.addEventListener('mouseup', handlePanUp);
+      return;
+    }
+
+    // 左クリック(button===0) 以外の操作は範囲選択等を行わない
+    if (e.button !== 0) return;
+
     const target = e.target as HTMLElement;
 
     // 生徒アイコン自体、リサイズハンドル、ヘッダー操作ボタンなどの直接操作時はキャンバス選択を開始しない
@@ -644,20 +709,36 @@ export const Canvas: React.FC<CanvasProps> = ({
   return (
     <div
       ref={containerRef}
-      className="flex-1 h-full overflow-auto bg-slate-950 flex items-center justify-center p-8 relative"
+      className={`flex-1 h-full overflow-hidden bg-slate-950 flex items-center justify-center relative select-none ${
+        isPanning ? 'cursor-grabbing' : ''
+      }`}
       onMouseDown={handleCanvasMouseDown}
       onContextMenu={handleContextMenu}
+      onDoubleClick={(e) => {
+        // キャンバス背景ダブルクリックでビュー位置（パン）を中央にリセット
+        if (e.target === containerRef.current) {
+          setPan({ x: 0, y: 0 });
+        }
+      }}
     >
-      {/* ズーム拡大縮小を適用するキャンバス本体 */}
+      {/* ビューパン移動ラッパー */}
       <div
-        ref={canvasRef}
-        id="canvas-bg"
         style={{
-          width: `${config.width}px`,
-          height: `${config.height}px`,
-          backgroundColor: config.bgColor,
-          transform: `scale(${config.zoom})`,
-          transformOrigin: 'center center',
+          transform: `translate(${pan.x}px, ${pan.y}px)`,
+          transition: isPanning ? 'none' : 'transform 0.05s ease-out',
+        }}
+        className="flex items-center justify-center p-8"
+      >
+        {/* ズーム拡大縮小を適用するキャンバス本体 */}
+        <div
+          ref={canvasRef}
+          id="canvas-bg"
+          style={{
+            width: `${config.width}px`,
+            height: `${config.height}px`,
+            backgroundColor: config.bgColor,
+            transform: `scale(${config.zoom})`,
+            transformOrigin: 'center center',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
         }}
         onDragOver={handleDragOver}
@@ -761,6 +842,19 @@ export const Canvas: React.FC<CanvasProps> = ({
           />
         )}
       </div>
+      </div>
+
+      {/* ビュー位置リセットボタン (パン移動されている時のみ右下に表示) */}
+      {(pan.x !== 0 || pan.y !== 0) && (
+        <button
+          onClick={() => setPan({ x: 0, y: 0 })}
+          className="absolute bottom-4 right-4 z-30 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 border border-slate-700 hover:border-cyan-500/50 px-3 py-1.5 rounded-lg text-xs font-medium shadow-xl backdrop-blur flex items-center gap-1.5 transition select-none animate-in fade-in slide-in-from-bottom-2 duration-150"
+          title="ビュー位置を中央にリセット"
+        >
+          <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
+          <span>ビュー位置をリセット</span>
+        </button>
+      )}
 
       {/* 右クリックコンテキストメニュー (最前面 portal) */}
       {contextMenu &&
