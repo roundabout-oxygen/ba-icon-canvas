@@ -11,10 +11,11 @@ interface ContainerBoxViewProps {
   onUpdate: (id: string, updates: Partial<ContainerBox>) => void;
   onDelete: (id: string) => void;
   onDuplicate: (id: string) => void;
-  onAlignChildren: (boxId: string, type: 'grid' | 'row', leftPadding?: number) => void;
+  onAlignChildren: (boxId: string, type: 'grid' | 'row', leftPadding?: number, iconGap?: number) => void;
   onStartDrag: (id: string, startX: number, startY: number, e: React.MouseEvent) => void;
   onStartResize?: (boxId: string, handle: string, e: React.MouseEvent) => void;
   zoom: number;
+  defaultGap?: number;
 }
 
 export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
@@ -29,11 +30,13 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
   onStartDrag,
   onStartResize,
   zoom,
+  defaultGap = 8,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showRadiusPicker, setShowRadiusPicker] = useState(false);
   const [showGridAlignPicker, setShowGridAlignPicker] = useState(false);
   const [gridPaddingLeft, setGridPaddingLeft] = useState<number>(16);
+  const [gridIconGap, setGridIconGap] = useState<number>(defaultGap);
   const resizeRef = useRef<{ handle: string; startX: number; startY: number; startBox: ContainerBox } | null>(null);
 
   // ピッカーポップアップ外クリックで閉じる
@@ -285,47 +288,69 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
           <span className="text-[10px] font-bold">横列</span>
         </button>
 
-        {/* 要望対応: グリッド整列ボタン ＆ 左端余白シークバーポップアップ */}
+        {/* 要望対応: グリッド整列ボタン ＆ 左端余白・アイコン間隔シークバーポップアップ */}
         <div className="relative">
           <button
             onClick={() => {
-              const nextState = !showGridAlignPicker;
-              setShowGridAlignPicker(nextState);
+              setShowGridAlignPicker(!showGridAlignPicker);
               setShowRadiusPicker(false);
               setShowColorPicker(false);
-              if (nextState) {
-                // ポップアップを開いた時に即座に現在の間隔で一度整列
-                onAlignChildren(box.id, 'grid', gridPaddingLeft);
-              }
             }}
             className={`p-1 rounded transition ${
               showGridAlignPicker
                 ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
                 : 'text-slate-300 hover:text-white hover:bg-slate-800'
             }`}
-            title="枠内のアイコンをグリッド整列 (左端からの間隔を設定)"
+            title="枠内のアイコンをグリッド整列 (左端余白・アイコン間隔を設定)"
           >
             <LayoutGrid className="w-3.5 h-3.5" />
           </button>
 
           {showGridAlignPicker && (
             <div
-              className="absolute top-full left-0 mt-1 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-xl p-3 shadow-2xl flex flex-col gap-2 z-[999] w-56 animate-in fade-in zoom-in-95 duration-100"
+              className="absolute top-full left-0 mt-1 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-xl p-3 shadow-2xl flex flex-col gap-2.5 z-[999] w-64 animate-in fade-in zoom-in-95 duration-100"
               onClick={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between text-xs font-bold text-slate-200 border-b border-slate-800 pb-1.5">
                 <span className="flex items-center gap-1.5 text-cyan-400">
                   <LayoutGrid className="w-3.5 h-3.5" />
-                  グリッド整列 (左寄せ)
+                  グリッド整列設定
                 </span>
-                <span className="font-mono text-cyan-300 font-extrabold">{gridPaddingLeft}px</span>
+                <span className="text-[10px] text-slate-400 font-normal">左寄せ</span>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between text-[10px] text-slate-400">
-                  <span>左端からの余白:</span>
-                  <span>{gridPaddingLeft} px</span>
+              {/* アイコン同士の間隔 (Gap) */}
+              <div className="flex flex-col gap-1 bg-slate-950/40 p-2 rounded-lg border border-slate-800/80">
+                <div className="flex justify-between items-center text-[10px]">
+                  <span className="text-slate-300 font-medium">アイコン間隔 (隙間):</span>
+                  <span className="font-mono text-cyan-400 font-bold">{gridIconGap}px</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="32"
+                  step="1"
+                  value={gridIconGap}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setGridIconGap(val);
+                    onAlignChildren(box.id, 'grid', gridPaddingLeft, val);
+                  }}
+                  className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
+                />
+                <div className="flex justify-between text-[9px] text-slate-500">
+                  <span>0px (密着)</span>
+                  <span>8px (標準)</span>
+                  <span>32px</span>
+                </div>
+              </div>
+
+              {/* 左端からの余白 (Padding Left) */}
+              <div className="flex flex-col gap-1 bg-slate-950/40 p-2 rounded-lg border border-slate-800/80">
+                <div className="flex justify-between items-center text-[10px]">
+                  <span className="text-slate-300 font-medium">左端からの余白:</span>
+                  <span className="font-mono text-cyan-400 font-bold">{gridPaddingLeft}px</span>
                 </div>
                 <input
                   type="range"
@@ -336,38 +361,44 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
                   onChange={(e) => {
                     const val = Number(e.target.value);
                     setGridPaddingLeft(val);
-                    onAlignChildren(box.id, 'grid', val);
+                    onAlignChildren(box.id, 'grid', val, gridIconGap);
                   }}
                   className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
                 />
+                <div className="grid grid-cols-5 gap-1 pt-0.5">
+                  {[0, 8, 16, 24, 32].map((pad) => (
+                    <button
+                      key={pad}
+                      onClick={() => {
+                        setGridPaddingLeft(pad);
+                        onAlignChildren(box.id, 'grid', pad, gridIconGap);
+                      }}
+                      className={`py-0.5 rounded text-[9px] font-mono transition border ${
+                        gridPaddingLeft === pad
+                          ? 'border-cyan-400 bg-cyan-950/60 text-cyan-300 font-bold'
+                          : 'border-slate-800 bg-slate-950/50 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {pad}px
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              {/* プリセットボタン */}
-              <div className="grid grid-cols-5 gap-1 pt-1">
-                {[0, 8, 16, 24, 32].map((pad) => (
-                  <button
-                    key={pad}
-                    onClick={() => {
-                      setGridPaddingLeft(pad);
-                      onAlignChildren(box.id, 'grid', pad);
-                    }}
-                    className={`py-1 rounded text-[10px] font-mono transition border ${
-                      gridPaddingLeft === pad
-                        ? 'border-cyan-400 bg-cyan-950/60 text-cyan-300 font-bold'
-                        : 'border-slate-800 bg-slate-950/50 text-slate-400 hover:text-white hover:border-slate-700'
-                    }`}
-                  >
-                    {pad}px
-                  </button>
-                ))}
+              <div className="flex items-center gap-1.5 pt-1">
+                <button
+                  onClick={() => onAlignChildren(box.id, 'grid', gridPaddingLeft, gridIconGap)}
+                  className="flex-1 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-md shadow-cyan-600/30 transition flex items-center justify-center gap-1"
+                >
+                  <span>整列を実行</span>
+                </button>
+                <button
+                  onClick={() => setShowGridAlignPicker(false)}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium transition"
+                >
+                  閉じる
+                </button>
               </div>
-
-              <button
-                onClick={() => setShowGridAlignPicker(false)}
-                className="w-full mt-1 py-1 rounded bg-slate-800 hover:bg-cyan-600 hover:text-white text-slate-300 text-[11px] font-bold transition flex items-center justify-center gap-1"
-              >
-                <span>閉じる (確定)</span>
-              </button>
             </div>
           )}
         </div>

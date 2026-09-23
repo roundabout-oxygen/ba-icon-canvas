@@ -311,7 +311,12 @@ export function App() {
 
   // 枠内のアイテムを整列（横一列 or 行・間隔保持型スマートグリッド）
   // 要望対応: 「左右の中央に配置するようにしてもらいましたが、やはり左寄せでお願いします。ただしグリッド整列を選んだときにシークバーが出て左端から〇ピクセル間隔を空けるかを設定できるようにしてください」
-  const handleAlignBoxChildren = (boxId: string, alignType: 'grid' | 'row', leftPadding: number = 16) => {
+  const handleAlignBoxChildren = (
+    boxId: string,
+    alignType: 'grid' | 'row',
+    leftPadding: number = 16,
+    iconGap?: number
+  ) => {
     const box = boxes.find((b) => b.id === boxId);
     if (!box) return;
 
@@ -328,7 +333,7 @@ export function App() {
 
     // 枠内のアイコンサイズを統一 (現在設定値の iconSize または枠内最初のアイテムサイズ)
     const itemW = iconSize || childItems[0].size;
-    const gap = 10;
+    const gap = iconGap !== undefined ? iconGap : (config.snapGap ?? 8);
     const minPadding = 8;
     const cellStep = itemW + gap;
 
@@ -449,11 +454,100 @@ export function App() {
     handleUpdateItems(nextItems);
   };
 
-  // 選択中要素の整列機能
+  // 選択中要素の整列機能 (生徒アイコン または 枠)
   const handleAlignElements = (
     type: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'distributeH' | 'distributeV'
   ) => {
+    const selectedBoxes = boxes.filter((b) => selectedIds.has(b.id));
     const selectedItems = items.filter((it) => selectedIds.has(it.id));
+
+    // === 要望対応: 枠が複数選択されている場合、枠同士を吸着間隔で整列・等間隔配置 ===
+    if (selectedBoxes.length >= 2) {
+      const minX = Math.min(...selectedBoxes.map((b) => b.x));
+      const maxX = Math.max(...selectedBoxes.map((b) => b.x + b.width));
+      const minY = Math.min(...selectedBoxes.map((b) => b.y));
+      const maxY = Math.max(...selectedBoxes.map((b) => b.y + b.height));
+
+      let updatedBoxes = [...boxes];
+
+      if (type === 'left') {
+        updatedBoxes = boxes.map((b) => (selectedIds.has(b.id) ? { ...b, x: minX } : b));
+      } else if (type === 'center') {
+        const midX = (minX + maxX) / 2;
+        updatedBoxes = boxes.map((b) =>
+          selectedIds.has(b.id) ? { ...b, x: Math.round(midX - b.width / 2) } : b
+        );
+      } else if (type === 'right') {
+        updatedBoxes = boxes.map((b) => (selectedIds.has(b.id) ? { ...b, x: maxX - b.width } : b));
+      } else if (type === 'top') {
+        updatedBoxes = boxes.map((b) => (selectedIds.has(b.id) ? { ...b, y: minY } : b));
+      } else if (type === 'middle') {
+        const midY = (minY + maxY) / 2;
+        updatedBoxes = boxes.map((b) =>
+          selectedIds.has(b.id) ? { ...b, y: Math.round(midY - b.height / 2) } : b
+        );
+      } else if (type === 'bottom') {
+        updatedBoxes = boxes.map((b) => (selectedIds.has(b.id) ? { ...b, y: maxY - b.height } : b));
+      } else if (type === 'distributeV') {
+        // 縦方向: 吸着間隔 config.snapGap (例: 8px) で上から順にピッタリ等間隔に配置！
+        const sorted = [...selectedBoxes].sort((a, b) => a.y - b.y);
+        const gap = config.snapGap ?? 8;
+        let currentY = minY;
+        const posMap = new Map<string, number>();
+        sorted.forEach((b) => {
+          posMap.set(b.id, Math.round(currentY));
+          currentY += b.height + gap;
+        });
+        updatedBoxes = boxes.map((b) => (posMap.has(b.id) ? { ...b, y: posMap.get(b.id)! } : b));
+      } else if (type === 'distributeH') {
+        // 横方向: 吸着間隔 config.snapGap で左から順に等間隔に配置！
+        const sorted = [...selectedBoxes].sort((a, b) => a.x - b.x);
+        const gap = config.snapGap ?? 8;
+        let currentX = minX;
+        const posMap = new Map<string, number>();
+        sorted.forEach((b) => {
+          posMap.set(b.id, Math.round(currentX));
+          currentX += b.width + gap;
+        });
+        updatedBoxes = boxes.map((b) => (posMap.has(b.id) ? { ...b, x: posMap.get(b.id)! } : b));
+      }
+
+      // 各枠の移動差分 (dx, dy) を計算し、枠内の生徒アイコンも一緒に追従させる
+      const boxDeltaMap = new Map<string, { dx: number; dy: number }>();
+      updatedBoxes.forEach((nb) => {
+        const ob = boxes.find((b) => b.id === nb.id);
+        if (ob) {
+          boxDeltaMap.set(nb.id, { dx: nb.x - ob.x, dy: nb.y - ob.y });
+        }
+      });
+
+      const updatedItems = items.map((it) => {
+        for (const [boxId, delta] of boxDeltaMap.entries()) {
+          const ob = boxes.find((b) => b.id === boxId);
+          if (
+            ob &&
+            it.x >= ob.x - 5 &&
+            it.x + it.size <= ob.x + ob.width + 5 &&
+            it.y >= ob.y - 5 &&
+            it.y + it.size <= ob.y + ob.height + 5
+          ) {
+            return {
+              ...it,
+              x: it.x + delta.dx,
+              y: it.y + delta.dy,
+            };
+          }
+        }
+        return it;
+      });
+
+      setBoxes(updatedBoxes);
+      setItems(updatedItems);
+      pushHistory(updatedItems, updatedBoxes, config);
+      return;
+    }
+
+    // 生徒アイコンが複数選択されている場合
     if (selectedItems.length < 2) return;
 
     let minX = Math.min(...selectedItems.map((i) => i.x));
@@ -493,6 +587,18 @@ export function App() {
         currentX += item.size + gap;
       });
       updated = items.map((it) => (posMap.has(it.id) ? { ...it, x: posMap.get(it.id)! } : it));
+    } else if (type === 'distributeV') {
+      const sorted = [...selectedItems].sort((a, b) => a.y - b.y);
+      const totalHeight = sorted.reduce((sum, item) => sum + item.size, 0);
+      const totalSpace = maxY - minY - totalHeight;
+      const gap = totalSpace / (sorted.length - 1);
+      let currentY = minY;
+      const posMap = new Map<string, number>();
+      sorted.forEach((item) => {
+        posMap.set(item.id, Math.round(currentY));
+        currentY += item.size + gap;
+      });
+      updated = items.map((it) => (posMap.has(it.id) ? { ...it, y: posMap.get(it.id)! } : it));
     }
 
     handleUpdateItems(updated);

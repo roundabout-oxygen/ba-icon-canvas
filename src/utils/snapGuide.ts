@@ -47,174 +47,153 @@ export function calculateSnap(
 
   const snapLines: SnapLine[] = [];
 
-  // 比較対象のXアンカー候補 (left, center, right, gapRight, gapLeft)
-  interface AnchorX {
-    pos: number;
-    type: 'left' | 'center' | 'right';
-    sourceYStart: number;
-    sourceYEnd: number;
+  // --- 1. X方向スナップ計算 ---
+  let snapLineX: number | null = null;
+
+  // キャンバス境界・中央とのアライメント
+  const canvasAnchorsX = [0, canvasWidth / 2, canvasWidth];
+  for (const cPos of canvasAnchorsX) {
+    const candidates = [
+      { dPos: dragLeft, targetX: cPos },
+      { dPos: dragCenterX, targetX: cPos - dragRect.width / 2 },
+      { dPos: dragRight, targetX: cPos - dragRect.width },
+    ];
+    for (const { dPos, targetX } of candidates) {
+      const diff = Math.abs(dPos - cPos);
+      if (diff < minDiffX) {
+        minDiffX = diff;
+        bestX = targetX;
+        snapLineX = cPos;
+      }
+    }
   }
-  const anchorsX: AnchorX[] = [];
 
-  // キャンバスの境界・中央
-  anchorsX.push({ pos: 0, type: 'left', sourceYStart: 0, sourceYEnd: canvasHeight });
-  anchorsX.push({ pos: canvasWidth / 2, type: 'center', sourceYStart: 0, sourceYEnd: canvasHeight });
-  anchorsX.push({ pos: canvasWidth, type: 'right', sourceYStart: 0, sourceYEnd: canvasHeight });
-
-  // 比較対象のYアンカー候補 (top, center, bottom, gapBottom, gapTop)
-  interface AnchorY {
-    pos: number;
-    type: 'top' | 'center' | 'bottom';
-    sourceXStart: number;
-    sourceXEnd: number;
-  }
-  const anchorsY: AnchorY[] = [];
-
-  // キャンバスの境界・中央
-  anchorsY.push({ pos: 0, type: 'top', sourceXStart: 0, sourceXEnd: canvasWidth });
-  anchorsY.push({ pos: canvasHeight / 2, type: 'center', sourceXStart: 0, sourceXEnd: canvasWidth });
-  anchorsY.push({ pos: canvasHeight, type: 'bottom', sourceXStart: 0, sourceXEnd: canvasWidth });
-
-  // 他の全要素からアンカーを収集
+  // 他要素とのアライメント＆間隔（Gap）吸着
   for (const other of otherRects) {
     if (other.id === dragRect.id) continue;
     const oLeft = other.x;
     const oRight = other.x + other.width;
     const oCenterX = other.x + other.width / 2;
-    const oTop = other.y;
-    const oBottom = other.y + other.height;
-    const oCenterY = other.y + other.height / 2;
 
-    // 端同士・中心同士のアライメント
-    anchorsX.push({ pos: oLeft, type: 'left', sourceYStart: oTop, sourceYEnd: oBottom });
-    anchorsX.push({ pos: oCenterX, type: 'center', sourceYStart: oTop, sourceYEnd: oBottom });
-    anchorsX.push({ pos: oRight, type: 'right', sourceYStart: oTop, sourceYEnd: oBottom });
+    // 端・中央の一致
+    for (const oPos of [oLeft, oCenterX, oRight]) {
+      const candidates = [
+        { dPos: dragLeft, targetX: oPos },
+        { dPos: dragCenterX, targetX: oPos - dragRect.width / 2 },
+        { dPos: dragRight, targetX: oPos - dragRect.width },
+      ];
+      for (const { dPos, targetX } of candidates) {
+        const diff = Math.abs(dPos - oPos);
+        if (diff < minDiffX) {
+          minDiffX = diff;
+          bestX = targetX;
+          snapLineX = oPos;
+        }
+      }
+    }
 
-    anchorsY.push({ pos: oTop, type: 'top', sourceXStart: oLeft, sourceXEnd: oRight });
-    anchorsY.push({ pos: oCenterY, type: 'center', sourceXStart: oLeft, sourceXEnd: oRight });
-    anchorsY.push({ pos: oBottom, type: 'bottom', sourceXStart: oLeft, sourceXEnd: oRight });
-
-    // 間隔（Gap）吸着アンカー
+    // 間隔（Gap）吸着: 他枠・要素と snapGap だけ離して配置
     if (snapGap > 0) {
-      // 他要素の右側に snapGap だけ離して配置 (dragLeft === oRight + snapGap)
+      // 右側に snapGap 離して配置 (dragLeft === oRight + snapGap)
       const gapR = oRight + snapGap;
-      let diff = Math.abs(dragLeft - gapR);
-      if (diff < minDiffX) {
-        minDiffX = diff;
+      const diffR = Math.abs(dragLeft - gapR);
+      if (diffR < minDiffX) {
+        minDiffX = diffR;
         bestX = gapR;
-        anchorsX.push({ pos: gapR, type: 'left', sourceYStart: oTop, sourceYEnd: oBottom });
+        snapLineX = gapR;
       }
 
-      // 他要素の左側に snapGap だけ離して配置 (dragRight === oLeft - snapGap)
+      // 左側に snapGap 離して配置 (dragRight === oLeft - snapGap)
       const gapL = oLeft - snapGap;
-      diff = Math.abs(dragRight - gapL);
-      if (diff < minDiffX) {
-        minDiffX = diff;
+      const diffL = Math.abs(dragRight - gapL);
+      if (diffL < minDiffX) {
+        minDiffX = diffL;
         bestX = gapL - dragRect.width;
-        anchorsX.push({ pos: gapL, type: 'right', sourceYStart: oTop, sourceYEnd: oBottom });
-      }
-
-      // 他要素の下側に snapGap だけ離して配置 (dragTop === oBottom + snapGap)
-      const gapB = oBottom + snapGap;
-      let diffY = Math.abs(dragTop - gapB);
-      if (diffY < minDiffY) {
-        minDiffY = diffY;
-        bestY = gapB;
-        anchorsY.push({ pos: gapB, type: 'top', sourceXStart: oLeft, sourceXEnd: oRight });
-      }
-
-      // 他要素の上側に snapGap だけ離して配置 (dragBottom === oTop - snapGap)
-      const gapT = oTop - snapGap;
-      diffY = Math.abs(dragBottom - gapT);
-      if (diffY < minDiffY) {
-        minDiffY = diffY;
-        bestY = gapT - dragRect.height;
-        anchorsY.push({ pos: gapT, type: 'bottom', sourceXStart: oLeft, sourceXEnd: oRight });
+        snapLineX = gapL;
       }
     }
   }
 
-  // --- X方向スナップ計算 ---
-  let bestAnchorX: AnchorX | null = null;
-  let activeDragXVal = 0;
-
-  for (const anchor of anchorsX) {
-    // 1. dragLeft と比較
-    let diff = Math.abs(dragLeft - anchor.pos);
-    if (diff < minDiffX) {
-      minDiffX = diff;
-      bestX = anchor.pos;
-      bestAnchorX = anchor;
-      activeDragXVal = anchor.pos;
-    }
-
-    // 2. dragCenterX と比較
-    diff = Math.abs(dragCenterX - anchor.pos);
-    if (diff < minDiffX) {
-      minDiffX = diff;
-      bestX = anchor.pos - dragRect.width / 2;
-      bestAnchorX = anchor;
-      activeDragXVal = anchor.pos;
-    }
-
-    // 3. dragRight と比較
-    diff = Math.abs(dragRight - anchor.pos);
-    if (diff < minDiffX) {
-      minDiffX = diff;
-      bestX = anchor.pos - dragRect.width;
-      bestAnchorX = anchor;
-      activeDragXVal = anchor.pos;
-    }
-  }
-
-  if (bestAnchorX && minDiffX <= THRESHOLD) {
-    // 縦方向のガイドライン: 上下を貫通して画面全体に長く表示（別枠同士の整列も一目で確認可能）
+  if (snapLineX !== null && minDiffX <= THRESHOLD) {
     snapLines.push({
       orientation: 'vertical',
-      pos: activeDragXVal,
+      pos: snapLineX,
       start: 0,
       end: canvasHeight,
     });
   }
 
-  // --- Y方向スナップ計算 ---
-  let bestAnchorY: AnchorY | null = null;
-  let activeDragYVal = 0;
+  // --- 2. Y方向スナップ計算 ---
+  let snapLineY: number | null = null;
 
-  for (const anchor of anchorsY) {
-    // 1. dragTop と比較
-    let diff = Math.abs(dragTop - anchor.pos);
-    if (diff < minDiffY) {
-      minDiffY = diff;
-      bestY = anchor.pos;
-      bestAnchorY = anchor;
-      activeDragYVal = anchor.pos;
-    }
-
-    // 2. dragCenterY と比較
-    diff = Math.abs(dragCenterY - anchor.pos);
-    if (diff < minDiffY) {
-      minDiffY = diff;
-      bestY = anchor.pos - dragRect.height / 2;
-      bestAnchorY = anchor;
-      activeDragYVal = anchor.pos;
-    }
-
-    // 3. dragBottom と比較
-    diff = Math.abs(dragBottom - anchor.pos);
-    if (diff < minDiffY) {
-      minDiffY = diff;
-      bestY = anchor.pos - dragRect.height;
-      bestAnchorY = anchor;
-      activeDragYVal = anchor.pos;
+  // キャンバス境界・中央とのアライメント
+  const canvasAnchorsY = [0, canvasHeight / 2, canvasHeight];
+  for (const cPos of canvasAnchorsY) {
+    const candidates = [
+      { dPos: dragTop, targetY: cPos },
+      { dPos: dragCenterY, targetY: cPos - dragRect.height / 2 },
+      { dPos: dragBottom, targetY: cPos - dragRect.height },
+    ];
+    for (const { dPos, targetY } of candidates) {
+      const diff = Math.abs(dPos - cPos);
+      if (diff < minDiffY) {
+        minDiffY = diff;
+        bestY = targetY;
+        snapLineY = cPos;
+      }
     }
   }
 
-  if (bestAnchorY && minDiffY <= THRESHOLD) {
-    // 横方向のガイドライン: 左右を貫通して画面全体に長く表示
+  // 他要素とのアライメント＆間隔（Gap）吸着
+  for (const other of otherRects) {
+    if (other.id === dragRect.id) continue;
+    const oTop = other.y;
+    const oBottom = other.y + other.height;
+    const oCenterY = other.y + other.height / 2;
+
+    // 端・中央の一致
+    for (const oPos of [oTop, oCenterY, oBottom]) {
+      const candidates = [
+        { dPos: dragTop, targetY: oPos },
+        { dPos: dragCenterY, targetY: oPos - dragRect.height / 2 },
+        { dPos: dragBottom, targetY: oPos - dragRect.height },
+      ];
+      for (const { dPos, targetY } of candidates) {
+        const diff = Math.abs(dPos - oPos);
+        if (diff < minDiffY) {
+          minDiffY = diff;
+          bestY = targetY;
+          snapLineY = oPos;
+        }
+      }
+    }
+
+    // 間隔（Gap）吸着: 他枠・要素と snapGap だけ離して配置 (枠同士の上下間隔で最重要)
+    if (snapGap > 0) {
+      // 下側に snapGap 離して配置 (dragTop === oBottom + snapGap)
+      const gapB = oBottom + snapGap;
+      const diffB = Math.abs(dragTop - gapB);
+      if (diffB < minDiffY) {
+        minDiffY = diffB;
+        bestY = gapB;
+        snapLineY = gapB;
+      }
+
+      // 上側に snapGap 離して配置 (dragBottom === oTop - snapGap)
+      const gapT = oTop - snapGap;
+      const diffT = Math.abs(dragBottom - gapT);
+      if (diffT < minDiffY) {
+        minDiffY = diffT;
+        bestY = gapT - dragRect.height;
+        snapLineY = gapT;
+      }
+    }
+  }
+
+  if (snapLineY !== null && minDiffY <= THRESHOLD) {
     snapLines.push({
       orientation: 'horizontal',
-      pos: activeDragYVal,
+      pos: snapLineY,
       start: 0,
       end: canvasWidth,
     });

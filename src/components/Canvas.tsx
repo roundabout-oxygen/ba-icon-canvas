@@ -20,7 +20,7 @@ interface CanvasProps {
   onDeleteItem: (id: string) => void;
   onDeleteBox: (id: string) => void;
   onDuplicateBox: (id: string) => void;
-  onAlignBoxChildren: (boxId: string, type: 'grid' | 'row', leftPadding?: number) => void;
+  onAlignBoxChildren: (boxId: string, type: 'grid' | 'row', leftPadding?: number, iconGap?: number) => void;
   onDropCharacters: (charIds: string[], x: number, y: number) => void;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   externalSnapLines?: SnapLine[];
@@ -336,20 +336,30 @@ export const Canvas: React.FC<CanvasProps> = ({
       const currentSnapLines: SnapLine[] = [];
       const threshold = 6;
 
-      // X方向の比較アンカー (他枠の左端、中央、右端、キャンバス境界)
+      const snapGap = config.snapGap ?? 8;
+
+      // X方向の比較アンカー (他枠の左端、中央、右端、キャンバス境界、および吸着間隔)
       const xAnchors: number[] = [0, config.width / 2, config.width];
       otherRects.forEach((r) => {
         xAnchors.push(r.x);
         xAnchors.push(r.x + r.width / 2);
         xAnchors.push(r.x + r.width);
+        if (snapGap > 0) {
+          xAnchors.push(r.x - snapGap);
+          xAnchors.push(r.x + r.width + snapGap);
+        }
       });
 
-      // Y方向の比較アンカー (他枠の上端、中央、下端、キャンバス境界)
+      // Y方向の比較アンカー (他枠の上端、中央、下端、キャンバス境界、および吸着間隔)
       const yAnchors: number[] = [0, config.height / 2, config.height];
       otherRects.forEach((r) => {
         yAnchors.push(r.y);
         yAnchors.push(r.y + r.height / 2);
         yAnchors.push(r.y + r.height);
+        if (snapGap > 0) {
+          yAnchors.push(r.y - snapGap);
+          yAnchors.push(r.y + r.height + snapGap);
+        }
       });
 
       // 右端リサイズ時のガイド線 & スナップ
@@ -773,6 +783,7 @@ export const Canvas: React.FC<CanvasProps> = ({
             onStartDrag={handleStartDrag}
             onStartResize={handleBoxResizeStart}
             zoom={config.zoom}
+            defaultGap={config.snapGap ?? 8}
           />
         ))}
 
