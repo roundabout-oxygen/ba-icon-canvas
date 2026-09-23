@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { CanvasIconItem, ContainerBox, CanvasTextItem, Character, SnapLine, CanvasConfig } from '../types';
 import { CanvasItemView } from './CanvasItemView';
@@ -8,7 +8,7 @@ import { CanvasSizeEditOverlay } from './CanvasSizeEditOverlay';
 import { calculateSnap, Rect } from '../utils/snapGuide';
 import { adjustClusterSpacing, SpacingAdjustOptions } from '../utils/spacingCluster';
 import { SpacingAdjustModal } from './SpacingAdjustModal';
-import { Sliders, Maximize2, RotateCcw, Crop } from 'lucide-react';
+import { Sliders, Maximize2, RotateCcw, Crop, Maximize } from 'lucide-react';
 
 interface CanvasProps {
   items: CanvasIconItem[];
@@ -110,6 +110,27 @@ export const Canvas: React.FC<CanvasProps> = ({
     el.addEventListener('wheel', handleWheel, { passive: false });
     return () => el.removeEventListener('wheel', handleWheel);
   }, [config.zoom, onUpdateConfig]);
+
+  // 画面全体に収まるようにズームとパンを自動調整 (Fit to Screen)
+  const handleFitToScreen = useCallback(() => {
+    if (!containerRef.current || !onUpdateConfig) return;
+    const containerW = containerRef.current.clientWidth;
+    const containerH = containerRef.current.clientHeight;
+
+    // 上下左右に余裕ある余白 (64px) を確保
+    const availW = Math.max(200, containerW - 64);
+    const availH = Math.max(200, containerH - 64);
+
+    const scaleW = availW / config.width;
+    const scaleH = availH / config.height;
+    const fitScale = Math.min(scaleW, scaleH);
+
+    // 0.25〜1.5の範囲で2桁丸め
+    const nextZoom = Math.min(1.5, Math.max(0.25, Math.round(fitScale * 100) / 100));
+
+    onUpdateConfig({ zoom: nextZoom });
+    setPan({ x: 0, y: 0 });
+  }, [config.width, config.height, onUpdateConfig]);
 
   // ドラッグ移動管理
   const dragRef = useRef<{
@@ -844,24 +865,36 @@ export const Canvas: React.FC<CanvasProps> = ({
           transform: `translate(${pan.x}px, ${pan.y}px)`,
           transition: isPanning ? 'none' : 'transform 0.05s ease-out',
         }}
-        className="flex items-center justify-center p-8"
+        className="flex items-center justify-center p-8 shrink-0"
       >
-        {/* ズーム拡大縮小を適用するキャンバス本体 */}
+        {/* スケーリングラッパー: ズーム後の実サイズを親のレイアウトに反映させ、上下左右のはみ出し・見切れを防止 */}
         <div
-          ref={canvasRef}
-          id="canvas-bg"
           style={{
-            width: `${config.width}px`,
-            height: `${config.height}px`,
-            backgroundColor: config.bgColor,
-            transform: `scale(${config.zoom})`,
-            transformOrigin: 'center center',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
-        }}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        className="relative select-none transition-transform duration-75 overflow-hidden rounded-md border border-slate-700/50"
-      >
+            width: `${Math.round(config.width * config.zoom)}px`,
+            height: `${Math.round(config.height * config.zoom)}px`,
+            position: 'relative',
+            flexShrink: 0,
+          }}
+        >
+          {/* ズーム拡大縮小を適用するキャンバス本体 */}
+          <div
+            ref={canvasRef}
+            id="canvas-bg"
+            style={{
+              width: `${config.width}px`,
+              height: `${config.height}px`,
+              backgroundColor: config.bgColor,
+              transform: `scale(${config.zoom})`,
+              transformOrigin: 'top left',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
+            }}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className="select-none transition-transform duration-75 overflow-hidden rounded-md border border-slate-700/50"
+          >
         {/* グリッド背景 (設定でONの場合) */}
         {config.showGrid && (
           <div
@@ -1001,20 +1034,40 @@ export const Canvas: React.FC<CanvasProps> = ({
               onCancel={onCancelCanvasEdit}
             />
           )}
-      </div>
+          </div>
+        </div>
       </div>
 
-      {/* ビュー位置リセットボタン (パン移動されている時のみ右下に表示) */}
-      {(pan.x !== 0 || pan.y !== 0) && (
+      {/* 画面右下フローティング・ビューコントロール (全体表示Fit / 100%リセット / 位置リセット) */}
+      <div className="absolute bottom-4 right-4 z-30 flex items-center gap-1.5 bg-slate-900/90 backdrop-blur border border-slate-700 hover:border-cyan-500/50 p-1 rounded-xl shadow-2xl transition select-none">
         <button
-          onClick={() => setPan({ x: 0, y: 0 })}
-          className="absolute bottom-4 right-4 z-30 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 border border-slate-700 hover:border-cyan-500/50 px-3 py-1.5 rounded-lg text-xs font-medium shadow-xl backdrop-blur flex items-center gap-1.5 transition select-none animate-in fade-in slide-in-from-bottom-2 duration-150"
-          title="ビュー位置を中央にリセット"
+          onClick={handleFitToScreen}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-950/80 hover:bg-cyan-600/30 text-cyan-300 hover:text-white border border-cyan-700/60 text-xs font-semibold shadow transition active:scale-95"
+          title="キャンバス全体を画面内にきれいに収める (Fit to Screen)"
         >
-          <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
-          <span>ビュー位置をリセット</span>
+          <Maximize className="w-3.5 h-3.5 text-cyan-400" />
+          <span>画面に収める</span>
         </button>
-      )}
+
+        <button
+          onClick={() => onUpdateConfig?.({ zoom: 1.0 })}
+          className="px-2 py-1 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-mono transition"
+          title="100% (等倍表示) にリセット"
+        >
+          {Math.round(config.zoom * 100)}%
+        </button>
+
+        {(pan.x !== 0 || pan.y !== 0) && (
+          <button
+            onClick={() => setPan({ x: 0, y: 0 })}
+            className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-cyan-300 text-xs transition"
+            title="パン位置を中央にリセット"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>位置リセット</span>
+          </button>
+        )}
+      </div>
 
       {/* 右クリックコンテキストメニュー (最前面 portal) */}
       {contextMenu &&
@@ -1067,6 +1120,19 @@ export const Canvas: React.FC<CanvasProps> = ({
             >
               <Crop className="w-3.5 h-3.5 text-cyan-400" />
               <span>キャンバス設定 (サイズ・比率・背景色)...</span>
+            </button>
+
+            {/* 画面全体に収める */}
+            <button
+              onClick={() => {
+                setContextMenu(null);
+                handleFitToScreen();
+              }}
+              onMouseDown={(e) => e.stopPropagation()}
+              className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-300 hover:bg-cyan-600/30 hover:text-cyan-200 rounded transition font-medium text-left"
+            >
+              <Maximize className="w-3.5 h-3.5 text-cyan-400" />
+              <span>画面全体に収める (全体表示)</span>
             </button>
 
             {/* パン位置リセット (パン移動時のみ) */}

@@ -157,9 +157,11 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
         }}
       />
 
-      {/* 枠ヘッダー / コントロールバー (アイコンより前面 z-[60]) */}
+      {/* 枠ヘッダー / コントロールバー (上端付近なら枠内上部に自動反転配置して見切れを完全防止) */}
       <div
-        className={`absolute -top-9 left-0 flex items-center gap-1 bg-slate-900/95 backdrop-blur border border-slate-700 px-2 py-1 rounded-md shadow-2xl text-xs z-[60] transition-opacity ${
+        className={`absolute ${
+          box.y < 45 ? 'top-2 left-2' : '-top-9 left-0'
+        } flex items-center gap-1 bg-slate-900/95 backdrop-blur border border-slate-700 px-2 py-1 rounded-md shadow-2xl text-xs z-[60] transition-all ${
           isSelected || showColorPicker || showRadiusPicker || showGridAlignPicker
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto'

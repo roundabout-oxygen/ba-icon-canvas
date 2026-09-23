@@ -213,11 +213,33 @@ export function App() {
     []
   );
 
+  // 画面全体に収まるようにズーム倍率を自動調整 (Fit to Screen)
+  const handleFitToScreen = useCallback(() => {
+    const availW = Math.max(280, window.innerWidth - 380 - 64);
+    const availH = Math.max(200, window.innerHeight - 56 - 64);
+    const scaleW = availW / config.width;
+    const scaleH = availH / config.height;
+    const fitScale = Math.min(scaleW, scaleH);
+    const nextZoom = Math.min(1.5, Math.max(0.25, Math.round(fitScale * 100) / 100));
+    setConfig((prev) => ({ ...prev, zoom: nextZoom }));
+  }, [config.width, config.height]);
+
   // キャンバスサイズ編集の確定 (OK)
   const handleConfirmCanvasEdit = useCallback(() => {
     setIsCanvasEditing(false);
     canvasEditSnapshotRef.current = null;
     pushHistory(items, boxes, texts, config);
+
+    // 新しいサイズが画面より大きい場合は自動的に画面内にフィットさせて見切れを防止
+    const availW = Math.max(280, window.innerWidth - 380 - 64);
+    const availH = Math.max(200, window.innerHeight - 56 - 64);
+    if (config.width * config.zoom > availW || config.height * config.zoom > availH) {
+      const scaleW = availW / config.width;
+      const scaleH = availH / config.height;
+      const fitScale = Math.min(scaleW, scaleH);
+      const nextZoom = Math.min(1.5, Math.max(0.25, Math.round(fitScale * 100) / 100));
+      setConfig((prev) => ({ ...prev, zoom: nextZoom }));
+    }
   }, [items, boxes, texts, config, pushHistory]);
 
   // キャンバスサイズ編集のキャンセル (Esc / キャンセル)
@@ -379,8 +401,8 @@ export function App() {
       id: `box_${Date.now()}`,
       type: 'box',
       label: theme.name,
-      x: 40 + boxes.length * 20,
-      y: 40 + boxes.length * 20,
+      x: 40 + (boxes.length % 5) * 20,
+      y: 70 + (boxes.length % 5) * 25,
       width: 680,
       height: 160,
       borderColor: theme.borderColor,
@@ -433,7 +455,7 @@ export function App() {
       type: 'text',
       text: defaultText,
       x: 60,
-      y: 40 + texts.length * 40,
+      y: 70 + (texts.length % 6) * 45,
       fontSize,
       fontWeight: 'bold',
       color,
@@ -1140,6 +1162,7 @@ export function App() {
         onChangeIconSize={handleChangeIconSize}
         onOpenIconSettings={() => setIsIconSettingsOpen(true)}
         onOpenCanvasSettings={handleStartCanvasEdit}
+        onFitToScreen={handleFitToScreen}
       />
 
       {/* メインエリア: 左サイドバー + 右キャンバス */}

@@ -28,6 +28,7 @@ import {
   Tag,
   FileText,
   Crop,
+  Maximize,
 } from 'lucide-react';
 
 interface ToolbarProps {
@@ -52,6 +53,7 @@ interface ToolbarProps {
   onChangeIconSize: (size: number) => void;
   onOpenIconSettings: () => void;
   onOpenCanvasSettings?: () => void;
+  onFitToScreen?: () => void;
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({
@@ -74,6 +76,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onChangeIconSize,
   onOpenIconSettings,
   onOpenCanvasSettings,
+  onFitToScreen,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showBoxDropdown, setShowBoxDropdown] = useState(false);
@@ -450,6 +453,15 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           >
             <RotateCcw className="w-3 h-3" />
           </button>
+          {onFitToScreen && (
+            <button
+              onClick={onFitToScreen}
+              className="p-1 hover:text-cyan-300 hover:bg-slate-700 rounded transition text-cyan-400 flex-shrink-0"
+              title="キャンバス全体を画面に収める (全体表示)"
+            >
+              <Maximize className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         <div className="h-4 w-[1px] bg-slate-700 mx-0.5 flex-shrink-0" />
