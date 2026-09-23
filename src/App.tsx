@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Character, CanvasIconItem, ContainerBox, CanvasConfig, HistoryState, SnapLine, IconBorderColorMode } from './types';
+import {
+  Character,
+  CanvasIconItem,
+  ContainerBox,
+  CanvasTextItem,
+  CanvasConfig,
+  HistoryState,
+  SnapLine,
+  IconBorderColorMode,
+  TextStylePreset,
+} from './types';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { Toolbar } from './components/Toolbar';
@@ -12,7 +22,7 @@ export function App() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // キャンバス設定
+  // キャンバス設定 (標準はアイコンサイズ64、角の丸み8、枠線太さ2、枠線色: 防御属性連動)
   const [config, setConfig] = useState<CanvasConfig>({
     width: 1200,
     height: 800,
@@ -22,8 +32,8 @@ export function App() {
     snapGap: 8,
     iconBorderRadius: 8,
     showGrid: false,
-    iconBorderWidth: 0,
-    iconBorderColorMode: 'attack',
+    iconBorderWidth: 2,
+    iconBorderColorMode: 'defense',
     iconBorderColor: '#ffffff',
   });
 
@@ -31,6 +41,7 @@ export function App() {
   const [isIconSettingsOpen, setIsIconSettingsOpen] = useState(false);
   const [items, setItems] = useState<CanvasIconItem[]>([]);
   const [boxes, setBoxes] = useState<ContainerBox[]>([]);
+  const [texts, setTexts] = useState<CanvasTextItem[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectedSidebarCharIds, setSelectedSidebarCharIds] = useState<Set<string>>(new Set());
   const [keyboardSnapLines, setKeyboardSnapLines] = useState<SnapLine[]>([]);
@@ -69,9 +80,10 @@ export function App() {
         // 要望: キャンバス部は最初は何も配置していない無地スタート
         setBoxes([]);
         setItems([]);
+        setTexts([]);
 
         // 履歴初期化
-        historyRef.current = [{ items: [], boxes: [], config }];
+        historyRef.current = [{ items: [], boxes: [], texts: [], config }];
         historyIndexRef.current = 0;
       })
       .catch((err) => {
@@ -82,10 +94,15 @@ export function App() {
 
   // 履歴プッシュ (状態変更時)
   const pushHistory = useCallback(
-    (newItems: CanvasIconItem[], newBoxes: ContainerBox[], newConfig: CanvasConfig) => {
+    (
+      newItems: CanvasIconItem[],
+      newBoxes: ContainerBox[],
+      newTexts: CanvasTextItem[],
+      newConfig: CanvasConfig
+    ) => {
       if (isUndoRedoActionRef.current) return;
       const history = historyRef.current.slice(0, historyIndexRef.current + 1);
-      history.push({ items: newItems, boxes: newBoxes, config: newConfig });
+      history.push({ items: newItems, boxes: newBoxes, texts: newTexts, config: newConfig });
       if (history.length > 50) history.shift();
       historyRef.current = history;
       historyIndexRef.current = history.length - 1;
@@ -101,6 +118,7 @@ export function App() {
       const state = historyRef.current[historyIndexRef.current];
       setItems(state.items);
       setBoxes(state.boxes);
+      setTexts(state.texts || []);
       setConfig(state.config);
       setTimeout(() => {
         isUndoRedoActionRef.current = false;
@@ -116,6 +134,7 @@ export function App() {
       const state = historyRef.current[historyIndexRef.current];
       setItems(state.items);
       setBoxes(state.boxes);
+      setTexts(state.texts || []);
       setConfig(state.config);
       setTimeout(() => {
         isUndoRedoActionRef.current = false;
@@ -127,18 +146,27 @@ export function App() {
   const handleUpdateItems = useCallback(
     (newItems: CanvasIconItem[]) => {
       setItems(newItems);
-      pushHistory(newItems, boxes, config);
+      pushHistory(newItems, boxes, texts, config);
     },
-    [boxes, config, pushHistory]
+    [boxes, texts, config, pushHistory]
   );
 
   // ボックス更新
   const handleUpdateBoxes = useCallback(
     (newBoxes: ContainerBox[]) => {
       setBoxes(newBoxes);
-      pushHistory(items, newBoxes, config);
+      pushHistory(items, newBoxes, texts, config);
     },
-    [items, config, pushHistory]
+    [items, texts, config, pushHistory]
+  );
+
+  // テキスト更新
+  const handleUpdateTexts = useCallback(
+    (newTexts: CanvasTextItem[]) => {
+      setTexts(newTexts);
+      pushHistory(items, boxes, newTexts, config);
+    },
+    [items, boxes, config, pushHistory]
   );
 
   // コンフィグ更新
@@ -146,9 +174,9 @@ export function App() {
     (updates: Partial<CanvasConfig>) => {
       const next = { ...config, ...updates };
       setConfig(next);
-      pushHistory(items, boxes, next);
+      pushHistory(items, boxes, texts, next);
     },
-    [config, items, boxes, pushHistory]
+    [config, items, boxes, texts, pushHistory]
   );
 
   // アイコンサイズ一括変更 (選択中があれば選択中のみ、未選択時は配置済みの全アイコンを一括変更)
@@ -184,7 +212,7 @@ export function App() {
     const nextItems = [...items, ...newItems];
     setItems(nextItems);
     setSelectedIds(new Set(newItems.map((it) => it.id)));
-    pushHistory(nextItems, boxes, config);
+    pushHistory(nextItems, boxes, texts, config);
   };
 
   /**
@@ -251,7 +279,7 @@ export function App() {
     const nextItems = [...items, ...newlyCreated];
     setItems(nextItems);
     setSelectedIds(new Set(newlyCreated.map((it) => it.id)));
-    pushHistory(nextItems, boxes, config);
+    pushHistory(nextItems, boxes, texts, config);
   };
 
   // アイテム削除
@@ -261,7 +289,7 @@ export function App() {
     const nextSelected = new Set(selectedIds);
     nextSelected.delete(id);
     setSelectedIds(nextSelected);
-    pushHistory(nextItems, boxes, config);
+    pushHistory(nextItems, boxes, texts, config);
   };
 
   // ボックス削除
@@ -271,7 +299,7 @@ export function App() {
     const nextSelected = new Set(selectedIds);
     nextSelected.delete(id);
     setSelectedIds(nextSelected);
-    pushHistory(items, nextBoxes, config);
+    pushHistory(items, nextBoxes, texts, config);
   };
 
   // ボックス複製
@@ -287,7 +315,7 @@ export function App() {
     const nextBoxes = [...boxes, newBox];
     setBoxes(nextBoxes);
     setSelectedIds(new Set([newBox.id]));
-    pushHistory(items, nextBoxes, config);
+    pushHistory(items, nextBoxes, texts, config);
   };
 
   // 枠の新規追加
@@ -311,7 +339,88 @@ export function App() {
     const nextBoxes = [...boxes, newBox];
     setBoxes(nextBoxes);
     setSelectedIds(new Set([newBox.id]));
-    pushHistory(items, nextBoxes, config);
+    pushHistory(items, nextBoxes, texts, config);
+  };
+
+  // テキストの追加
+  const handleAddText = (preset: TextStylePreset = 'title') => {
+    let defaultText = 'タイトル';
+    let fontSize = 24;
+    let color = '#38bdf8';
+    let bgColor = 'transparent';
+    let borderColor = 'transparent';
+    let borderWidth = 0;
+
+    if (preset === 'title') {
+      defaultText = '総力戦・大決戦 編成方針';
+      fontSize = 24;
+      color = '#38bdf8';
+      bgColor = 'transparent';
+      borderColor = 'transparent';
+      borderWidth = 0;
+    } else if (preset === 'tag') {
+      defaultText = '1凸編成（メイン）';
+      fontSize = 14;
+      color = '#e2e8f0';
+      bgColor = 'rgba(30, 41, 59, 0.85)';
+      borderColor = 'rgba(56, 189, 248, 0.4)';
+      borderWidth = 1;
+    } else {
+      defaultText = '編成メモ・解説';
+      fontSize = 14;
+      color = '#cbd5e1';
+      bgColor = 'transparent';
+      borderColor = 'transparent';
+      borderWidth = 0;
+    }
+
+    const newText: CanvasTextItem = {
+      id: `text_${Date.now()}`,
+      type: 'text',
+      text: defaultText,
+      x: 60,
+      y: 40 + texts.length * 40,
+      fontSize,
+      fontWeight: 'bold',
+      color,
+      bgColor,
+      borderColor,
+      borderWidth,
+      borderRadius: preset === 'tag' ? 6 : 0,
+      stylePreset: preset,
+      zIndex: 20 + texts.length,
+    };
+
+    const nextTexts = [...texts, newText];
+    setTexts(nextTexts);
+    setSelectedIds(new Set([newText.id]));
+    pushHistory(items, boxes, nextTexts, config);
+  };
+
+  // テキスト削除
+  const handleDeleteText = (id: string) => {
+    const nextTexts = texts.filter((t) => t.id !== id);
+    setTexts(nextTexts);
+    const nextSelected = new Set(selectedIds);
+    nextSelected.delete(id);
+    setSelectedIds(nextSelected);
+    pushHistory(items, boxes, nextTexts, config);
+  };
+
+  // テキスト複製
+  const handleDuplicateText = (id: string) => {
+    const src = texts.find((t) => t.id === id);
+    if (!src) return;
+    const newText: CanvasTextItem = {
+      ...src,
+      id: `text_${Date.now()}`,
+      x: src.x + 20,
+      y: src.y + 20,
+    };
+    const nextTexts = [...texts, newText];
+    setTexts(nextTexts);
+    setSelectedIds(new Set([newText.id]));
+    pushHistory(items, boxes, nextTexts, config);
   };
 
   // 枠内のアイテムを整列（横一列 or 行・間隔保持型スマートグリッド）
@@ -554,7 +663,7 @@ export function App() {
 
       setBoxes(updatedBoxes);
       setItems(updatedItems);
-      pushHistory(updatedItems, updatedBoxes, config);
+      pushHistory(updatedItems, updatedBoxes, texts, config);
       return;
     }
 
@@ -620,12 +729,13 @@ export function App() {
     if (window.confirm('キャンバス上のすべての要素をクリアしますか？')) {
       setItems([]);
       setBoxes([]);
+      setTexts([]);
       setSelectedIds(new Set());
-      pushHistory([], [], config);
+      pushHistory([], [], [], config);
     }
   };
 
-  // PNG画像保存
+  // PNG画像保存 (拡大・スクロール時も見切れずキャンバス全体を2倍高精細で出力)
   const handleExportPng = async () => {
     if (!canvasRef.current) return;
     try {
@@ -636,6 +746,14 @@ export function App() {
       const dataUrl = await toPng(canvasRef.current, {
         pixelRatio: 2,
         cacheBust: true,
+        width: config.width,
+        height: config.height,
+        style: {
+          transform: 'none',
+          margin: '0',
+          left: '0',
+          top: '0',
+        },
       });
 
       setSelectedIds(prevSelected);
@@ -650,7 +768,7 @@ export function App() {
     }
   };
 
-  // クリップボードへコピー
+  // クリップボードへコピー (拡大時も見切れず全体をコピー)
   const handleCopyToClipboard = async () => {
     if (!canvasRef.current) return;
     try {
@@ -658,7 +776,18 @@ export function App() {
       setSelectedIds(new Set());
       await new Promise((r) => setTimeout(r, 50));
 
-      const blob = await toBlob(canvasRef.current, { pixelRatio: 2, cacheBust: true });
+      const blob = await toBlob(canvasRef.current, {
+        pixelRatio: 2,
+        cacheBust: true,
+        width: config.width,
+        height: config.height,
+        style: {
+          transform: 'none',
+          margin: '0',
+          left: '0',
+          top: '0',
+        },
+      });
       setSelectedIds(prevSelected);
 
       if (blob) {
@@ -680,6 +809,7 @@ export function App() {
       config,
       boxes,
       items,
+      texts,
       savedAt: new Date().toISOString(),
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -699,12 +829,13 @@ export function App() {
     reader.onload = (event) => {
       try {
         const json = JSON.parse(event.target?.result as string);
-        if (json.items && json.boxes) {
-          setItems(json.items);
-          setBoxes(json.boxes);
+        if (json.items && (json.boxes || json.texts)) {
+          setItems(json.items || []);
+          setBoxes(json.boxes || []);
+          setTexts(json.texts || []);
           if (json.config) setConfig(json.config);
           setSelectedIds(new Set());
-          pushHistory(json.items, json.boxes, json.config || config);
+          pushHistory(json.items || [], json.boxes || [], json.texts || [], json.config || config);
         }
       } catch (err) {
         alert('ファイルの読み込みに失敗しました。');
@@ -726,10 +857,12 @@ export function App() {
         if (selectedIds.size > 0) {
           const nextItems = items.filter((it) => !selectedIds.has(it.id));
           const nextBoxes = boxes.filter((b) => !selectedIds.has(b.id));
+          const nextTexts = texts.filter((t) => !selectedIds.has(t.id));
           setItems(nextItems);
           setBoxes(nextBoxes);
+          setTexts(nextTexts);
           setSelectedIds(new Set());
-          pushHistory(nextItems, nextBoxes, config);
+          pushHistory(nextItems, nextBoxes, nextTexts, config);
         }
       }
 
@@ -747,7 +880,11 @@ export function App() {
       // Ctrl+A 全選択
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
         e.preventDefault();
-        const allIds = new Set([...items.map((i) => i.id), ...boxes.map((b) => b.id)]);
+        const allIds = new Set([
+          ...items.map((i) => i.id),
+          ...boxes.map((b) => b.id),
+          ...texts.map((t) => t.id),
+        ]);
         setSelectedIds(allIds);
       }
 
@@ -761,7 +898,6 @@ export function App() {
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         if (selectedIds.size === 0) return;
         e.preventDefault();
-
         const step = e.shiftKey ? 10 : 1;
         let dx = 0;
         let dy = 0;
@@ -776,17 +912,30 @@ export function App() {
         const nextBoxes = boxes.map((b) =>
           selectedIds.has(b.id) ? { ...b, x: b.x + dx, y: b.y + dy } : b
         );
+        const nextTexts = texts.map((t) =>
+          selectedIds.has(t.id) ? { ...t, x: t.x + dx, y: t.y + dy } : t
+        );
 
         setItems(nextItems);
         setBoxes(nextBoxes);
+        setTexts(nextTexts);
 
         // 代表要素の位置からガイド線を判定
         const selectedItem = nextItems.find((it) => selectedIds.has(it.id));
         const selectedBox = nextBoxes.find((b) => selectedIds.has(b.id));
+        const selectedText = nextTexts.find((t) => selectedIds.has(t.id));
         const activeRect: Rect | null = selectedItem
           ? { id: selectedItem.id, x: selectedItem.x, y: selectedItem.y, width: selectedItem.size, height: selectedItem.size }
           : selectedBox
           ? { id: selectedBox.id, x: selectedBox.x, y: selectedBox.y, width: selectedBox.width, height: selectedBox.height }
+          : selectedText
+          ? {
+              id: selectedText.id,
+              x: selectedText.x,
+              y: selectedText.y,
+              width: Math.max(60, selectedText.text.length * selectedText.fontSize * 0.85),
+              height: Math.max(28, selectedText.fontSize * 1.4),
+            }
           : null;
 
         if (activeRect) {
@@ -799,6 +948,17 @@ export function App() {
           nextBoxes.forEach((b) => {
             if (!selectedIds.has(b.id)) {
               otherRects.push({ id: b.id, x: b.x, y: b.y, width: b.width, height: b.height });
+            }
+          });
+          nextTexts.forEach((t) => {
+            if (!selectedIds.has(t.id)) {
+              otherRects.push({
+                id: t.id,
+                x: t.x,
+                y: t.y,
+                width: Math.max(60, t.text.length * t.fontSize * 0.85),
+                height: Math.max(28, t.fontSize * 1.4),
+              });
             }
           });
 
@@ -821,7 +981,7 @@ export function App() {
         // 連続押しを考慮した履歴のデバウンス保存
         if (historyDebounceRef.current) clearTimeout(historyDebounceRef.current);
         historyDebounceRef.current = setTimeout(() => {
-          pushHistory(nextItems, nextBoxes, config);
+          pushHistory(nextItems, nextBoxes, nextTexts, config);
         }, 300);
       }
     };
@@ -832,7 +992,7 @@ export function App() {
       if (snapLinesTimerRef.current) clearTimeout(snapLinesTimerRef.current);
       if (historyDebounceRef.current) clearTimeout(historyDebounceRef.current);
     };
-  }, [items, boxes, selectedIds, config, handleUndo, handleRedo, pushHistory]);
+  }, [items, boxes, texts, selectedIds, config, handleUndo, handleRedo, pushHistory]);
 
   // プレビュー用に各属性の代表生徒をピックアップ（ヒナ:爆発、イオリ:貫通、アリス:神秘、ユカリ:振動、ケイ/臨戦アリス:複合装甲）
   const previewCharacters = useMemo(() => {
@@ -900,7 +1060,7 @@ export function App() {
     }
 
     setItems(nextItems);
-    pushHistory(nextItems, boxes, nextConfig);
+    pushHistory(nextItems, boxes, texts, nextConfig);
   };
 
   return (
@@ -916,6 +1076,7 @@ export function App() {
         selectedCount={selectedIds.size}
         onAlignElements={handleAlignElements}
         onAddBox={handleAddBox}
+        onAddText={handleAddText}
         onExportPng={handleExportPng}
         onCopyToClipboard={handleCopyToClipboard}
         onSaveJson={handleSaveJson}
@@ -939,15 +1100,19 @@ export function App() {
         <Canvas
           items={items}
           boxes={boxes}
+          texts={texts}
           charactersMap={charactersMap}
           config={config}
           selectedIds={selectedIds}
           onSelectIds={setSelectedIds}
           onUpdateItems={handleUpdateItems}
           onUpdateBoxes={handleUpdateBoxes}
+          onUpdateTexts={handleUpdateTexts}
           onDeleteItem={handleDeleteItem}
           onDeleteBox={handleDeleteBox}
+          onDeleteText={handleDeleteText}
           onDuplicateBox={handleDuplicateBox}
+          onDuplicateText={handleDuplicateText}
           onAlignBoxChildren={handleAlignBoxChildren}
           onDropCharacters={handleDropCharacters}
           canvasRef={canvasRef}
@@ -963,8 +1128,8 @@ export function App() {
         onClose={() => setIsIconSettingsOpen(false)}
         currentSize={iconSize}
         currentRadius={config.iconBorderRadius ?? 8}
-        currentBorderWidth={config.iconBorderWidth ?? 0}
-        currentColorMode={config.iconBorderColorMode ?? 'attack'}
+        currentBorderWidth={config.iconBorderWidth ?? 2}
+        currentColorMode={config.iconBorderColorMode ?? 'defense'}
         currentColor={config.iconBorderColor ?? '#ffffff'}
         selectedCount={selectedIconCount}
         previewCharacters={previewCharacters}

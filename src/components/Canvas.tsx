@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { CanvasIconItem, ContainerBox, Character, SnapLine, CanvasConfig } from '../types';
+import { CanvasIconItem, ContainerBox, CanvasTextItem, Character, SnapLine, CanvasConfig } from '../types';
 import { CanvasItemView } from './CanvasItemView';
 import { ContainerBoxView } from './ContainerBoxView';
+import { CanvasTextView } from './CanvasTextView';
 import { calculateSnap, Rect } from '../utils/snapGuide';
 import { adjustClusterSpacing, SpacingAdjustOptions } from '../utils/spacingCluster';
 import { SpacingAdjustModal } from './SpacingAdjustModal';
@@ -11,15 +12,19 @@ import { Sliders, Maximize2, RotateCcw } from 'lucide-react';
 interface CanvasProps {
   items: CanvasIconItem[];
   boxes: ContainerBox[];
+  texts?: CanvasTextItem[];
   charactersMap: Map<string, Character>;
   config: CanvasConfig;
   selectedIds: Set<string>;
   onSelectIds: (ids: Set<string>) => void;
   onUpdateItems: (items: CanvasIconItem[]) => void;
   onUpdateBoxes: (boxes: ContainerBox[]) => void;
+  onUpdateTexts?: (texts: CanvasTextItem[]) => void;
   onDeleteItem: (id: string) => void;
   onDeleteBox: (id: string) => void;
+  onDeleteText?: (id: string) => void;
   onDuplicateBox: (id: string) => void;
+  onDuplicateText?: (id: string) => void;
   onAlignBoxChildren: (boxId: string, type: 'grid' | 'row', leftPadding?: number, iconGap?: number) => void;
   onDropCharacters: (charIds: string[], x: number, y: number) => void;
   canvasRef: React.RefObject<HTMLDivElement | null>;
@@ -31,15 +36,19 @@ interface CanvasProps {
 export const Canvas: React.FC<CanvasProps> = ({
   items,
   boxes,
+  texts = [],
   charactersMap,
   config,
   selectedIds,
   onSelectIds,
   onUpdateItems,
   onUpdateBoxes,
+  onUpdateTexts,
   onDeleteItem,
   onDeleteBox,
+  onDeleteText,
   onDuplicateBox,
+  onDuplicateText,
   onAlignBoxChildren,
   onDropCharacters,
   canvasRef,
@@ -85,14 +94,16 @@ export const Canvas: React.FC<CanvasProps> = ({
     return () => el.removeEventListener('wheel', handleWheel);
   }, [config.zoom, onUpdateConfig]);
 
-  // ドラグラフ移動管理
+  // ドラッグ移動管理
   const dragRef = useRef<{
     activeId: string;
     isBox: boolean;
+    isText: boolean;
     startX: number;
     startY: number;
     itemInitPositions: Map<string, { x: number; y: number }>;
     boxInitPositions: Map<string, { x: number; y: number }>;
+    textInitPositions: Map<string, { x: number; y: number }>;
   } | null>(null);
 
   // 範囲選択 (Selection Box)
@@ -163,6 +174,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     }
 
     const isBox = boxes.some((b) => b.id === id);
+    const isText = texts.some((t) => t.id === id);
     if (isBox) {
       setIsDraggingBoxes(true);
     }
@@ -182,18 +194,27 @@ export const Canvas: React.FC<CanvasProps> = ({
       }
     });
 
+    const textInitPositions = new Map<string, { x: number; y: number }>();
+    texts.forEach((t) => {
+      if (currentSelected.has(t.id)) {
+        textInitPositions.set(t.id, { x: t.x, y: t.y });
+      }
+    });
+
     dragRef.current = {
       activeId: id,
       isBox,
+      isText,
       startX: e.clientX,
       startY: e.clientY,
       itemInitPositions,
       boxInitPositions,
+      textInitPositions,
     };
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       if (!dragRef.current || !canvasRef.current) return;
-      const { activeId, startX, startY, itemInitPositions, boxInitPositions, isBox } = dragRef.current;
+      const { activeId, startX, startY, itemInitPositions, boxInitPositions, textInitPositions, isBox, isText } = dragRef.current as any;
 
       const deltaX = (moveEvent.clientX - startX) / config.zoom;
       const deltaY = (moveEvent.clientY - startY) / config.zoom;
@@ -205,6 +226,14 @@ export const Canvas: React.FC<CanvasProps> = ({
         const init = boxInitPositions.get(activeId);
         if (b && init) {
           dragRect = { id: b.id, x: init.x + deltaX, y: init.y + deltaY, width: b.width, height: b.height };
+        }
+      } else if (isText) {
+        const t = texts.find((tx) => tx.id === activeId);
+        const init = textInitPositions?.get(activeId);
+        if (t && init) {
+          const approxW = Math.max(60, t.text.length * t.fontSize * 0.85);
+          const approxH = Math.max(28, t.fontSize * 1.4);
+          dragRect = { id: t.id, x: init.x + deltaX, y: init.y + deltaY, width: approxW, height: approxH };
         }
       } else {
         const it = items.find((itm) => itm.id === activeId);
@@ -228,6 +257,13 @@ export const Canvas: React.FC<CanvasProps> = ({
           otherRects.push({ id: b.id, x: b.x, y: b.y, width: b.width, height: b.height });
         }
       });
+      texts.forEach((t) => {
+        if (!currentSelected.has(t.id)) {
+          const approxW = Math.max(60, t.text.length * t.fontSize * 0.85);
+          const approxH = Math.max(28, t.fontSize * 1.4);
+          otherRects.push({ id: t.id, x: t.x, y: t.y, width: approxW, height: approxH });
+        }
+      });
 
       // スナップ計算
       const snap = calculateSnap(
@@ -244,6 +280,8 @@ export const Canvas: React.FC<CanvasProps> = ({
       // 実効差分 (スナップ後の位置 - 初期位置)
       const initActive = isBox
         ? boxInitPositions.get(activeId)!
+        : isText
+        ? textInitPositions.get(activeId)!
         : itemInitPositions.get(activeId)!;
       const effectiveDx = snap.x - initActive.x;
       const effectiveDy = snap.y - initActive.y;
@@ -271,6 +309,21 @@ export const Canvas: React.FC<CanvasProps> = ({
             if (!init) return b;
             return {
               ...b,
+              x: Math.round(init.x + effectiveDx),
+              y: Math.round(init.y + effectiveDy),
+            };
+          })
+        );
+      }
+
+      // 選択中の全テキストの位置を一括更新
+      if (textInitPositions && textInitPositions.size > 0 && onUpdateTexts) {
+        onUpdateTexts(
+          texts.map((t) => {
+            const init = textInitPositions.get(t.id);
+            if (!init) return t;
+            return {
+              ...t,
               x: Math.round(init.x + effectiveDx),
               y: Math.round(init.y + effectiveDy),
             };
@@ -607,12 +660,13 @@ export const Canvas: React.FC<CanvasProps> = ({
 
     const target = e.target as HTMLElement;
 
-    // 生徒アイコン自体、リサイズハンドル、ヘッダー操作ボタンなどの直接操作時はキャンバス選択を開始しない
+    // 生徒アイコン自体、リサイズハンドル、ヘッダー操作ボタン、テキスト要素などの直接操作時はキャンバス選択を開始しない
     if (
       target.closest('[data-item-id]') ||
       target.closest('[data-resize-handle]') ||
       target.closest('button') ||
-      target.closest('.box-drag-handle')
+      target.closest('.box-drag-handle') ||
+      target.closest('[data-text-id]')
     ) {
       return;
     }
@@ -664,11 +718,26 @@ export const Canvas: React.FC<CanvasProps> = ({
         }
       });
 
+      const intersectingTextIds: string[] = [];
+      texts.forEach((t) => {
+        const approxW = Math.max(60, t.text.length * t.fontSize * 0.85);
+        const approxH = Math.max(28, t.fontSize * 1.4);
+        if (
+          t.x < selRight &&
+          t.x + approxW > selLeft &&
+          t.y < selBottom &&
+          t.y + approxH > selTop
+        ) {
+          intersectingTextIds.push(t.id);
+        }
+      });
+
       const newSelected = new Set<string>(e.shiftKey ? selectedIds : []);
 
-      if (intersectingItemIds.length > 0) {
-        // 要望対応: 範囲内に生徒アイコンがある場合はアイコンを選択（枠は除外してアイコン選択を快適に）
+      if (intersectingItemIds.length > 0 || intersectingTextIds.length > 0) {
+        // アイコンやテキストがある場合はそれらを選択（枠は除外して快適に）
         intersectingItemIds.forEach((id) => newSelected.add(id));
+        intersectingTextIds.forEach((id) => newSelected.add(id));
       } else {
         // 要望対応: 「ドラッグ範囲内にアイコンなしで枠だけの時は枠を選択」
         boxes.forEach((b) => {
@@ -808,6 +877,25 @@ export const Canvas: React.FC<CanvasProps> = ({
             />
           );
         })}
+
+        {/* スタイリッシュなテキスト・見出し・タグ枠 */}
+        {texts.map((text) => (
+          <CanvasTextView
+            key={text.id}
+            item={text}
+            isSelected={selectedIds.has(text.id)}
+            zoom={config.zoom}
+            onSelect={handleSelectElement}
+            onUpdate={(id, updates) => {
+              if (onUpdateTexts) {
+                onUpdateTexts(texts.map((t) => (t.id === id ? { ...t, ...updates } : t)));
+              }
+            }}
+            onDelete={onDeleteText || (() => {})}
+            onDuplicate={onDuplicateText || (() => {})}
+            onStartDrag={handleStartDrag}
+          />
+        ))}
 
         {/* PowerPoint風スマートガイド線（スナップライン）SVGオーバーレイ (最前面 z-[100]) */}
         {((externalSnapLines && externalSnapLines.length > 0) || snapLines.length > 0) && (

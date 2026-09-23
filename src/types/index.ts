@@ -49,7 +49,28 @@ export interface ContainerBox {
   zIndex: number;
 }
 
-export type CanvasElement = CanvasIconItem | ContainerBox;
+export type TextStylePreset = 'title' | 'tag' | 'plain';
+
+export interface CanvasTextItem {
+  id: string;
+  type: 'text';
+  text: string;
+  x: number;
+  y: number;
+  width?: number;
+  fontSize: number; // 14, 18, 24, 32 等
+  fontWeight: 'normal' | 'bold' | 'black';
+  color: string; // 文字色
+  bgColor?: string; // 背景色
+  bgOpacity?: number; // 背景不透明度
+  borderColor?: string; // 枠線色
+  borderWidth?: number; // 枠線太さ
+  borderRadius?: number; // 角丸
+  stylePreset: TextStylePreset;
+  zIndex: number;
+}
+
+export type CanvasElement = CanvasIconItem | ContainerBox | CanvasTextItem;
 
 export interface SnapLine {
   orientation: 'horizontal' | 'vertical';
@@ -75,5 +96,6 @@ export interface CanvasConfig {
 export interface HistoryState {
   items: CanvasIconItem[];
   boxes: ContainerBox[];
+  texts: CanvasTextItem[];
   config: CanvasConfig;
 }

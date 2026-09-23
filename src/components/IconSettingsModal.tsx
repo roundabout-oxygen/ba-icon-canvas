@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Character, IconBorderColorMode } from '../types';
 import { ATTACK_COLORS, DEFENSE_COLORS } from '../utils/constants';
-import { X, Sliders, Shield, Swords, Palette, Check } from 'lucide-react';
+import { X, Sliders, Shield, Swords, Palette, Check, RotateCcw } from 'lucide-react';
 
 interface IconSettingsModalProps {
   isOpen: boolean;
@@ -187,17 +187,24 @@ export const IconSettingsModal: React.FC<IconSettingsModalProps> = ({
               className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
             />
             <div className="grid grid-cols-6 gap-1 pt-0.5">
-              {[48, 64, 72, 80, 96, 120].map((s) => (
+              {[
+                { label: '48px', val: 48 },
+                { label: '64px (標準)', val: 64 },
+                { label: '72px', val: 72 },
+                { label: '80px', val: 80 },
+                { label: '96px', val: 96 },
+                { label: '120px', val: 120 },
+              ].map(({ label, val }) => (
                 <button
-                  key={s}
-                  onClick={() => setSize(s)}
+                  key={val}
+                  onClick={() => setSize(val)}
                   className={`py-1 rounded text-[10px] font-mono transition border ${
-                    size === s
+                    size === val
                       ? 'border-cyan-400 bg-cyan-950/60 text-cyan-300 font-bold'
                       : 'border-slate-800 bg-slate-950/50 text-slate-400 hover:text-white'
                   }`}
                 >
-                  {s}px
+                  {label}
                 </button>
               ))}
             </div>
@@ -262,7 +269,7 @@ export const IconSettingsModal: React.FC<IconSettingsModalProps> = ({
               {[
                 { label: 'なし', val: 0 },
                 { label: '1px', val: 1 },
-                { label: '2px', val: 2 },
+                { label: '2px (標準)', val: 2 },
                 { label: '3px', val: 3 },
                 { label: '4px', val: 4 },
                 { label: '6px', val: 6 },
@@ -316,6 +323,9 @@ export const IconSettingsModal: React.FC<IconSettingsModalProps> = ({
                 <div className="flex items-center gap-1 text-[11px]">
                   <Shield className="w-3.5 h-3.5 text-blue-400" />
                   <span>防御属性連動</span>
+                  <span className="text-[9px] px-1 py-0.2 bg-blue-500/30 text-blue-200 rounded font-normal">
+                    標準
+                  </span>
                 </div>
                 <span className="text-[9px] text-slate-400">軽装/重装/特殊/弾力/複合</span>
               </button>
@@ -397,12 +407,28 @@ export const IconSettingsModal: React.FC<IconSettingsModalProps> = ({
 
         {/* フッター */}
         <div className="px-5 py-3.5 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between gap-2">
-          <button
-            onClick={onClose}
-            className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition font-medium text-xs"
-          >
-            キャンセル
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onClose}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition font-medium text-xs"
+            >
+              キャンセル
+            </button>
+            <button
+              onClick={() => {
+                setSize(64);
+                setRadius(8);
+                setBorderWidth(2);
+                setColorMode('defense');
+                setColor('#ffffff');
+              }}
+              className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-cyan-400 border border-slate-700 hover:border-cyan-500/50 transition font-medium text-xs flex items-center gap-1.5"
+              title="アイコンサイズ64px、角の丸み8px、枠線2px、防御属性連動に戻す"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>標準に戻す</span>
+            </button>
+          </div>
 
           <div className="flex items-center gap-2">
             {selectedCount > 0 && (
