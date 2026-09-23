@@ -4,10 +4,11 @@ import { CanvasIconItem, ContainerBox, CanvasTextItem, Character, SnapLine, Canv
 import { CanvasItemView } from './CanvasItemView';
 import { ContainerBoxView } from './ContainerBoxView';
 import { CanvasTextView } from './CanvasTextView';
+import { CanvasSizeEditOverlay } from './CanvasSizeEditOverlay';
 import { calculateSnap, Rect } from '../utils/snapGuide';
 import { adjustClusterSpacing, SpacingAdjustOptions } from '../utils/spacingCluster';
 import { SpacingAdjustModal } from './SpacingAdjustModal';
-import { Sliders, Maximize2, RotateCcw } from 'lucide-react';
+import { Sliders, Maximize2, RotateCcw, Crop } from 'lucide-react';
 
 interface CanvasProps {
   items: CanvasIconItem[];
@@ -31,6 +32,16 @@ interface CanvasProps {
   externalSnapLines?: SnapLine[];
   onUpdateConfig?: (updates: Partial<CanvasConfig>) => void;
   currentIconSize?: number;
+  isCanvasEditing?: boolean;
+  onStartCanvasEdit?: () => void;
+  onUpdateTempConfig?: (updates: Partial<CanvasConfig>) => void;
+  onUpdateTempElements?: (
+    items: CanvasIconItem[],
+    boxes: ContainerBox[],
+    texts: CanvasTextItem[]
+  ) => void;
+  onConfirmCanvasEdit?: () => void;
+  onCancelCanvasEdit?: () => void;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
@@ -55,6 +66,12 @@ export const Canvas: React.FC<CanvasProps> = ({
   externalSnapLines,
   onUpdateConfig,
   currentIconSize = 64,
+  isCanvasEditing = false,
+  onStartCanvasEdit,
+  onUpdateTempConfig,
+  onUpdateTempElements,
+  onConfirmCanvasEdit,
+  onCancelCanvasEdit,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [snapLines, setSnapLines] = useState<SnapLine[]>([]);
@@ -564,7 +581,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     return () => window.removeEventListener('mousedown', handleOutsideClick);
   }, [contextMenu]);
 
-  // 右クリックコンテキストメニュー (アイコン選択時)
+  // 右クリックコンテキストメニュー
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -574,17 +591,31 @@ export const Canvas: React.FC<CanvasProps> = ({
       return;
     }
 
-    const selectedIconCount = items.filter((it) => selectedIds.has(it.id)).length;
-    if (selectedIconCount >= 1) {
-      e.stopPropagation();
-      const menuW = 200;
-      const menuH = 90;
-      const posX = Math.min(e.clientX, window.innerWidth - menuW - 10);
-      const posY = Math.min(e.clientY, window.innerHeight - menuH - 10);
-      setContextMenu({ x: Math.max(10, posX), y: Math.max(10, posY) });
+    // キャンバス編集モード中はコンテキストメニューを開かない
+    if (isCanvasEditing) return;
+
+    e.stopPropagation();
+
+    // クリックされたターゲットがアイテムの上かどうか確認
+    const target = e.target as HTMLElement;
+    const clickedItemEl = target.closest('[data-item-id]');
+    if (clickedItemEl) {
+      const clickedId = clickedItemEl.getAttribute('data-item-id');
+      if (clickedId && !selectedIds.has(clickedId)) {
+        onSelectIds(new Set([clickedId]));
+      }
     } else {
-      setContextMenu(null);
+      // 背景や枠、テキストなどの右クリック時は選択を解除してキャンバス設定を開きやすくする
+      if (selectedIds.size > 0 && !target.closest('[data-text-id]') && !target.closest('[data-box-id]')) {
+        onSelectIds(new Set());
+      }
     }
+
+    const menuW = 210;
+    const menuH = 140;
+    const posX = Math.min(e.clientX, window.innerWidth - menuW - 10);
+    const posY = Math.min(e.clientY, window.innerHeight - menuH - 10);
+    setContextMenu({ x: Math.max(10, posX), y: Math.max(10, posY) });
   };
 
   // 選択中アイコンのサイズを基準サイズに一括統一
@@ -611,6 +642,13 @@ export const Canvas: React.FC<CanvasProps> = ({
   const handleCanvasMouseDown = (e: React.MouseEvent) => {
     if (contextMenu) {
       setContextMenu(null);
+    }
+
+    // キャンバス編集モード中はパン移動（右ドラッグ・中ドラッグ）のみ許可し、選択ボックスなどは抑止
+    if (isCanvasEditing) {
+      if (e.button !== 2 && e.button !== 1) {
+        return;
+      }
     }
 
     // === 要望対応: 右クリック(button===2) またはホイールクリック(button===1) のドラッグでビュー移動（パン） ===
@@ -944,6 +982,25 @@ export const Canvas: React.FC<CanvasProps> = ({
             }}
           />
         )}
+
+        {/* キャンバスサイズ編集オーバーレイ (8方向リサイズハンドル & 上部設定バー) */}
+        {isCanvasEditing &&
+          onUpdateTempConfig &&
+          onUpdateTempElements &&
+          onConfirmCanvasEdit &&
+          onCancelCanvasEdit && (
+            <CanvasSizeEditOverlay
+              config={config}
+              items={items}
+              boxes={boxes}
+              texts={texts}
+              zoom={config.zoom}
+              onUpdateTempConfig={onUpdateTempConfig}
+              onUpdateTempElements={onUpdateTempElements}
+              onConfirm={onConfirmCanvasEdit}
+              onCancel={onCancelCanvasEdit}
+            />
+          )}
       </div>
       </div>
 
@@ -963,11 +1020,12 @@ export const Canvas: React.FC<CanvasProps> = ({
       {contextMenu &&
         createPortal(
           <div
-            className="fixed bg-slate-900/95 backdrop-blur border border-slate-700 shadow-2xl rounded-lg py-1 px-1 z-[9999] min-w-[190px] animate-in fade-in zoom-in-95 duration-100 select-none"
+            className="fixed bg-slate-900/95 backdrop-blur border border-slate-700 shadow-2xl rounded-lg py-1 px-1 z-[9999] min-w-[210px] animate-in fade-in zoom-in-95 duration-100 select-none"
             style={{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }}
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
           >
+            {/* アイコン選択時専用項目 */}
             {items.filter((it) => selectedIds.has(it.id)).length >= 2 && (
               <button
                 onClick={() => {
@@ -981,17 +1039,50 @@ export const Canvas: React.FC<CanvasProps> = ({
                 <span>間隔を調整する...</span>
               </button>
             )}
+            {items.filter((it) => selectedIds.has(it.id)).length >= 1 && (
+              <>
+                <button
+                  onClick={() => {
+                    setContextMenu(null);
+                    handleUnifySelectedSizes();
+                  }}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-200 hover:bg-cyan-600/30 hover:text-cyan-300 rounded transition font-medium text-left"
+                >
+                  <Maximize2 className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>アイコンサイズを揃える ({currentIconSize}px)</span>
+                </button>
+                <div className="h-[1px] bg-slate-800 my-1" />
+              </>
+            )}
+
+            {/* キャンバス設定（背景右クリック、またはアイコン右クリック共通） */}
             <button
               onClick={() => {
                 setContextMenu(null);
-                handleUnifySelectedSizes();
+                onStartCanvasEdit?.();
               }}
               onMouseDown={(e) => e.stopPropagation()}
-              className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-200 hover:bg-cyan-600/30 hover:text-cyan-300 rounded transition font-medium text-left"
+              className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-cyan-300 hover:bg-cyan-600/30 hover:text-cyan-200 rounded transition font-semibold text-left"
             >
-              <Maximize2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>アイコンサイズを揃える ({currentIconSize}px)</span>
+              <Crop className="w-3.5 h-3.5 text-cyan-400" />
+              <span>キャンバス設定 (サイズ・比率・背景色)...</span>
             </button>
+
+            {/* パン位置リセット (パン移動時のみ) */}
+            {(pan.x !== 0 || pan.y !== 0) && (
+              <button
+                onClick={() => {
+                  setContextMenu(null);
+                  setPan({ x: 0, y: 0 });
+                }}
+                onMouseDown={(e) => e.stopPropagation()}
+                className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-300 hover:bg-cyan-600/30 hover:text-cyan-200 rounded transition font-medium text-left"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+                <span>ビュー位置をリセット</span>
+              </button>
+            )}
           </div>,
           document.body
         )}

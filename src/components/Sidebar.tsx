@@ -503,56 +503,60 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div
               key={char.id}
               data-id={char.id}
-              draggable
-              onDragStart={(e) => handleDragStart(e, char)}
-              onClick={(e) => handleItemClick(char.id, e)}
-              onDoubleClick={() => onAddCharacters([char.id])}
-              onMouseEnter={() => setHoveredChar(char)}
-              onMouseLeave={() => setHoveredChar(null)}
-              className={`character-card group relative w-full aspect-square shrink-0 rounded-md overflow-hidden border cursor-grab active:cursor-grabbing transition duration-75 ${
-                isSelected
-                  ? 'border-cyan-400 ring-2 ring-cyan-400 shadow-md shadow-cyan-500/30'
-                  : isPlaced
-                  ? 'border-cyan-700/80 ring-1 ring-cyan-600/40 opacity-90'
-                  : 'border-slate-700/80 hover:border-slate-400'
-              }`}
-              title={`${char.name}\n攻撃: ${char.attack_type} / 防御: ${char.defense_type}\n(クリックで選択、ドラッグで追加)`}
+              className="character-card relative w-full pt-[100%]"
             >
-              {/* アイコン画像 */}
-              <img
-                src={char.icon}
-                alt={char.name}
-                className="w-full h-full object-cover pointer-events-none block"
-                loading="lazy"
-              />
-
-              {/* 攻撃・防御のインジケータードット */}
-              <div className="absolute top-0.5 left-0.5 flex gap-0.5 pointer-events-none">
-                <span
-                  className="w-1.5 h-1.5 rounded-full shadow border border-black/50"
-                  style={{ backgroundColor: atkColor }}
+              <div
+                draggable
+                onDragStart={(e) => handleDragStart(e, char)}
+                onClick={(e) => handleItemClick(char.id, e)}
+                onDoubleClick={() => onAddCharacters([char.id])}
+                onMouseEnter={() => setHoveredChar(char)}
+                onMouseLeave={() => setHoveredChar(null)}
+                className={`group absolute inset-0 rounded-md overflow-hidden border cursor-grab active:cursor-grabbing transition duration-75 ${
+                  isSelected
+                    ? 'border-cyan-400 ring-2 ring-cyan-400 shadow-md shadow-cyan-500/30'
+                    : isPlaced
+                    ? 'border-cyan-700/80 ring-1 ring-cyan-600/40 opacity-90'
+                    : 'border-slate-700/80 hover:border-slate-400'
+                }`}
+                title={`${char.name}\n攻撃: ${char.attack_type} / 防御: ${char.defense_type}\n(クリックで選択、ドラッグで追加)`}
+              >
+                {/* アイコン画像 */}
+                <img
+                  src={char.icon}
+                  alt={char.name}
+                  className="w-full h-full object-cover pointer-events-none block"
+                  loading="lazy"
                 />
-                <span
-                  className="w-1.5 h-1.5 rounded-full shadow border border-black/50"
-                  style={{ backgroundColor: defColor }}
-                />
-              </div>
 
-              {/* 配置済みチェック */}
-              {isPlaced && (
-                <div className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center font-bold text-[8px] shadow pointer-events-none">
-                  <Check className="w-2.5 h-2.5 stroke-[3]" />
+                {/* 攻撃・防御のインジケータードット */}
+                <div className="absolute top-0.5 left-0.5 flex gap-0.5 pointer-events-none">
+                  <span
+                    className="w-1.5 h-1.5 rounded-full shadow border border-black/50"
+                    style={{ backgroundColor: atkColor }}
+                  />
+                  <span
+                    className="w-1.5 h-1.5 rounded-full shadow border border-black/50"
+                    style={{ backgroundColor: defColor }}
+                  />
                 </div>
-              )}
 
-              {/* 選択時オーバーレイ */}
-              {isSelected && (
-                <div className="absolute inset-0 bg-cyan-500/20 pointer-events-none flex items-center justify-center">
-                  <div className="w-4 h-4 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center font-black text-[9px] shadow">
-                    ✓
+                {/* 配置済みチェック */}
+                {isPlaced && (
+                  <div className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center font-bold text-[8px] shadow pointer-events-none">
+                    <Check className="w-2.5 h-2.5 stroke-[3]" />
                   </div>
-                </div>
-              )}
+                )}
+
+                {/* 選択時オーバーレイ */}
+                {isSelected && (
+                  <div className="absolute inset-0 bg-cyan-500/20 pointer-events-none flex items-center justify-center">
+                    <div className="w-4 h-4 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center font-black text-[9px] shadow">
+                      ✓
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}

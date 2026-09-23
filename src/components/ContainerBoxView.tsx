@@ -445,38 +445,63 @@ export const ContainerBoxView: React.FC<ContainerBoxViewProps> = ({
         </button>
       </div>
 
-      {/* 選択時のリサイズハンドル (四隅・四辺) */}
+      {/* 選択時のリサイズハンドル (全8方向: 四隅・四辺) */}
       {isSelected && (
         <>
+          {/* 四隅 */}
           <div
             data-resize-handle="true"
-            className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-cyan-500 rounded-sm cursor-nwse-resize z-30"
+            className="absolute -top-1.5 -left-1.5 w-3.5 h-3.5 bg-white border-2 border-cyan-500 rounded-sm cursor-nwse-resize z-30 shadow"
             onMouseDown={(e) => handleResizeStart('tl', e)}
+            title="左上をドラッグしてリサイズ"
           />
           <div
             data-resize-handle="true"
-            className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-cyan-500 rounded-sm cursor-nesw-resize z-30"
+            className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-white border-2 border-cyan-500 rounded-sm cursor-nesw-resize z-30 shadow"
             onMouseDown={(e) => handleResizeStart('tr', e)}
+            title="右上をドラッグしてリサイズ"
           />
           <div
             data-resize-handle="true"
-            className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-cyan-500 rounded-sm cursor-nesw-resize z-30"
+            className="absolute -bottom-1.5 -left-1.5 w-3.5 h-3.5 bg-white border-2 border-cyan-500 rounded-sm cursor-nesw-resize z-30 shadow"
             onMouseDown={(e) => handleResizeStart('bl', e)}
+            title="左下をドラッグしてリサイズ"
           />
           <div
             data-resize-handle="true"
-            className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-cyan-500 rounded-sm cursor-nwse-resize z-30"
+            className="absolute -bottom-1.5 -right-1.5 w-3.5 h-3.5 bg-white border-2 border-cyan-500 rounded-sm cursor-nwse-resize z-30 shadow"
             onMouseDown={(e) => handleResizeStart('br', e)}
+            title="右下をドラッグしてリサイズ"
           />
+
+          {/* 四辺の中央ハンドル */}
+          {/* 上辺 */}
           <div
             data-resize-handle="true"
-            className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-5 bg-white border-2 border-cyan-500 rounded-sm cursor-ew-resize z-30"
-            onMouseDown={(e) => handleResizeStart('r', e)}
+            className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-6 h-2.5 bg-white border-2 border-cyan-500 rounded-sm cursor-ns-resize z-30 shadow hover:bg-cyan-100 transition-colors"
+            onMouseDown={(e) => handleResizeStart('t', e)}
+            title="上端をドラッグしてリサイズ"
           />
+          {/* 下辺 */}
           <div
             data-resize-handle="true"
-            className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-2.5 bg-white border-2 border-cyan-500 rounded-sm cursor-ns-resize z-30"
+            className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-6 h-2.5 bg-white border-2 border-cyan-500 rounded-sm cursor-ns-resize z-30 shadow hover:bg-cyan-100 transition-colors"
             onMouseDown={(e) => handleResizeStart('b', e)}
+            title="下端をドラッグしてリサイズ"
+          />
+          {/* 左辺 */}
+          <div
+            data-resize-handle="true"
+            className="absolute top-1/2 -left-1.5 -translate-y-1/2 w-2.5 h-6 bg-white border-2 border-cyan-500 rounded-sm cursor-ew-resize z-30 shadow hover:bg-cyan-100 transition-colors"
+            onMouseDown={(e) => handleResizeStart('l', e)}
+            title="左端をドラッグしてリサイズ"
+          />
+          {/* 右辺 */}
+          <div
+            data-resize-handle="true"
+            className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-6 bg-white border-2 border-cyan-500 rounded-sm cursor-ew-resize z-30 shadow hover:bg-cyan-100 transition-colors"
+            onMouseDown={(e) => handleResizeStart('r', e)}
+            title="右端をドラッグしてリサイズ"
           />
         </>
       )}

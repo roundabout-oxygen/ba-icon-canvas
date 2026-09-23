@@ -107,10 +107,12 @@ export const CanvasTextView: React.FC<CanvasTextViewProps> = ({
           : 'hover:brightness-110'
       }`}
     >
-      {/* 選択時のフローティングツールバー */}
+      {/* 選択時のフローティングツールバー (文字に被らないよう十分な間隔を空け、上端付近なら下側に自動反転) */}
       {isSelected && !isEditing && (
         <div
-          className="absolute -top-10 left-0 bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl px-1.5 py-1 flex items-center gap-1 z-50 animate-in fade-in zoom-in-95 duration-100"
+          className={`absolute left-0 bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl px-1.5 py-1 flex items-center gap-1 z-50 animate-in fade-in zoom-in-95 duration-100 whitespace-nowrap ${
+            item.y < 55 ? 'top-full mt-2.5' : '-top-12'
+          }`}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >

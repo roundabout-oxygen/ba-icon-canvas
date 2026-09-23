@@ -27,6 +27,7 @@ import {
   Type,
   Tag,
   FileText,
+  Crop,
 } from 'lucide-react';
 
 interface ToolbarProps {
@@ -50,6 +51,7 @@ interface ToolbarProps {
   iconSize: number;
   onChangeIconSize: (size: number) => void;
   onOpenIconSettings: () => void;
+  onOpenCanvasSettings?: () => void;
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({
@@ -71,6 +73,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   iconSize,
   onChangeIconSize,
   onOpenIconSettings,
+  onOpenCanvasSettings,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showBoxDropdown, setShowBoxDropdown] = useState(false);
@@ -409,6 +412,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({
               </option>
             ))}
           </select>
+
+          {/* キャンバスサイズ編集モード起動ボタン */}
+          <button
+            onClick={onOpenCanvasSettings}
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-700/80 hover:bg-cyan-600/40 text-slate-300 hover:text-cyan-200 border border-slate-600/60 transition text-[10px] font-medium ml-1 flex-shrink-0 whitespace-nowrap"
+            title="キャンバス設定を開く（ドラッグ変形・アスペクト比固定・背景色変更）"
+          >
+            <Crop className="w-3 h-3 text-cyan-400" />
+            <span>サイズ変更</span>
+          </button>
         </div>
 
         {/* ズーム */}

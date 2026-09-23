@@ -39,6 +39,14 @@ export function App() {
 
   const [iconSize, setIconSize] = useState<number>(64);
   const [isIconSettingsOpen, setIsIconSettingsOpen] = useState(false);
+  const [isCanvasEditing, setIsCanvasEditing] = useState(false);
+  const canvasEditSnapshotRef = useRef<{
+    config: CanvasConfig;
+    items: CanvasIconItem[];
+    boxes: ContainerBox[];
+    texts: CanvasTextItem[];
+  } | null>(null);
+
   const [items, setItems] = useState<CanvasIconItem[]>([]);
   const [boxes, setBoxes] = useState<ContainerBox[]>([]);
   const [texts, setTexts] = useState<CanvasTextItem[]>([]);
@@ -178,6 +186,52 @@ export function App() {
     },
     [config, items, boxes, texts, pushHistory]
   );
+
+  // キャンバスサイズ編集モードの開始
+  const handleStartCanvasEdit = useCallback(() => {
+    canvasEditSnapshotRef.current = {
+      config: { ...config },
+      items: [...items],
+      boxes: [...boxes],
+      texts: [...texts],
+    };
+    setIsCanvasEditing(true);
+    setSelectedIds(new Set());
+  }, [config, items, boxes, texts]);
+
+  // 一時反映 (ドラッグ中等は履歴に積まずリアルタイム反映)
+  const handleTempCanvasConfig = useCallback((updates: Partial<CanvasConfig>) => {
+    setConfig((prev) => ({ ...prev, ...updates }));
+  }, []);
+
+  const handleTempCanvasElements = useCallback(
+    (newItems: CanvasIconItem[], newBoxes: ContainerBox[], newTexts: CanvasTextItem[]) => {
+      setItems(newItems);
+      setBoxes(newBoxes);
+      setTexts(newTexts);
+    },
+    []
+  );
+
+  // キャンバスサイズ編集の確定 (OK)
+  const handleConfirmCanvasEdit = useCallback(() => {
+    setIsCanvasEditing(false);
+    canvasEditSnapshotRef.current = null;
+    pushHistory(items, boxes, texts, config);
+  }, [items, boxes, texts, config, pushHistory]);
+
+  // キャンバスサイズ編集のキャンセル (Esc / キャンセル)
+  const handleCancelCanvasEdit = useCallback(() => {
+    if (canvasEditSnapshotRef.current) {
+      const snap = canvasEditSnapshotRef.current;
+      setConfig(snap.config);
+      setItems(snap.items);
+      setBoxes(snap.boxes);
+      setTexts(snap.texts);
+    }
+    setIsCanvasEditing(false);
+    canvasEditSnapshotRef.current = null;
+  }, []);
 
   // アイコンサイズ一括変更 (選択中があれば選択中のみ、未選択時は配置済みの全アイコンを一括変更)
   const handleChangeIconSize = (size: number) => {
@@ -1085,6 +1139,7 @@ export function App() {
         iconSize={iconSize}
         onChangeIconSize={handleChangeIconSize}
         onOpenIconSettings={() => setIsIconSettingsOpen(true)}
+        onOpenCanvasSettings={handleStartCanvasEdit}
       />
 
       {/* メインエリア: 左サイドバー + 右キャンバス */}
@@ -1119,6 +1174,12 @@ export function App() {
           externalSnapLines={keyboardSnapLines}
           onUpdateConfig={handleUpdateConfig}
           currentIconSize={iconSize}
+          isCanvasEditing={isCanvasEditing}
+          onStartCanvasEdit={handleStartCanvasEdit}
+          onUpdateTempConfig={handleTempCanvasConfig}
+          onUpdateTempElements={handleTempCanvasElements}
+          onConfirmCanvasEdit={handleConfirmCanvasEdit}
+          onCancelCanvasEdit={handleCancelCanvasEdit}
         />
       </div>
 
