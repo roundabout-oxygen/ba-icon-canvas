@@ -189,10 +189,10 @@ export const CanvasSizeEditOverlay: React.FC<CanvasSizeEditOverlayProps> = ({
 
   return (
     <>
-      {/* ─── 画面上部中央ドッキング型 設定ツールバー (createPortalでdocument.body直下に描画し、キャンバスのtransform影響を完全排除) ─── */}
+      {/* ─── 画面下部中央ドッキング型 設定ツールバー (文字枠やキャンバス上部を一切遮らないよう画面最下部に配置) ─── */}
       {createPortal(
         <div
-          className="fixed top-16 left-1/2 -translate-x-1/2 z-[9999] bg-slate-900/95 backdrop-blur-xl border border-cyan-500/80 rounded-2xl shadow-2xl px-3.5 py-2 flex items-center gap-2.5 animate-in fade-in slide-in-from-top-3 duration-200 select-none max-w-[calc(100vw-32px)] overflow-x-auto scrollbar-none"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] bg-slate-900/95 backdrop-blur-xl border border-cyan-500/80 rounded-2xl shadow-2xl px-3.5 py-2 flex items-center gap-2.5 animate-in fade-in slide-in-from-bottom-3 duration-200 select-none max-w-[calc(100vw-32px)] overflow-x-auto scrollbar-none"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >

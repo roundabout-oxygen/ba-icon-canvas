@@ -941,7 +941,7 @@ export const Canvas: React.FC<CanvasProps> = ({
             }}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="select-none transition-transform duration-75 overflow-hidden rounded-md border border-slate-700/50"
+            className="select-none transition-transform duration-75 overflow-visible rounded-md border border-slate-700/50"
           >
         {/* グリッド背景 (設定でONの場合) */}
         {config.showGrid && (

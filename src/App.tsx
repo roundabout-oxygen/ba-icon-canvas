@@ -85,12 +85,12 @@ export function App() {
         setCharacters(sorted);
         setLoading(false);
 
-        // 要望: キャンバス部は最初は何も配置していない無地スタート
+        // キャンバス部は最初は何も配置していない無地スタート
         setBoxes([]);
         setItems([]);
         setTexts([]);
 
-        // 画面サイズに応じて初期ズームを自動計算して画面に綺麗に収める（上部ツールバーや左右マージン考慮）
+        // 画面サイズに応じて初期ズームを自動計算して画面内に100%美しく収める
         const availW = Math.max(300, window.innerWidth - 420);
         const availH = Math.max(200, window.innerHeight - 56 - 96);
         const scaleW = availW / 1200;
@@ -225,8 +225,8 @@ export function App() {
 
   // 画面全体に収まるようにズーム倍率を自動調整 (Fit to Screen)
   const handleFitToScreen = useCallback(() => {
-    const availW = Math.max(280, window.innerWidth - 380 - 64);
-    const availH = Math.max(200, window.innerHeight - 56 - 64);
+    const availW = Math.max(280, window.innerWidth - 380 - 80);
+    const availH = Math.max(200, window.innerHeight - 56 - 110);
     const scaleW = availW / config.width;
     const scaleH = availH / config.height;
     const fitScale = Math.min(scaleW, scaleH);
@@ -241,8 +241,8 @@ export function App() {
     pushHistory(items, boxes, texts, config);
 
     // 新しいサイズが画面より大きい場合は自動的に画面内にフィットさせて見切れを防止
-    const availW = Math.max(280, window.innerWidth - 380 - 64);
-    const availH = Math.max(200, window.innerHeight - 56 - 64);
+    const availW = Math.max(280, window.innerWidth - 380 - 80);
+    const availH = Math.max(200, window.innerHeight - 56 - 110);
     if (config.width * config.zoom > availW || config.height * config.zoom > availH) {
       const scaleW = availW / config.width;
       const scaleH = availH / config.height;
