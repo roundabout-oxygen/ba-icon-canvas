@@ -7,9 +7,9 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1440,
     height: 920,
-    minWidth: 1024,
-    minHeight: 700,
-    title: 'BlueArchive Icon Canvas - v1.0.13',
+    minWidth: 900,
+    minHeight: 650,
+    title: 'BlueArchive Icon Canvas - v1.0.14',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
