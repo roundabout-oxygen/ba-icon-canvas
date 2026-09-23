@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { CanvasConfig, ContainerBox } from '../types';
 import { APP_VERSION, PRESET_BOX_THEMES, CANVAS_PRESETS } from '../utils/constants';
 import {
@@ -79,9 +80,63 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onFitToScreen,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const boxBtnRef = useRef<HTMLButtonElement>(null);
+  const textBtnRef = useRef<HTMLButtonElement>(null);
   const [showBoxDropdown, setShowBoxDropdown] = useState(false);
   const [showTextDropdown, setShowTextDropdown] = useState(false);
+  const [boxMenuPos, setBoxMenuPos] = useState<{ top: number; left: number } | null>(null);
+  const [textMenuPos, setTextMenuPos] = useState<{ top: number; left: number } | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
+
+  // 外側クリックおよびスクロール検知でドロップダウンを閉じる
+  useEffect(() => {
+    if (!showBoxDropdown && !showTextDropdown) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (
+        !target.closest('[data-dropdown-menu]') &&
+        !boxBtnRef.current?.contains(target) &&
+        !textBtnRef.current?.contains(target)
+      ) {
+        setShowBoxDropdown(false);
+        setShowTextDropdown(false);
+      }
+    };
+    const handleScrollOrResize = () => {
+      setShowBoxDropdown(false);
+      setShowTextDropdown(false);
+    };
+    window.addEventListener('mousedown', handleOutsideClick);
+    window.addEventListener('scroll', handleScrollOrResize, true);
+    window.addEventListener('resize', handleScrollOrResize);
+    return () => {
+      window.removeEventListener('mousedown', handleOutsideClick);
+      window.removeEventListener('scroll', handleScrollOrResize, true);
+      window.removeEventListener('resize', handleScrollOrResize);
+    };
+  }, [showBoxDropdown, showTextDropdown]);
+
+  const handleToggleBoxDropdown = () => {
+    if (!showBoxDropdown && boxBtnRef.current) {
+      const rect = boxBtnRef.current.getBoundingClientRect();
+      setBoxMenuPos({ top: rect.bottom + 4, left: rect.left });
+      setShowBoxDropdown(true);
+      setShowTextDropdown(false);
+    } else {
+      setShowBoxDropdown(false);
+    }
+  };
+
+  const handleToggleTextDropdown = () => {
+    if (!showTextDropdown && textBtnRef.current) {
+      const rect = textBtnRef.current.getBoundingClientRect();
+      setTextMenuPos({ top: rect.bottom + 4, left: rect.left });
+      setShowTextDropdown(true);
+      setShowBoxDropdown(false);
+    } else {
+      setShowTextDropdown(false);
+    }
+  };
 
   const handleCopyClick = () => {
     onCopyToClipboard();
@@ -90,7 +145,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <header className="h-14 bg-slate-900 border-b border-slate-700/80 px-3 flex items-center justify-between select-none z-30 shadow-md min-w-0 overflow-x-auto overflow-y-hidden gap-2 scrollbar-none">
+    <>
+      <header className="h-14 bg-slate-900 border-b border-slate-700/80 px-3 flex items-center justify-between select-none z-30 shadow-md min-w-0 overflow-x-auto overflow-y-hidden gap-2 scrollbar-none">
       {/* ─── 左グループ: アプリ名・バージョン & 作成・整列操作 ─── */}
       <div className="flex items-center gap-2 flex-shrink-0">
         {/* ロゴ & バージョン */}
@@ -138,109 +194,27 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         {/* 囲み枠（ボックス）追加 */}
         <div className="relative flex-shrink-0">
           <button
-            onClick={() => {
-              setShowBoxDropdown(!showBoxDropdown);
-              setShowTextDropdown(false);
-            }}
+            ref={boxBtnRef}
+            onClick={handleToggleBoxDropdown}
             className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-md text-xs font-medium border border-slate-700 transition shadow-sm whitespace-nowrap flex-shrink-0"
             title="囲み枠を追加"
           >
             <PlusSquare className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
             <span className="whitespace-nowrap">枠を追加</span>
           </button>
-
-          {showBoxDropdown && (
-            <div className="absolute top-full left-0 mt-1 bg-slate-800 border border-slate-700 rounded-lg p-2 shadow-2xl flex flex-col gap-1 z-50 w-44">
-              <div className="text-[10px] text-slate-400 font-bold px-1 py-0.5">プリセット枠色</div>
-              {PRESET_BOX_THEMES.map((theme, idx) => (
-                <button
-                  key={theme.name}
-                  onClick={() => {
-                    onAddBox(idx);
-                    setShowBoxDropdown(false);
-                  }}
-                  className="flex items-center gap-2 px-2 py-1 hover:bg-slate-700 rounded text-left text-xs text-slate-200 transition whitespace-nowrap"
-                >
-                  <span
-                    className="w-3.5 h-3.5 rounded border flex-shrink-0"
-                    style={{ borderColor: theme.borderColor, backgroundColor: theme.bgColor }}
-                  />
-                  <span>{theme.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* 文字・タイトル追加 */}
         <div className="relative flex-shrink-0">
           <button
-            onClick={() => {
-              setShowTextDropdown(!showTextDropdown);
-              setShowBoxDropdown(false);
-            }}
+            ref={textBtnRef}
+            onClick={handleToggleTextDropdown}
             className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-md text-xs font-medium border border-slate-700 transition shadow-sm whitespace-nowrap flex-shrink-0"
             title="タイトル文やタグ枠・メモ文字を追加"
           >
             <Type className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
             <span className="whitespace-nowrap">文字を追加</span>
           </button>
-
-          {showTextDropdown && (
-            <div className="absolute top-full left-0 mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 shadow-2xl flex flex-col gap-1.5 z-50 w-52 animate-in fade-in zoom-in-95 duration-100">
-              <div className="text-[10px] text-slate-400 font-bold px-1.5 py-0.5 border-b border-slate-800 pb-1">
-                テキストスタイルを選択
-              </div>
-
-              <button
-                onClick={() => {
-                  onAddText('title');
-                  setShowTextDropdown(false);
-                }}
-                className="flex items-center gap-2.5 px-2 py-1.5 hover:bg-slate-800 rounded-lg text-left transition group whitespace-nowrap"
-              >
-                <div className="p-1 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 flex-shrink-0">
-                  <Type className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-cyan-300">タイトル文</div>
-                  <div className="text-[10px] text-slate-400">青ライン付きの大見出し</div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => {
-                  onAddText('tag');
-                  setShowTextDropdown(false);
-                }}
-                className="flex items-center gap-2.5 px-2 py-1.5 hover:bg-slate-800 rounded-lg text-left transition group whitespace-nowrap"
-              >
-                <div className="p-1 rounded bg-slate-800 text-slate-200 border border-slate-700 flex-shrink-0">
-                  <Tag className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-cyan-300">タグ・小見出し枠</div>
-                  <div className="text-[10px] text-slate-400">枠付きの分類ラベル</div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => {
-                  onAddText('plain');
-                  setShowTextDropdown(false);
-                }}
-                className="flex items-center gap-2.5 px-2 py-1.5 hover:bg-slate-800 rounded-lg text-left transition group whitespace-nowrap"
-              >
-                <div className="p-1 rounded bg-slate-800 text-slate-400 border border-slate-700 flex-shrink-0">
-                  <FileText className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-cyan-300">シンプル文字</div>
-                  <div className="text-[10px] text-slate-400">背景なしの注釈・メモ</div>
-                </div>
-              </button>
-            </div>
-          )}
         </div>
 
         {/* 整列ボタン群 (複数選択時のみスマートに表示) */}
@@ -511,5 +485,95 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         </button>
       </div>
     </header>
+
+    {/* ─── ドロップダウンメニュー (Portal により header の overflow-y-hidden を回避し、常に最前面に表示) ─── */}
+    {showBoxDropdown && boxMenuPos && createPortal(
+      <div
+        data-dropdown-menu
+        style={{ top: boxMenuPos.top, left: boxMenuPos.left }}
+        className="fixed bg-slate-800 border border-slate-700 rounded-lg p-2 shadow-2xl flex flex-col gap-1 z-[99999] w-44 animate-in fade-in zoom-in-95 duration-100"
+      >
+        <div className="text-[10px] text-slate-400 font-bold px-1 py-0.5">プリセット枠色</div>
+        {PRESET_BOX_THEMES.map((theme, idx) => (
+          <button
+            key={theme.name}
+            onClick={() => {
+              onAddBox(idx);
+              setShowBoxDropdown(false);
+            }}
+            className="flex items-center gap-2 px-2 py-1 hover:bg-slate-700 rounded text-left text-xs text-slate-200 transition whitespace-nowrap"
+          >
+            <span
+              className="w-3.5 h-3.5 rounded border flex-shrink-0"
+              style={{ borderColor: theme.borderColor, backgroundColor: theme.bgColor }}
+            />
+            <span>{theme.name}</span>
+          </button>
+        ))}
+      </div>,
+      document.body
+    )}
+
+    {showTextDropdown && textMenuPos && createPortal(
+      <div
+        data-dropdown-menu
+        style={{ top: textMenuPos.top, left: textMenuPos.left }}
+        className="fixed bg-slate-900 border border-slate-700 rounded-xl p-2 shadow-2xl flex flex-col gap-1.5 z-[99999] w-52 animate-in fade-in zoom-in-95 duration-100"
+      >
+        <div className="text-[10px] text-slate-400 font-bold px-1.5 py-0.5 border-b border-slate-800 pb-1">
+          テキストスタイルを選択
+        </div>
+
+        <button
+          onClick={() => {
+            onAddText('title');
+            setShowTextDropdown(false);
+          }}
+          className="flex items-center gap-2.5 px-2 py-1.5 hover:bg-slate-800 rounded-lg text-left transition group whitespace-nowrap"
+        >
+          <div className="p-1 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 flex-shrink-0">
+            <Type className="w-3.5 h-3.5" />
+          </div>
+          <div>
+            <div className="text-xs font-bold text-white group-hover:text-cyan-300">タイトル文</div>
+            <div className="text-[10px] text-slate-400">青ライン付きの大見出し</div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => {
+            onAddText('tag');
+            setShowTextDropdown(false);
+          }}
+          className="flex items-center gap-2.5 px-2 py-1.5 hover:bg-slate-800 rounded-lg text-left transition group whitespace-nowrap"
+        >
+          <div className="p-1 rounded bg-slate-800 text-slate-200 border border-slate-700 flex-shrink-0">
+            <Tag className="w-3.5 h-3.5" />
+          </div>
+          <div>
+            <div className="text-xs font-bold text-white group-hover:text-cyan-300">タグ・小見出し枠</div>
+            <div className="text-[10px] text-slate-400">枠付きの分類ラベル</div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => {
+            onAddText('plain');
+            setShowTextDropdown(false);
+          }}
+          className="flex items-center gap-2.5 px-2 py-1.5 hover:bg-slate-800 rounded-lg text-left transition group whitespace-nowrap"
+        >
+          <div className="p-1 rounded bg-slate-800 text-slate-400 border border-slate-700 flex-shrink-0">
+            <FileText className="w-3.5 h-3.5" />
+          </div>
+          <div>
+            <div className="text-xs font-bold text-white group-hover:text-cyan-300">シンプル文字</div>
+            <div className="text-[10px] text-slate-400">背景なしの注釈・メモ</div>
+          </div>
+        </button>
+      </div>,
+      document.body
+    )}
+  </>
   );
 };
