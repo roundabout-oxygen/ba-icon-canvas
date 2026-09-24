@@ -4,6 +4,8 @@ export type Role = 'STRIKER' | 'SPECIAL';
 
 export type IconBorderColorMode = 'custom' | 'attack' | 'defense';
 
+export type ImplementationFilter = 'all' | 'playable' | 'npc';
+
 export interface Character {
   id: string;
   name: string;
@@ -17,6 +19,7 @@ export interface Character {
   school: string;
   attack_type: string;
   defense_type: string;
+  is_npc?: boolean;
 }
 
 export interface CanvasIconItem {

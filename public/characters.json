@@ -11,7 +11,8 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
     "id": "char_002",
@@ -25,7 +26,8 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
     "id": "char_003",
@@ -39,7 +41,8 @@
     "class": "T.S",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
     "id": "char_004",
@@ -53,7 +56,8 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
     "id": "char_005",
@@ -67,7 +71,8 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
     "id": "char_006",
@@ -81,7 +86,8 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
     "id": "char_007",
@@ -95,7 +101,8 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
     "id": "char_008",
@@ -109,7 +116,8 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
     "id": "char_009",
@@ -123,7 +131,8 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
     "id": "char_010",
@@ -137,7 +146,8 @@
     "class": "タンク",
     "school": "アリウス",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
     "id": "char_011",
@@ -151,7 +161,8 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
     "id": "char_012",
@@ -165,7 +176,8 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
     "id": "char_013",
@@ -179,7 +191,8 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "複合装甲"
+    "defense_type": "複合装甲",
+    "is_npc": false
   },
   {
     "id": "char_014",
@@ -193,7 +206,8 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
     "id": "char_015",
@@ -207,7 +221,8 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
     "id": "char_016",
@@ -221,10 +236,26 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
     "id": "char_017",
+    "name": "アンナ",
+    "rarity": "★3",
+    "icon": "icons/アンナ.png",
+    "weapon": "HG",
+    "cover": "○",
+    "role": "STRIKER",
+    "pos": "MIDDLE",
+    "class": "アタッカー",
+    "school": "レッドウィンター",
+    "attack_type": "貫通",
+    "defense_type": "軽装備",
+    "is_npc": false
+  },
+  {
+    "id": "char_018",
     "name": "イオリ",
     "rarity": "★3",
     "icon": "icons/イオリ.png",
@@ -235,10 +266,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_018",
+    "id": "char_019",
     "name": "イオリ（水着）",
     "rarity": "★3",
     "icon": "icons/イオリ（水着）.png",
@@ -249,10 +281,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_019",
+    "id": "char_020",
     "name": "イズナ",
     "rarity": "★3",
     "icon": "icons/イズナ.png",
@@ -263,10 +296,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_020",
+    "id": "char_021",
     "name": "イズナ（水着）",
     "rarity": "★3",
     "icon": "icons/イズナ（水着）.png",
@@ -277,10 +311,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_021",
+    "id": "char_022",
     "name": "イズミ",
     "rarity": "★3",
     "icon": "icons/イズミ.png",
@@ -291,10 +326,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_022",
+    "id": "char_023",
     "name": "イズミ（正月）",
     "rarity": "★3",
     "icon": "icons/イズミ（正月）.png",
@@ -305,10 +341,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_023",
+    "id": "char_024",
     "name": "イチカ",
     "rarity": "★3",
     "icon": "icons/イチカ.png",
@@ -319,10 +356,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_024",
+    "id": "char_025",
     "name": "イブキ（水着）",
     "rarity": "★3",
     "icon": "icons/イブキ（水着）.png",
@@ -333,10 +371,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_025",
+    "id": "char_026",
     "name": "イロハ",
     "rarity": "★3",
     "icon": "icons/イロハ.png",
@@ -347,10 +386,11 @@
     "class": "T.S",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_026",
+    "id": "char_027",
     "name": "イロハ（水着）",
     "rarity": "★3",
     "icon": "icons/イロハ（水着）.png",
@@ -361,10 +401,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_027",
+    "id": "char_028",
     "name": "ウイ",
     "rarity": "★3",
     "icon": "icons/ウイ.png",
@@ -375,10 +416,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_028",
+    "id": "char_029",
     "name": "ウイ（水着）",
     "rarity": "★3",
     "icon": "icons/ウイ（水着）.png",
@@ -389,10 +431,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_029",
+    "id": "char_030",
     "name": "ウタハ（応援団）",
     "rarity": "★3",
     "icon": "icons/ウタハ（応援団）.png",
@@ -403,10 +446,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_030",
+    "id": "char_031",
     "name": "ウミカ",
     "rarity": "★3",
     "icon": "icons/ウミカ.png",
@@ -417,10 +461,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_031",
+    "id": "char_032",
     "name": "エイミ",
     "rarity": "★3",
     "icon": "icons/エイミ.png",
@@ -431,10 +476,11 @@
     "class": "タンク",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_032",
+    "id": "char_033",
     "name": "エイミ（水着）",
     "rarity": "★3",
     "icon": "icons/エイミ（水着）.png",
@@ -445,10 +491,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_033",
+    "id": "char_034",
     "name": "エイミ（臨戦）",
     "rarity": "★3",
     "icon": "icons/エイミ（臨戦）.png",
@@ -459,10 +506,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_034",
+    "id": "char_035",
     "name": "エリ",
     "rarity": "★3",
     "icon": "icons/エリ.png",
@@ -473,10 +521,11 @@
     "class": "アタッカー",
     "school": "ワイルドハント",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_035",
+    "id": "char_036",
     "name": "エリカ",
     "rarity": "★3",
     "icon": "icons/エリカ.png",
@@ -487,10 +536,26 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_036",
+    "id": "char_037",
+    "name": "エリナ",
+    "rarity": "★3",
+    "icon": "icons/エリナ.png",
+    "weapon": "HG",
+    "cover": "×",
+    "role": "SPECIAL",
+    "pos": "BACK",
+    "class": "サポーター",
+    "school": "レッドウィンター",
+    "attack_type": "振動",
+    "defense_type": "軽装備",
+    "is_npc": false
+  },
+  {
+    "id": "char_038",
     "name": "カエデ",
     "rarity": "★3",
     "icon": "icons/カエデ.png",
@@ -501,10 +566,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_037",
+    "id": "char_039",
     "name": "カズサ",
     "rarity": "★3",
     "icon": "icons/カズサ.png",
@@ -515,10 +581,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_038",
+    "id": "char_040",
     "name": "カズサ（バンド）",
     "rarity": "★3",
     "icon": "icons/カズサ（バンド）.png",
@@ -529,10 +596,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_039",
+    "id": "char_041",
     "name": "カスミ",
     "rarity": "★3",
     "icon": "icons/カスミ.png",
@@ -543,10 +611,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_040",
+    "id": "char_042",
     "name": "カスミ（水着）",
     "rarity": "★3",
     "icon": "icons/カスミ（水着）.png",
@@ -557,10 +626,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_041",
+    "id": "char_043",
     "name": "カノエ",
     "rarity": "★3",
     "icon": "icons/カノエ.png",
@@ -571,10 +641,11 @@
     "class": "タンク",
     "school": "ワイルドハント",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_042",
+    "id": "char_044",
     "name": "カホ",
     "rarity": "★3",
     "icon": "icons/カホ.png",
@@ -585,10 +656,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_043",
+    "id": "char_045",
     "name": "カヨコ（正月）",
     "rarity": "★3",
     "icon": "icons/カヨコ（正月）.png",
@@ -599,10 +671,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_044",
+    "id": "char_046",
     "name": "カヨコ（ドレス）",
     "rarity": "★3",
     "icon": "icons/カヨコ（ドレス）.png",
@@ -613,10 +686,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_045",
+    "id": "char_047",
     "name": "カリン",
     "rarity": "★3",
     "icon": "icons/カリン.png",
@@ -627,10 +701,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_046",
+    "id": "char_048",
     "name": "カリン（バニーガール）",
     "rarity": "★3",
     "icon": "icons/カリン（バニーガール）.png",
@@ -641,10 +716,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_047",
+    "id": "char_049",
     "name": "カンナ",
     "rarity": "★3",
     "icon": "icons/カンナ.png",
@@ -655,10 +731,11 @@
     "class": "アタッカー",
     "school": "ヴァルキューレ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_048",
+    "id": "char_050",
     "name": "カンナ（水着）",
     "rarity": "★3",
     "icon": "icons/カンナ（水着）.png",
@@ -669,10 +746,11 @@
     "class": "サポーター",
     "school": "ヴァルキューレ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_049",
+    "id": "char_051",
     "name": "キキョウ",
     "rarity": "★3",
     "icon": "icons/キキョウ.png",
@@ -683,10 +761,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_050",
+    "id": "char_052",
     "name": "キキョウ（水着）",
     "rarity": "★3",
     "icon": "icons/キキョウ（水着）.png",
@@ -697,10 +776,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_051",
+    "id": "char_053",
     "name": "キサキ",
     "rarity": "★3",
     "icon": "icons/キサキ.png",
@@ -711,10 +791,11 @@
     "class": "サポーター",
     "school": "山海経",
     "attack_type": "振動",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_052",
+    "id": "char_054",
     "name": "キサキ（水着）",
     "rarity": "★3",
     "icon": "icons/キサキ（水着）.png",
@@ -725,10 +806,11 @@
     "class": "サポーター",
     "school": "山海経",
     "attack_type": "振動",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_053",
+    "id": "char_055",
     "name": "キララ",
     "rarity": "★3",
     "icon": "icons/キララ.png",
@@ -739,10 +821,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_054",
+    "id": "char_056",
     "name": "クルミ",
     "rarity": "★3",
     "icon": "icons/クルミ.png",
@@ -753,10 +836,11 @@
     "class": "タンク",
     "school": "SRT",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_055",
+    "id": "char_057",
     "name": "ケイ",
     "rarity": "★3",
     "icon": "icons/ケイ.png",
@@ -767,10 +851,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "複合装甲"
+    "defense_type": "複合装甲",
+    "is_npc": false
   },
   {
-    "id": "char_056",
+    "id": "char_058",
     "name": "ココナ",
     "rarity": "★3",
     "icon": "icons/ココナ.png",
@@ -781,10 +866,11 @@
     "class": "ヒーラー",
     "school": "山海経",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_057",
+    "id": "char_059",
     "name": "ココロ",
     "rarity": "★3",
     "icon": "icons/ココロ.png",
@@ -795,10 +881,11 @@
     "class": "サポーター",
     "school": "オデュッセイア",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_058",
+    "id": "char_060",
     "name": "コタマ（キャンプ）",
     "rarity": "★3",
     "icon": "icons/コタマ（キャンプ）.png",
@@ -809,10 +896,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_059",
+    "id": "char_061",
     "name": "コトネ",
     "rarity": "★3",
     "icon": "icons/コトネ.png",
@@ -823,10 +911,11 @@
     "class": "タンク",
     "school": "オデュッセイア",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_060",
+    "id": "char_062",
     "name": "コトリ（応援団）",
     "rarity": "★3",
     "icon": "icons/コトリ（応援団）.png",
@@ -837,10 +926,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_061",
+    "id": "char_063",
     "name": "コノカ",
     "rarity": "★3",
     "icon": "icons/コノカ.png",
@@ -851,10 +941,11 @@
     "class": "タンク",
     "school": "ヴァルキューレ",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_062",
+    "id": "char_064",
     "name": "コハル",
     "rarity": "★3",
     "icon": "icons/コハル.png",
@@ -865,10 +956,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_063",
+    "id": "char_065",
     "name": "コユキ",
     "rarity": "★3",
     "icon": "icons/コユキ.png",
@@ -879,10 +971,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_064",
+    "id": "char_066",
     "name": "コユキ（パジャマ）",
     "rarity": "★3",
     "icon": "icons/コユキ（パジャマ）.png",
@@ -893,10 +986,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_065",
+    "id": "char_067",
     "name": "サオリ",
     "rarity": "★3",
     "icon": "icons/サオリ.png",
@@ -907,10 +1001,11 @@
     "class": "アタッカー",
     "school": "アリウス",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_066",
+    "id": "char_068",
     "name": "サオリ（水着）",
     "rarity": "★3",
     "icon": "icons/サオリ（水着）.png",
@@ -921,10 +1016,11 @@
     "class": "アタッカー",
     "school": "アリウス",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_067",
+    "id": "char_069",
     "name": "サオリ（ドレス）",
     "rarity": "★3",
     "icon": "icons/サオリ（ドレス）.png",
@@ -935,10 +1031,11 @@
     "class": "アタッカー",
     "school": "アリウス",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_068",
+    "id": "char_070",
     "name": "サキ",
     "rarity": "★3",
     "icon": "icons/サキ.png",
@@ -949,10 +1046,11 @@
     "class": "アタッカー",
     "school": "SRT",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_069",
+    "id": "char_071",
     "name": "サキ（水着）",
     "rarity": "★3",
     "icon": "icons/サキ（水着）.png",
@@ -963,10 +1061,11 @@
     "class": "サポーター",
     "school": "SRT",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_070",
+    "id": "char_072",
     "name": "サクラコ",
     "rarity": "★3",
     "icon": "icons/サクラコ.png",
@@ -977,10 +1076,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_071",
+    "id": "char_073",
     "name": "サクラコ（アイドル）",
     "rarity": "★3",
     "icon": "icons/サクラコ（アイドル）.png",
@@ -991,10 +1091,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_072",
+    "id": "char_074",
     "name": "サツキ",
     "rarity": "★3",
     "icon": "icons/サツキ.png",
@@ -1005,10 +1106,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_073",
+    "id": "char_075",
     "name": "サツキ（水着）",
     "rarity": "★3",
     "icon": "icons/サツキ（水着）.png",
@@ -1019,10 +1121,11 @@
     "class": "ヒーラー",
     "school": "ゲヘナ",
     "attack_type": "振動",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_074",
+    "id": "char_076",
     "name": "サヤ",
     "rarity": "★3",
     "icon": "icons/サヤ.png",
@@ -1033,10 +1136,11 @@
     "class": "アタッカー",
     "school": "山海経",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_075",
+    "id": "char_077",
     "name": "サヤ（私服）",
     "rarity": "★3",
     "icon": "icons/サヤ（私服）.png",
@@ -1047,10 +1151,11 @@
     "class": "アタッカー",
     "school": "山海経",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_076",
+    "id": "char_078",
     "name": "シグレ",
     "rarity": "★3",
     "icon": "icons/シグレ.png",
@@ -1061,10 +1166,11 @@
     "class": "アタッカー",
     "school": "レッドウィンター",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_077",
+    "id": "char_079",
     "name": "シグレ（温泉）",
     "rarity": "★3",
     "icon": "icons/シグレ（温泉）.png",
@@ -1075,10 +1181,11 @@
     "class": "ヒーラー",
     "school": "レッドウィンター",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_078",
+    "id": "char_080",
     "name": "ジュリ（アルバイト）",
     "rarity": "★3",
     "icon": "icons/ジュリ（アルバイト）.png",
@@ -1089,10 +1196,11 @@
     "class": "タンク",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_079",
+    "id": "char_081",
     "name": "シュン",
     "rarity": "★3",
     "icon": "icons/シュン.png",
@@ -1103,10 +1211,11 @@
     "class": "アタッカー",
     "school": "山海経",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_080",
+    "id": "char_082",
     "name": "シュン（幼女）",
     "rarity": "★3",
     "icon": "icons/シュン（幼女）.png",
@@ -1117,38 +1226,41 @@
     "class": "アタッカー",
     "school": "山海経",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
-  },
-  {
-    "id": "char_081",
-    "name": "シュン（水着）",
-    "rarity": "★3",
-    "icon": "icons/シュン（水着）.png",
-    "weapon": "SR",
-    "cover": "○",
-    "role": "STRIKER",
-    "pos": "BACK",
-    "class": "アタッカー",
-    "school": "山海経",
-    "attack_type": "振動",
-    "defense_type": "軽装備"
-  },
-  {
-    "id": "char_082",
-    "name": "シュン（水着）",
-    "rarity": "★3",
-    "icon": "icons/シュン（水着）.png",
-    "weapon": "SR",
-    "cover": "○",
-    "role": "STRIKER",
-    "pos": "BACK",
-    "class": "アタッカー",
-    "school": "山海経",
-    "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
     "id": "char_083",
+    "name": "シュン（水着）",
+    "rarity": "★3",
+    "icon": "icons/シュン（水着）.png",
+    "weapon": "SR",
+    "cover": "○",
+    "role": "STRIKER",
+    "pos": "BACK",
+    "class": "アタッカー",
+    "school": "山海経",
+    "attack_type": "振動",
+    "defense_type": "軽装備",
+    "is_npc": false
+  },
+  {
+    "id": "char_084",
+    "name": "シュン（水着）",
+    "rarity": "★3",
+    "icon": "icons/シュン（水着）.png",
+    "weapon": "SR",
+    "cover": "○",
+    "role": "STRIKER",
+    "pos": "BACK",
+    "class": "アタッカー",
+    "school": "山海経",
+    "attack_type": "振動",
+    "defense_type": "軽装備",
+    "is_npc": false
+  },
+  {
+    "id": "char_085",
     "name": "シロコ",
     "rarity": "★3",
     "icon": "icons/シロコ.png",
@@ -1159,10 +1271,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_084",
+    "id": "char_086",
     "name": "シロコ（ライディング）",
     "rarity": "★3",
     "icon": "icons/シロコ（ライディング）.png",
@@ -1173,10 +1286,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_085",
+    "id": "char_087",
     "name": "シロコ（水着）",
     "rarity": "★3",
     "icon": "icons/シロコ（水着）.png",
@@ -1187,10 +1301,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_086",
+    "id": "char_088",
     "name": "シロコ＊テラー",
     "rarity": "★3",
     "icon": "icons/シロコ＊テラー.png",
@@ -1201,10 +1316,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_087",
+    "id": "char_089",
     "name": "スズミ（マジカル）",
     "rarity": "★3",
     "icon": "icons/スズミ（マジカル）.png",
@@ -1215,10 +1331,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_088",
+    "id": "char_090",
     "name": "スバル",
     "rarity": "★3",
     "icon": "icons/スバル.png",
@@ -1229,10 +1346,11 @@
     "class": "アタッカー",
     "school": "アリウス",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_089",
+    "id": "char_091",
     "name": "スミレ",
     "rarity": "★3",
     "icon": "icons/スミレ.png",
@@ -1243,10 +1361,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_090",
+    "id": "char_092",
     "name": "スミレ（アルバイト）",
     "rarity": "★3",
     "icon": "icons/スミレ（アルバイト）.png",
@@ -1257,10 +1376,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_091",
+    "id": "char_093",
     "name": "セイア",
     "rarity": "★3",
     "icon": "icons/セイア.png",
@@ -1271,10 +1391,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_092",
+    "id": "char_094",
     "name": "セイア（水着）",
     "rarity": "★3",
     "icon": "icons/セイア（水着）.png",
@@ -1285,10 +1406,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_093",
+    "id": "char_095",
     "name": "セナ",
     "rarity": "★3",
     "icon": "icons/セナ.png",
@@ -1299,10 +1421,11 @@
     "class": "T.S",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_094",
+    "id": "char_096",
     "name": "セナ（私服）",
     "rarity": "★3",
     "icon": "icons/セナ（私服）.png",
@@ -1313,10 +1436,11 @@
     "class": "ヒーラー",
     "school": "ゲヘナ",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_095",
+    "id": "char_097",
     "name": "セリカ（正月）",
     "rarity": "★3",
     "icon": "icons/セリカ（正月）.png",
@@ -1327,10 +1451,11 @@
     "class": "サポーター",
     "school": "アビドス",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_096",
+    "id": "char_098",
     "name": "セリカ（水着）",
     "rarity": "★3",
     "icon": "icons/セリカ（水着）.png",
@@ -1341,10 +1466,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_097",
+    "id": "char_099",
     "name": "セリナ（クリスマス）",
     "rarity": "★3",
     "icon": "icons/セリナ（クリスマス）.png",
@@ -1355,10 +1481,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_098",
+    "id": "char_100",
     "name": "タカネ",
     "rarity": "★3",
     "icon": "icons/タカネ.png",
@@ -1369,10 +1496,11 @@
     "class": "ヒーラー",
     "school": "レッドウィンター",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_099",
+    "id": "char_101",
     "name": "チアキ",
     "rarity": "★3",
     "icon": "icons/チアキ.png",
@@ -1383,10 +1511,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_100",
+    "id": "char_102",
     "name": "チェリノ",
     "rarity": "★3",
     "icon": "icons/チェリノ.png",
@@ -1397,10 +1526,11 @@
     "class": "アタッカー",
     "school": "レッドウィンター",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_101",
+    "id": "char_103",
     "name": "チェリノ（温泉）",
     "rarity": "★3",
     "icon": "icons/チェリノ（温泉）.png",
@@ -1411,10 +1541,11 @@
     "class": "T.S",
     "school": "レッドウィンター",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_102",
+    "id": "char_104",
     "name": "チセ（水着）",
     "rarity": "★3",
     "icon": "icons/チセ（水着）.png",
@@ -1425,10 +1556,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_103",
+    "id": "char_105",
     "name": "チナツ（温泉）",
     "rarity": "★3",
     "icon": "icons/チナツ（温泉）.png",
@@ -1439,10 +1571,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_104",
+    "id": "char_106",
     "name": "チヒロ",
     "rarity": "★3",
     "icon": "icons/チヒロ.png",
@@ -1453,10 +1586,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_105",
+    "id": "char_107",
     "name": "ツクヨ",
     "rarity": "★3",
     "icon": "icons/ツクヨ.png",
@@ -1467,10 +1601,11 @@
     "class": "タンク",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_106",
+    "id": "char_108",
     "name": "ツクヨ（ドレス）",
     "rarity": "★3",
     "icon": "icons/ツクヨ（ドレス）.png",
@@ -1481,10 +1616,11 @@
     "class": "タンク",
     "school": "百鬼夜行",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_107",
+    "id": "char_109",
     "name": "ツバキ（ガイド）",
     "rarity": "★3",
     "icon": "icons/ツバキ（ガイド）.png",
@@ -1495,10 +1631,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_108",
+    "id": "char_110",
     "name": "ツルギ",
     "rarity": "★3",
     "icon": "icons/ツルギ.png",
@@ -1509,10 +1646,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_109",
+    "id": "char_111",
     "name": "トキ",
     "rarity": "★3",
     "icon": "icons/トキ.png",
@@ -1523,10 +1661,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_110",
+    "id": "char_112",
     "name": "トキ（バニーガール）",
     "rarity": "★3",
     "icon": "icons/トキ（バニーガール）.png",
@@ -1537,10 +1676,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_111",
+    "id": "char_113",
     "name": "トモエ（チーパオ）",
     "rarity": "★3",
     "icon": "icons/トモエ（チーパオ）.png",
@@ -1551,10 +1691,11 @@
     "class": "サポーター",
     "school": "レッドウィンター",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_112",
+    "id": "char_114",
     "name": "ナギサ",
     "rarity": "★3",
     "icon": "icons/ナギサ.png",
@@ -1565,10 +1706,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_113",
+    "id": "char_115",
     "name": "ナギサ（水着）",
     "rarity": "★3",
     "icon": "icons/ナギサ（水着）.png",
@@ -1579,10 +1721,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "振動",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_114",
+    "id": "char_116",
     "name": "ナグサ",
     "rarity": "★3",
     "icon": "icons/ナグサ.png",
@@ -1593,10 +1736,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "振動",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_115",
+    "id": "char_117",
     "name": "ナグサ（水着）",
     "rarity": "★3",
     "icon": "icons/ナグサ（水着）.png",
@@ -1607,10 +1751,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_116",
+    "id": "char_118",
     "name": "ナツ",
     "rarity": "★3",
     "icon": "icons/ナツ.png",
@@ -1621,10 +1766,11 @@
     "class": "タンク",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_117",
+    "id": "char_119",
     "name": "ナツ（バンド）",
     "rarity": "★3",
     "icon": "icons/ナツ（バンド）.png",
@@ -1635,10 +1781,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_118",
+    "id": "char_120",
     "name": "ニコ",
     "rarity": "★3",
     "icon": "icons/ニコ.png",
@@ -1649,10 +1796,11 @@
     "class": "サポーター",
     "school": "SRT",
     "attack_type": "爆発",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_119",
+    "id": "char_121",
     "name": "ニヤ",
     "rarity": "★3",
     "icon": "icons/ニヤ.png",
@@ -1663,10 +1811,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_120",
+    "id": "char_122",
     "name": "ネル",
     "rarity": "★3",
     "icon": "icons/ネル.png",
@@ -1677,10 +1826,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_121",
+    "id": "char_123",
     "name": "ネル（バニーガール）",
     "rarity": "★3",
     "icon": "icons/ネル（バニーガール）.png",
@@ -1691,10 +1841,11 @@
     "class": "タンク",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_122",
+    "id": "char_124",
     "name": "ネル（制服）",
     "rarity": "★3",
     "icon": "icons/ネル（制服）.png",
@@ -1705,10 +1856,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_123",
+    "id": "char_125",
     "name": "ノア",
     "rarity": "★3",
     "icon": "icons/ノア.png",
@@ -1719,10 +1871,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_124",
+    "id": "char_126",
     "name": "ノア（パジャマ）",
     "rarity": "★3",
     "icon": "icons/ノア（パジャマ）.png",
@@ -1733,10 +1886,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_125",
+    "id": "char_127",
     "name": "ノゾミ",
     "rarity": "★3",
     "icon": "icons/ノゾミ.png",
@@ -1747,10 +1901,11 @@
     "class": "アタッカー",
     "school": "ハイランダー",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_126",
+    "id": "char_128",
     "name": "ノドカ（温泉）",
     "rarity": "★3",
     "icon": "icons/ノドカ（温泉）.png",
@@ -1761,10 +1916,11 @@
     "class": "ヒーラー",
     "school": "レッドウィンター",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_127",
+    "id": "char_129",
     "name": "ノノミ（水着）",
     "rarity": "★3",
     "icon": "icons/ノノミ（水着）.png",
@@ -1775,10 +1931,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_128",
+    "id": "char_130",
     "name": "ハスミ（水着）",
     "rarity": "★3",
     "icon": "icons/ハスミ（水着）.png",
@@ -1789,10 +1946,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_129",
+    "id": "char_131",
     "name": "ハナエ（クリスマス）",
     "rarity": "★3",
     "icon": "icons/ハナエ（クリスマス）.png",
@@ -1803,10 +1961,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_130",
+    "id": "char_132",
     "name": "ハナコ（水着）",
     "rarity": "★3",
     "icon": "icons/ハナコ（水着）.png",
@@ -1817,10 +1976,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_131",
+    "id": "char_133",
     "name": "ハルカ（正月）",
     "rarity": "★3",
     "icon": "icons/ハルカ（正月）.png",
@@ -1831,10 +1991,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_132",
+    "id": "char_134",
     "name": "ハルカ（ドレス）",
     "rarity": "★3",
     "icon": "icons/ハルカ（ドレス）.png",
@@ -1845,10 +2006,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_133",
+    "id": "char_135",
     "name": "ハルナ",
     "rarity": "★3",
     "icon": "icons/ハルナ.png",
@@ -1859,10 +2021,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_134",
+    "id": "char_136",
     "name": "ハルナ（正月）",
     "rarity": "★3",
     "icon": "icons/ハルナ（正月）.png",
@@ -1873,10 +2036,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_135",
+    "id": "char_137",
     "name": "ハルナ（体操服）",
     "rarity": "★3",
     "icon": "icons/ハルナ（体操服）.png",
@@ -1887,10 +2051,11 @@
     "class": "ヒーラー",
     "school": "ゲヘナ",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_136",
+    "id": "char_138",
     "name": "ハレ（キャンプ）",
     "rarity": "★3",
     "icon": "icons/ハレ（キャンプ）.png",
@@ -1901,10 +2066,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_137",
+    "id": "char_139",
     "name": "ヒカリ",
     "rarity": "★3",
     "icon": "icons/ヒカリ.png",
@@ -1915,10 +2081,11 @@
     "class": "サポーター",
     "school": "ハイランダー",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_138",
+    "id": "char_140",
     "name": "ヒナ",
     "rarity": "★3",
     "icon": "icons/ヒナ.png",
@@ -1929,10 +2096,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_139",
+    "id": "char_141",
     "name": "ヒナ（水着）",
     "rarity": "★3",
     "icon": "icons/ヒナ（水着）.png",
@@ -1943,10 +2111,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_140",
+    "id": "char_142",
     "name": "ヒナ（ドレス）",
     "rarity": "★3",
     "icon": "icons/ヒナ（ドレス）.png",
@@ -1957,10 +2126,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_141",
+    "id": "char_143",
     "name": "ヒナタ",
     "rarity": "★3",
     "icon": "icons/ヒナタ.png",
@@ -1971,10 +2141,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_142",
+    "id": "char_144",
     "name": "ヒナタ（水着）",
     "rarity": "★3",
     "icon": "icons/ヒナタ（水着）.png",
@@ -1985,10 +2156,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_143",
+    "id": "char_145",
     "name": "ヒビキ",
     "rarity": "★3",
     "icon": "icons/ヒビキ.png",
@@ -1999,10 +2171,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_144",
+    "id": "char_146",
     "name": "ヒフミ",
     "rarity": "★3",
     "icon": "icons/ヒフミ.png",
@@ -2013,10 +2186,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_145",
+    "id": "char_147",
     "name": "ヒフミ（水着）",
     "rarity": "★3",
     "icon": "icons/ヒフミ（水着）.png",
@@ -2027,10 +2201,11 @@
     "class": "T.S",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_146",
+    "id": "char_148",
     "name": "ヒマリ",
     "rarity": "★3",
     "icon": "icons/ヒマリ.png",
@@ -2041,10 +2216,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_147",
+    "id": "char_149",
     "name": "ヒマリ（臨戦）",
     "rarity": "★3",
     "icon": "icons/ヒマリ（臨戦）.png",
@@ -2055,10 +2231,11 @@
     "class": "T.S",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_148",
+    "id": "char_150",
     "name": "ヒヨリ",
     "rarity": "★3",
     "icon": "icons/ヒヨリ.png",
@@ -2069,10 +2246,11 @@
     "class": "サポーター",
     "school": "アリウス",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_149",
+    "id": "char_151",
     "name": "ヒヨリ（水着）",
     "rarity": "★3",
     "icon": "icons/ヒヨリ（水着）.png",
@@ -2083,10 +2261,11 @@
     "class": "アタッカー",
     "school": "アリウス",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_150",
+    "id": "char_152",
     "name": "フィーナ（ガイド）",
     "rarity": "★3",
     "icon": "icons/フィーナ（ガイド）.png",
@@ -2097,10 +2276,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_151",
+    "id": "char_153",
     "name": "フウカ（正月）",
     "rarity": "★3",
     "icon": "icons/フウカ（正月）.png",
@@ -2111,10 +2291,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_152",
+    "id": "char_154",
     "name": "フブキ（水着）",
     "rarity": "★3",
     "icon": "icons/フブキ（水着）.png",
@@ -2125,10 +2306,11 @@
     "class": "アタッカー",
     "school": "ヴァルキューレ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_153",
+    "id": "char_155",
     "name": "フユ",
     "rarity": "★3",
     "icon": "icons/フユ.png",
@@ -2139,10 +2321,11 @@
     "class": "サポーター",
     "school": "ワイルドハント",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_154",
+    "id": "char_156",
     "name": "ホシノ",
     "rarity": "★3",
     "icon": "icons/ホシノ.png",
@@ -2153,10 +2336,11 @@
     "class": "タンク",
     "school": "アビドス",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_155",
+    "id": "char_157",
     "name": "ホシノ（水着）",
     "rarity": "★3",
     "icon": "icons/ホシノ（水着）.png",
@@ -2167,10 +2351,11 @@
     "class": "サポーター",
     "school": "アビドス",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_156",
+    "id": "char_158",
     "name": "ホシノ（臨戦）",
     "rarity": "★3",
     "icon": "icons/ホシノ（臨戦）.png",
@@ -2181,10 +2366,11 @@
     "class": "タンク",
     "school": "アビドス",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_157",
+    "id": "char_159",
     "name": "ホシノ（臨戦）",
     "rarity": "★3",
     "icon": "icons/ホシノ（臨戦）.png",
@@ -2195,10 +2381,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_158",
+    "id": "char_160",
     "name": "マキ",
     "rarity": "★3",
     "icon": "icons/マキ.png",
@@ -2209,10 +2396,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_159",
+    "id": "char_161",
     "name": "マキ（キャンプ）",
     "rarity": "★3",
     "icon": "icons/マキ（キャンプ）.png",
@@ -2223,10 +2411,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_160",
+    "id": "char_162",
     "name": "マコト",
     "rarity": "★3",
     "icon": "icons/マコト.png",
@@ -2237,10 +2426,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_161",
+    "id": "char_163",
     "name": "マコト（水着）",
     "rarity": "★3",
     "icon": "icons/マコト（水着）.png",
@@ -2251,10 +2441,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_162",
+    "id": "char_164",
     "name": "マシロ",
     "rarity": "★3",
     "icon": "icons/マシロ.png",
@@ -2265,10 +2456,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_163",
+    "id": "char_165",
     "name": "マシロ（水着）",
     "rarity": "★3",
     "icon": "icons/マシロ（水着）.png",
@@ -2279,10 +2471,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_164",
+    "id": "char_166",
     "name": "マリー（体操服）",
     "rarity": "★3",
     "icon": "icons/マリー（体操服）.png",
@@ -2293,10 +2486,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_165",
+    "id": "char_167",
     "name": "マリー（アイドル）",
     "rarity": "★3",
     "icon": "icons/マリー（アイドル）.png",
@@ -2307,10 +2501,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_166",
+    "id": "char_168",
     "name": "マリナ",
     "rarity": "★3",
     "icon": "icons/マリナ.png",
@@ -2321,10 +2516,11 @@
     "class": "タンク",
     "school": "レッドウィンター",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_167",
+    "id": "char_169",
     "name": "マリナ（チーパオ）",
     "rarity": "★3",
     "icon": "icons/マリナ（チーパオ）.png",
@@ -2335,10 +2531,11 @@
     "class": "アタッカー",
     "school": "レッドウィンター",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_168",
+    "id": "char_170",
     "name": "ミカ",
     "rarity": "★3",
     "icon": "icons/ミカ.png",
@@ -2349,10 +2546,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_169",
+    "id": "char_171",
     "name": "ミカ（水着）",
     "rarity": "★3",
     "icon": "icons/ミカ（水着）.png",
@@ -2363,10 +2561,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_170",
+    "id": "char_172",
     "name": "ミサキ",
     "rarity": "★3",
     "icon": "icons/ミサキ.png",
@@ -2377,10 +2576,11 @@
     "class": "アタッカー",
     "school": "アリウス",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_171",
+    "id": "char_173",
     "name": "ミサキ（水着）",
     "rarity": "★3",
     "icon": "icons/ミサキ（水着）.png",
@@ -2391,10 +2591,11 @@
     "class": "アタッカー",
     "school": "アリウス",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_172",
+    "id": "char_174",
     "name": "ミチル（ドレス）",
     "rarity": "★3",
     "icon": "icons/ミチル（ドレス）.png",
@@ -2405,10 +2606,11 @@
     "class": "ヒーラー",
     "school": "百鬼夜行",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_173",
+    "id": "char_175",
     "name": "ミドリ",
     "rarity": "★3",
     "icon": "icons/ミドリ.png",
@@ -2419,10 +2621,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_174",
+    "id": "char_176",
     "name": "ミドリ（メイド）",
     "rarity": "★3",
     "icon": "icons/ミドリ（メイド）.png",
@@ -2433,10 +2636,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_175",
+    "id": "char_177",
     "name": "ミナ",
     "rarity": "★3",
     "icon": "icons/ミナ.png",
@@ -2447,10 +2651,11 @@
     "class": "サポーター",
     "school": "山海経",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_176",
+    "id": "char_178",
     "name": "ミネ",
     "rarity": "★3",
     "icon": "icons/ミネ.png",
@@ -2461,10 +2666,11 @@
     "class": "タンク",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_177",
+    "id": "char_179",
     "name": "ミノリ",
     "rarity": "★3",
     "icon": "icons/ミノリ.png",
@@ -2475,10 +2681,11 @@
     "class": "アタッカー",
     "school": "レッドウィンター",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_178",
+    "id": "char_180",
     "name": "ミモリ",
     "rarity": "★3",
     "icon": "icons/ミモリ.png",
@@ -2489,10 +2696,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_179",
+    "id": "char_181",
     "name": "ミモリ（水着）",
     "rarity": "★3",
     "icon": "icons/ミモリ（水着）.png",
@@ -2503,10 +2711,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_180",
+    "id": "char_182",
     "name": "ミヤコ",
     "rarity": "★3",
     "icon": "icons/ミヤコ.png",
@@ -2517,10 +2726,11 @@
     "class": "タンク",
     "school": "SRT",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_181",
+    "id": "char_183",
     "name": "ミヤコ（水着）",
     "rarity": "★3",
     "icon": "icons/ミヤコ（水着）.png",
@@ -2531,10 +2741,11 @@
     "class": "タンク",
     "school": "SRT",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_182",
+    "id": "char_184",
     "name": "ミユ",
     "rarity": "★3",
     "icon": "icons/ミユ.png",
@@ -2545,10 +2756,11 @@
     "class": "サポーター",
     "school": "SRT",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_183",
+    "id": "char_185",
     "name": "ミヨ",
     "rarity": "★3",
     "icon": "icons/ミヨ.png",
@@ -2559,10 +2771,11 @@
     "class": "サポーター",
     "school": "ワイルドハント",
     "attack_type": "振動",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_184",
+    "id": "char_186",
     "name": "ムツキ（正月）",
     "rarity": "★3",
     "icon": "icons/ムツキ（正月）.png",
@@ -2573,10 +2786,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_185",
+    "id": "char_187",
     "name": "ムツキ（ドレス）",
     "rarity": "★3",
     "icon": "icons/ムツキ（ドレス）.png",
@@ -2587,10 +2801,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_186",
+    "id": "char_188",
     "name": "メグ",
     "rarity": "★3",
     "icon": "icons/メグ.png",
@@ -2601,10 +2816,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_187",
+    "id": "char_189",
     "name": "メル",
     "rarity": "★3",
     "icon": "icons/メル.png",
@@ -2615,10 +2831,11 @@
     "class": "アタッカー",
     "school": "レッドウィンター",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_188",
+    "id": "char_190",
     "name": "モエ",
     "rarity": "★3",
     "icon": "icons/モエ.png",
@@ -2629,10 +2846,11 @@
     "class": "アタッカー",
     "school": "SRT",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_189",
+    "id": "char_191",
     "name": "モエ（水着）",
     "rarity": "★3",
     "icon": "icons/モエ（水着）.png",
@@ -2643,10 +2861,11 @@
     "class": "アタッカー",
     "school": "SRT",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_190",
+    "id": "char_192",
     "name": "モモイ（メイド）",
     "rarity": "★3",
     "icon": "icons/モモイ（メイド）.png",
@@ -2657,10 +2876,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_191",
+    "id": "char_193",
     "name": "ヤクモ",
     "rarity": "★3",
     "icon": "icons/ヤクモ.png",
@@ -2671,10 +2891,11 @@
     "class": "サポーター",
     "school": "レッドウィンター",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_192",
+    "id": "char_194",
     "name": "ユウカ（体操服）",
     "rarity": "★3",
     "icon": "icons/ユウカ（体操服）.png",
@@ -2685,10 +2906,11 @@
     "class": "タンク",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_193",
+    "id": "char_195",
     "name": "ユウカ（パジャマ）",
     "rarity": "★3",
     "icon": "icons/ユウカ（パジャマ）.png",
@@ -2699,10 +2921,11 @@
     "class": "タンク",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_194",
+    "id": "char_196",
     "name": "ユカリ",
     "rarity": "★3",
     "icon": "icons/ユカリ.png",
@@ -2713,10 +2936,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_195",
+    "id": "char_197",
     "name": "ユカリ（水着）",
     "rarity": "★3",
     "icon": "icons/ユカリ（水着）.png",
@@ -2727,10 +2951,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_196",
+    "id": "char_198",
     "name": "ユズ",
     "rarity": "★3",
     "icon": "icons/ユズ.png",
@@ -2741,10 +2966,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_197",
+    "id": "char_199",
     "name": "ユズ（臨戦）",
     "rarity": "★3",
     "icon": "icons/ユズ（臨戦）.png",
@@ -2755,10 +2981,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_198",
+    "id": "char_200",
     "name": "ヨシミ（バンド）",
     "rarity": "★3",
     "icon": "icons/ヨシミ（バンド）.png",
@@ -2769,10 +2996,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_199",
+    "id": "char_201",
     "name": "リオ",
     "rarity": "★3",
     "icon": "icons/リオ.png",
@@ -2783,10 +3011,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_200",
+    "id": "char_202",
     "name": "リオ（臨戦）",
     "rarity": "★3",
     "icon": "icons/リオ（臨戦）.png",
@@ -2797,10 +3026,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_201",
+    "id": "char_203",
     "name": "リツ",
     "rarity": "★3",
     "icon": "icons/リツ.png",
@@ -2811,10 +3041,11 @@
     "class": "サポーター",
     "school": "ワイルドハント",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_202",
+    "id": "char_204",
     "name": "ルミ",
     "rarity": "★3",
     "icon": "icons/ルミ.png",
@@ -2825,10 +3056,11 @@
     "class": "ヒーラー",
     "school": "山海経",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_203",
+    "id": "char_205",
     "name": "レイ",
     "rarity": "★3",
     "icon": "icons/レイ.png",
@@ -2839,10 +3071,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_204",
+    "id": "char_206",
     "name": "レイサ",
     "rarity": "★3",
     "icon": "icons/レイサ.png",
@@ -2853,10 +3086,11 @@
     "class": "タンク",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_205",
+    "id": "char_207",
     "name": "レイサ（マジカル）",
     "rarity": "★3",
     "icon": "icons/レイサ（マジカル）.png",
@@ -2867,10 +3101,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_206",
+    "id": "char_208",
     "name": "レイジョ",
     "rarity": "★3",
     "icon": "icons/レイジョ.png",
@@ -2881,10 +3116,11 @@
     "class": "サポーター",
     "school": "山海経",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_207",
+    "id": "char_209",
     "name": "レナ",
     "rarity": "★3",
     "icon": "icons/レナ.png",
@@ -2895,10 +3131,11 @@
     "class": "サポーター",
     "school": "ワイルドハント",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_208",
+    "id": "char_210",
     "name": "レンゲ",
     "rarity": "★3",
     "icon": "icons/レンゲ.png",
@@ -2909,10 +3146,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_209",
+    "id": "char_211",
     "name": "ワカモ",
     "rarity": "★3",
     "icon": "icons/ワカモ.png",
@@ -2923,10 +3161,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_210",
+    "id": "char_212",
     "name": "ワカモ（水着）",
     "rarity": "★3",
     "icon": "icons/ワカモ（水着）.png",
@@ -2937,10 +3176,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_211",
+    "id": "char_213",
     "name": "御坂美琴",
     "rarity": "★3",
     "icon": "icons/御坂美琴.png",
@@ -2951,10 +3191,11 @@
     "class": "アタッカー",
     "school": "常盤台中学",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_212",
+    "id": "char_214",
     "name": "初音ミク",
     "rarity": "★3",
     "icon": "icons/初音ミク.png",
@@ -2965,10 +3206,11 @@
     "class": "サポーター",
     "school": "その他",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_213",
+    "id": "char_215",
     "name": "食蜂操祈",
     "rarity": "★3",
     "icon": "icons/食蜂操祈.png",
@@ -2979,10 +3221,11 @@
     "class": "サポーター",
     "school": "常盤台中学",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_214",
+    "id": "char_216",
     "name": "アイリ",
     "rarity": "★2",
     "icon": "icons/アイリ.png",
@@ -2993,10 +3236,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_215",
+    "id": "char_217",
     "name": "アカネ",
     "rarity": "★2",
     "icon": "icons/アカネ.png",
@@ -3007,10 +3251,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_216",
+    "id": "char_218",
     "name": "アカリ",
     "rarity": "★2",
     "icon": "icons/アカリ.png",
@@ -3021,10 +3266,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_217",
+    "id": "char_219",
     "name": "アヤネ",
     "rarity": "★2",
     "icon": "icons/アヤネ.png",
@@ -3035,10 +3281,11 @@
     "class": "ヒーラー",
     "school": "アビドス",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_218",
+    "id": "char_220",
     "name": "ウタハ",
     "rarity": "★2",
     "icon": "icons/ウタハ.png",
@@ -3049,10 +3296,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_219",
+    "id": "char_221",
     "name": "カヨコ",
     "rarity": "★2",
     "icon": "icons/カヨコ.png",
@@ -3063,10 +3311,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_220",
+    "id": "char_222",
     "name": "キリノ",
     "rarity": "★2",
     "icon": "icons/キリノ.png",
@@ -3077,10 +3326,11 @@
     "class": "サポーター",
     "school": "ヴァルキューレ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_221",
+    "id": "char_223",
     "name": "シズコ",
     "rarity": "★2",
     "icon": "icons/シズコ.png",
@@ -3091,10 +3341,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_222",
+    "id": "char_224",
     "name": "ジュンコ",
     "rarity": "★2",
     "icon": "icons/ジュンコ.png",
@@ -3105,10 +3356,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_223",
+    "id": "char_225",
     "name": "セリカ",
     "rarity": "★2",
     "icon": "icons/セリカ.png",
@@ -3119,10 +3371,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_224",
+    "id": "char_226",
     "name": "チセ",
     "rarity": "★2",
     "icon": "icons/チセ.png",
@@ -3133,10 +3386,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_225",
+    "id": "char_227",
     "name": "ツバキ",
     "rarity": "★2",
     "icon": "icons/ツバキ.png",
@@ -3147,10 +3401,11 @@
     "class": "タンク",
     "school": "百鬼夜行",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_226",
+    "id": "char_228",
     "name": "ノノミ",
     "rarity": "★2",
     "icon": "icons/ノノミ.png",
@@ -3161,10 +3416,11 @@
     "class": "アタッカー",
     "school": "アビドス",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_227",
+    "id": "char_229",
     "name": "ハスミ",
     "rarity": "★2",
     "icon": "icons/ハスミ.png",
@@ -3175,10 +3431,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_228",
+    "id": "char_230",
     "name": "ハナエ",
     "rarity": "★2",
     "icon": "icons/ハナエ.png",
@@ -3189,10 +3446,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_229",
+    "id": "char_231",
     "name": "ハナコ",
     "rarity": "★2",
     "icon": "icons/ハナコ.png",
@@ -3203,10 +3461,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_230",
+    "id": "char_232",
     "name": "ハレ",
     "rarity": "★2",
     "icon": "icons/ハレ.png",
@@ -3217,10 +3476,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_231",
+    "id": "char_233",
     "name": "フウカ",
     "rarity": "★2",
     "icon": "icons/フウカ.png",
@@ -3231,10 +3491,11 @@
     "class": "ヒーラー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_232",
+    "id": "char_234",
     "name": "マリー",
     "rarity": "★2",
     "icon": "icons/マリー.png",
@@ -3245,10 +3506,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_233",
+    "id": "char_235",
     "name": "ムツキ",
     "rarity": "★2",
     "icon": "icons/ムツキ.png",
@@ -3259,10 +3521,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_234",
+    "id": "char_236",
     "name": "モミジ",
     "rarity": "★2",
     "icon": "icons/モミジ.png",
@@ -3273,10 +3536,11 @@
     "class": "アタッカー",
     "school": "レッドウィンター",
     "attack_type": "振動",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_235",
+    "id": "char_237",
     "name": "モモイ",
     "rarity": "★2",
     "icon": "icons/モモイ.png",
@@ -3287,10 +3551,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_236",
+    "id": "char_238",
     "name": "ユウカ",
     "rarity": "★2",
     "icon": "icons/ユウカ.png",
@@ -3301,10 +3566,11 @@
     "class": "タンク",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_237",
+    "id": "char_239",
     "name": "レンゲ（水着）",
     "rarity": "★2",
     "icon": "icons/レンゲ（水着）.png",
@@ -3315,10 +3581,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_238",
+    "id": "char_240",
     "name": "アイリ（バンド）",
     "rarity": "★1",
     "icon": "icons/アイリ（バンド）.png",
@@ -3329,10 +3596,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_239",
+    "id": "char_241",
     "name": "アオバ",
     "rarity": "★1",
     "icon": "icons/アオバ.png",
@@ -3343,10 +3611,11 @@
     "class": "タンク",
     "school": "ハイランダー",
     "attack_type": "振動",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_240",
+    "id": "char_242",
     "name": "アスナ",
     "rarity": "★1",
     "icon": "icons/アスナ.png",
@@ -3357,10 +3626,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_241",
+    "id": "char_243",
     "name": "アツコ（水着）",
     "rarity": "★1",
     "icon": "icons/アツコ（水着）.png",
@@ -3371,10 +3641,11 @@
     "class": "ヒーラー",
     "school": "アリウス",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_242",
+    "id": "char_244",
     "name": "アヤネ（水着）",
     "rarity": "★1",
     "icon": "icons/アヤネ（水着）.png",
@@ -3385,10 +3656,11 @@
     "class": "T.S",
     "school": "アビドス",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_243",
+    "id": "char_245",
     "name": "イズミ（水着）",
     "rarity": "★1",
     "icon": "icons/イズミ（水着）.png",
@@ -3399,10 +3671,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_244",
+    "id": "char_246",
     "name": "イチカ（水着）",
     "rarity": "★1",
     "icon": "icons/イチカ（水着）.png",
@@ -3413,10 +3686,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_245",
+    "id": "char_247",
     "name": "イブキ",
     "rarity": "★1",
     "icon": "icons/イブキ.png",
@@ -3427,10 +3701,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_246",
+    "id": "char_248",
     "name": "オトギ",
     "rarity": "★1",
     "icon": "icons/オトギ.png",
@@ -3441,10 +3716,11 @@
     "class": "アタッカー",
     "school": "SRT",
     "attack_type": "爆発",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_247",
+    "id": "char_249",
     "name": "カリン（制服）",
     "rarity": "★1",
     "icon": "icons/カリン（制服）.png",
@@ -3455,10 +3731,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_248",
+    "id": "char_250",
     "name": "キリノ（水着）",
     "rarity": "★1",
     "icon": "icons/キリノ（水着）.png",
@@ -3469,10 +3746,11 @@
     "class": "サポーター",
     "school": "ヴァルキューレ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_249",
+    "id": "char_251",
     "name": "コタマ",
     "rarity": "★1",
     "icon": "icons/コタマ.png",
@@ -3483,10 +3761,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_250",
+    "id": "char_252",
     "name": "コトリ",
     "rarity": "★1",
     "icon": "icons/コトリ.png",
@@ -3497,10 +3776,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_251",
+    "id": "char_253",
     "name": "コハル（水着）",
     "rarity": "★1",
     "icon": "icons/コハル（水着）.png",
@@ -3511,10 +3791,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_252",
+    "id": "char_254",
     "name": "シズコ（水着）",
     "rarity": "★1",
     "icon": "icons/シズコ（水着）.png",
@@ -3525,10 +3806,11 @@
     "class": "サポーター",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_253",
+    "id": "char_255",
     "name": "シミコ",
     "rarity": "★1",
     "icon": "icons/シミコ.png",
@@ -3539,10 +3821,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_254",
+    "id": "char_256",
     "name": "ジュリ",
     "rarity": "★1",
     "icon": "icons/ジュリ.png",
@@ -3553,10 +3836,11 @@
     "class": "サポーター",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_255",
+    "id": "char_257",
     "name": "ジュンコ（正月）",
     "rarity": "★1",
     "icon": "icons/ジュンコ（正月）.png",
@@ -3567,10 +3851,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "神秘",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_256",
+    "id": "char_258",
     "name": "スズミ",
     "rarity": "★1",
     "icon": "icons/スズミ.png",
@@ -3581,10 +3866,11 @@
     "class": "サポーター",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_257",
+    "id": "char_259",
     "name": "セリナ",
     "rarity": "★1",
     "icon": "icons/セリナ.png",
@@ -3595,10 +3881,11 @@
     "class": "ヒーラー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_258",
+    "id": "char_260",
     "name": "チアキ（水着）",
     "rarity": "★1",
     "icon": "icons/チアキ（水着）.png",
@@ -3609,10 +3896,11 @@
     "class": "アタッカー",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_259",
+    "id": "char_261",
     "name": "チナツ",
     "rarity": "★1",
     "icon": "icons/チナツ.png",
@@ -3623,10 +3911,11 @@
     "class": "ヒーラー",
     "school": "ゲヘナ",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_260",
+    "id": "char_262",
     "name": "ツルギ（水着）",
     "rarity": "★1",
     "icon": "icons/ツルギ（水着）.png",
@@ -3637,10 +3926,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_261",
+    "id": "char_263",
     "name": "トキ（臨戦）",
     "rarity": "★1",
     "icon": "icons/トキ（臨戦）.png",
@@ -3651,10 +3941,11 @@
     "class": "サポーター",
     "school": "ミレニアム",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_262",
+    "id": "char_264",
     "name": "トモエ",
     "rarity": "★1",
     "icon": "icons/トモエ.png",
@@ -3665,10 +3956,11 @@
     "class": "サポーター",
     "school": "レッドウィンター",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_263",
+    "id": "char_265",
     "name": "ノドカ",
     "rarity": "★1",
     "icon": "icons/ノドカ.png",
@@ -3679,10 +3971,11 @@
     "class": "サポーター",
     "school": "レッドウィンター",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_264",
+    "id": "char_266",
     "name": "ハスミ（体操服）",
     "rarity": "★1",
     "icon": "icons/ハスミ（体操服）.png",
@@ -3693,10 +3986,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "神秘",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_265",
+    "id": "char_267",
     "name": "ハルカ",
     "rarity": "★1",
     "icon": "icons/ハルカ.png",
@@ -3707,10 +4001,11 @@
     "class": "タンク",
     "school": "ゲヘナ",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_266",
+    "id": "char_268",
     "name": "ヒビキ（応援団）",
     "rarity": "★1",
     "icon": "icons/ヒビキ（応援団）.png",
@@ -3721,10 +4016,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_267",
+    "id": "char_269",
     "name": "フィーナ",
     "rarity": "★1",
     "icon": "icons/フィーナ.png",
@@ -3735,10 +4031,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "貫通",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_268",
+    "id": "char_270",
     "name": "フブキ",
     "rarity": "★1",
     "icon": "icons/フブキ.png",
@@ -3749,10 +4046,11 @@
     "class": "アタッカー",
     "school": "ヴァルキューレ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_269",
+    "id": "char_271",
     "name": "ミチル",
     "rarity": "★1",
     "icon": "icons/ミチル.png",
@@ -3763,10 +4061,11 @@
     "class": "アタッカー",
     "school": "百鬼夜行",
     "attack_type": "神秘",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_270",
+    "id": "char_272",
     "name": "ミネ（アイドル）",
     "rarity": "★1",
     "icon": "icons/ミネ（アイドル）.png",
@@ -3777,10 +4076,11 @@
     "class": "タンク",
     "school": "トリニティ",
     "attack_type": "爆発",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_271",
+    "id": "char_273",
     "name": "ミユ（水着）",
     "rarity": "★1",
     "icon": "icons/ミユ（水着）.png",
@@ -3791,10 +4091,11 @@
     "class": "アタッカー",
     "school": "SRT",
     "attack_type": "爆発",
-    "defense_type": "軽装備"
+    "defense_type": "軽装備",
+    "is_npc": false
   },
   {
-    "id": "char_272",
+    "id": "char_274",
     "name": "ユズ（メイド）",
     "rarity": "★1",
     "icon": "icons/ユズ（メイド）.png",
@@ -3805,10 +4106,11 @@
     "class": "アタッカー",
     "school": "ミレニアム",
     "attack_type": "爆発",
-    "defense_type": "弾力装甲"
+    "defense_type": "弾力装甲",
+    "is_npc": false
   },
   {
-    "id": "char_273",
+    "id": "char_275",
     "name": "ヨシミ",
     "rarity": "★1",
     "icon": "icons/ヨシミ.png",
@@ -3819,10 +4121,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "貫通",
-    "defense_type": "重装甲"
+    "defense_type": "重装甲",
+    "is_npc": false
   },
   {
-    "id": "char_274",
+    "id": "char_276",
     "name": "ラブ",
     "rarity": "★1",
     "icon": "icons/ラブ.png",
@@ -3833,10 +4136,11 @@
     "class": "アタッカー",
     "school": "トリニティ",
     "attack_type": "振動",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
   },
   {
-    "id": "char_275",
+    "id": "char_277",
     "name": "佐天涙子",
     "rarity": "★1",
     "icon": "icons/佐天涙子.png",
@@ -3847,6 +4151,1702 @@
     "class": "アタッカー",
     "school": "柵川中学",
     "attack_type": "貫通",
-    "defense_type": "特殊装甲"
+    "defense_type": "特殊装甲",
+    "is_npc": false
+  },
+  {
+    "id": "npc_001",
+    "name": "アロナ",
+    "rarity": "",
+    "icon": "icons/npc_アロナ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "シッテムの箱",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_002",
+    "name": "プラナ",
+    "rarity": "",
+    "icon": "icons/npc_プラナ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "シッテムの箱",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_003",
+    "name": "ユメ",
+    "rarity": "",
+    "icon": "icons/npc_ユメ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "アビドス",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_004",
+    "name": "マイア",
+    "rarity": "",
+    "icon": "icons/npc_マイア.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "アリウス",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_005",
+    "name": "バルバラ",
+    "rarity": "",
+    "icon": "icons/npc_バルバラ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "アリウス",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_006",
+    "name": "モブキャラクター（アリウス）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（アリウス）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "アリウス",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_007",
+    "name": "ミスズ",
+    "rarity": "",
+    "icon": "icons/npc_ミスズ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ヴァルキューレ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_008",
+    "name": "生徒",
+    "rarity": "",
+    "icon": "icons/npc_生徒.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ヴァルキューレ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_009",
+    "name": "海警",
+    "rarity": "",
+    "icon": "icons/npc_海警.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ヴァルキューレ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_010",
+    "name": "ミナト",
+    "rarity": "",
+    "icon": "icons/npc_ミナト.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_011",
+    "name": "アミ",
+    "rarity": "",
+    "icon": "icons/npc_アミ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_012",
+    "name": "スミカ",
+    "rarity": "",
+    "icon": "icons/npc_スミカ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_013",
+    "name": "ミツキ",
+    "rarity": "",
+    "icon": "icons/npc_ミツキ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_014",
+    "name": "サナエ",
+    "rarity": "",
+    "icon": "icons/npc_サナエ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_015",
+    "name": "マキナ",
+    "rarity": "",
+    "icon": "icons/npc_マキナ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_016",
+    "name": "サユリ",
+    "rarity": "",
+    "icon": "icons/npc_サユリ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_017",
+    "name": "ナナミ",
+    "rarity": "",
+    "icon": "icons/npc_ナナミ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_018",
+    "name": "生徒",
+    "rarity": "",
+    "icon": "icons/npc_生徒.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_019",
+    "name": "部員",
+    "rarity": "",
+    "icon": "icons/npc_部員.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_020",
+    "name": "ガード",
+    "rarity": "",
+    "icon": "icons/npc_ガード.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "オデュッセイア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_021",
+    "name": "マイ",
+    "rarity": "",
+    "icon": "icons/npc_マイ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "クロノス",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_022",
+    "name": "シノン",
+    "rarity": "",
+    "icon": "icons/npc_シノン.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "クロノス",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_023",
+    "name": "マユミ",
+    "rarity": "",
+    "icon": "icons/npc_マユミ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲヘナ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_024",
+    "name": "カレン",
+    "rarity": "",
+    "icon": "icons/npc_カレン.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲヘナ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_025",
+    "name": "ショウコ",
+    "rarity": "",
+    "icon": "icons/npc_ショウコ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲヘナ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_026",
+    "name": "モブキャラクター（ゲヘナ）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（ゲヘナ）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲヘナ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_027",
+    "name": "カナエ",
+    "rarity": "",
+    "icon": "icons/npc_カナエ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "山海経",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_028",
+    "name": "カグヤ",
+    "rarity": "",
+    "icon": "icons/npc_カグヤ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "山海経",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_029",
+    "name": "モブキャラクター（山海経）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（山海経）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "山海経",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_030",
+    "name": "モブキャラクター（トリニティ）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（トリニティ）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "トリニティ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_031",
+    "name": "部員",
+    "rarity": "",
+    "icon": "icons/npc_部員.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "トリニティ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_032",
+    "name": "部員（体操服）",
+    "rarity": "",
+    "icon": "icons/npc_部員（体操服）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "トリニティ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_033",
+    "name": "スオウ",
+    "rarity": "",
+    "icon": "icons/npc_スオウ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ハイランダー",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_034",
+    "name": "モブキャラクター（ハイランダー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（ハイランダー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ハイランダー",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_035",
+    "name": "クズノハ",
+    "rarity": "",
+    "icon": "icons/npc_クズノハ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_036",
+    "name": "アヤメ",
+    "rarity": "",
+    "icon": "icons/npc_アヤメ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_037",
+    "name": "アラタ",
+    "rarity": "",
+    "icon": "icons/npc_アラタ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_038",
+    "name": "コクリコ",
+    "rarity": "",
+    "icon": "icons/npc_コクリコ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_039",
+    "name": "シュロ",
+    "rarity": "",
+    "icon": "icons/npc_シュロ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_040",
+    "name": "アザミ",
+    "rarity": "",
+    "icon": "icons/npc_アザミ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_041",
+    "name": "ナツキ",
+    "rarity": "",
+    "icon": "icons/npc_ナツキ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_042",
+    "name": "モブキャラクター（百鬼夜行）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（百鬼夜行）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_043",
+    "name": "（水着）",
+    "rarity": "",
+    "icon": "icons/npc_（水着）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百鬼夜行",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_044",
+    "name": "ミライ",
+    "rarity": "",
+    "icon": "icons/npc_ミライ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ミレニアム",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_045",
+    "name": "ツバサ",
+    "rarity": "",
+    "icon": "icons/npc_ツバサ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ミレニアム",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_046",
+    "name": "モブキャラクター（ミレニアム）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（ミレニアム）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ミレニアム",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_047",
+    "name": "モブキャラクター（エネミー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（エネミー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ミレニアム",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_048",
+    "name": "ラナ",
+    "rarity": "",
+    "icon": "icons/npc_ラナ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "レッドウィンター",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_049",
+    "name": "モブキャラクター（レッドウィンター）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（レッドウィンター）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "レッドウィンター",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_050",
+    "name": "連邦生徒会長",
+    "rarity": "",
+    "icon": "icons/npc_連邦生徒会長.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_051",
+    "name": "リン",
+    "rarity": "",
+    "icon": "icons/npc_リン.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_052",
+    "name": "モモカ",
+    "rarity": "",
+    "icon": "icons/npc_モモカ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_053",
+    "name": "アユム",
+    "rarity": "",
+    "icon": "icons/npc_アユム.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_054",
+    "name": "カヤ",
+    "rarity": "",
+    "icon": "icons/npc_カヤ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_055",
+    "name": "アオイ",
+    "rarity": "",
+    "icon": "icons/npc_アオイ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_056",
+    "name": "ハイネ",
+    "rarity": "",
+    "icon": "icons/npc_ハイネ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_057",
+    "name": "スモモ",
+    "rarity": "",
+    "icon": "icons/npc_スモモ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_058",
+    "name": "（金髪）",
+    "rarity": "",
+    "icon": "icons/npc_（金髪）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_059",
+    "name": "モブキャラクター（連邦生徒会）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（連邦生徒会）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "連邦生徒会",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_060",
+    "name": "ユキノ",
+    "rarity": "",
+    "icon": "icons/npc_ユキノ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "SRT",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_061",
+    "name": "アキラ",
+    "rarity": "",
+    "icon": "icons/npc_アキラ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ワイルドハント",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_062",
+    "name": "ヒロミ",
+    "rarity": "",
+    "icon": "icons/npc_ヒロミ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ワイルドハント",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_063",
+    "name": "ツムギ",
+    "rarity": "",
+    "icon": "icons/npc_ツムギ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ワイルドハント",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_064",
+    "name": "生徒",
+    "rarity": "",
+    "icon": "icons/npc_生徒.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ワイルドハント",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_065",
+    "name": "モブキャラクター（ワイルドハント）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（ワイルドハント）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ワイルドハント",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_066",
+    "name": "カイ",
+    "rarity": "",
+    "icon": "icons/npc_カイ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_067",
+    "name": "アケミ",
+    "rarity": "",
+    "icon": "icons/npc_アケミ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_068",
+    "name": "ニヤニヤ教授",
+    "rarity": "",
+    "icon": "icons/npc_ニヤニヤ教授.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_069",
+    "name": "スイコ",
+    "rarity": "",
+    "icon": "icons/npc_スイコ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_070",
+    "name": "ナゴミ",
+    "rarity": "",
+    "icon": "icons/npc_ナゴミ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_071",
+    "name": "ヨウコ",
+    "rarity": "",
+    "icon": "icons/npc_ヨウコ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_072",
+    "name": "モブキャラクター（不良）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（不良）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_073",
+    "name": "（MG）",
+    "rarity": "",
+    "icon": "icons/npc_（MG）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_074",
+    "name": "（SMG）",
+    "rarity": "",
+    "icon": "icons/npc_（SMG）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_075",
+    "name": "モブキャラクター（その他）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（その他）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "その他",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_076",
+    "name": "ソラ",
+    "rarity": "",
+    "icon": "icons/npc_ソラ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "エンジェル24",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_077",
+    "name": "カイテンジャー",
+    "rarity": "",
+    "icon": "icons/npc_カイテンジャー.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "カイテンジャー",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_078",
+    "name": "プレジデント",
+    "rarity": "",
+    "icon": "icons/npc_プレジデント.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "カイザーコーポレーション",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_079",
+    "name": "ジェネラル",
+    "rarity": "",
+    "icon": "icons/npc_ジェネラル.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "カイザーコーポレーション",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_080",
+    "name": "カイザーPMC理事",
+    "rarity": "",
+    "icon": "icons/npc_カイザーPMC理事.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "カイザーコーポレーション",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_081",
+    "name": "モブキャラクター（エネミー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（エネミー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "カイザーコーポレーション",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_082",
+    "name": "特殊部隊員",
+    "rarity": "",
+    "icon": "icons/npc_特殊部隊員.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "カイザーコーポレーション",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_083",
+    "name": "モブキャラクター（エネミー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（エネミー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "黒亀組",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_084",
+    "name": "黒服",
+    "rarity": "",
+    "icon": "icons/npc_黒服.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲマトリア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_085",
+    "name": "マエストロ",
+    "rarity": "",
+    "icon": "icons/npc_マエストロ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲマトリア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_086",
+    "name": "デカルコマニー",
+    "rarity": "",
+    "icon": "icons/npc_デカルコマニー.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲマトリア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_087",
+    "name": "フランシス",
+    "rarity": "",
+    "icon": "icons/npc_フランシス.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲマトリア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_088",
+    "name": "オーウェル",
+    "rarity": "",
+    "icon": "icons/npc_オーウェル.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲマトリア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_089",
+    "name": "ベアトリーチェ",
+    "rarity": "",
+    "icon": "icons/npc_ベアトリーチェ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲマトリア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_090",
+    "name": "地下生活者",
+    "rarity": "",
+    "icon": "icons/npc_地下生活者.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ゲマトリア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_091",
+    "name": "プレナパテス",
+    "rarity": "",
+    "icon": "icons/npc_プレナパテス.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "色彩",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_092",
+    "name": "デカグラマトン",
+    "rarity": "",
+    "icon": "icons/npc_デカグラマトン.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "デカグラマトン",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_093",
+    "name": "マルクト",
+    "rarity": "",
+    "icon": "icons/npc_マルクト.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "デカグラマトン",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_094",
+    "name": "アイン",
+    "rarity": "",
+    "icon": "icons/npc_アイン.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "デカグラマトン",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_095",
+    "name": "ソフ",
+    "rarity": "",
+    "icon": "icons/npc_ソフ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "デカグラマトン",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_096",
+    "name": "オウル",
+    "rarity": "",
+    "icon": "icons/npc_オウル.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "デカグラマトン",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_097",
+    "name": "兵士",
+    "rarity": "",
+    "icon": "icons/npc_兵士.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "デカグラマトン",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_098",
+    "name": "モブキャラクター（エネミー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（エネミー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "デカグラマトン",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_099",
+    "name": "アランチーノ",
+    "rarity": "",
+    "icon": "icons/npc_アランチーノ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ブラックマーケット関連",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_100",
+    "name": "無名の司祭",
+    "rarity": "",
+    "icon": "icons/npc_無名の司祭.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "無名の司祭",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_101",
+    "name": "（ロボット）",
+    "rarity": "",
+    "icon": "icons/npc_（ロボット）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "無名の司祭",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_102",
+    "name": "モブキャラクター（エネミー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（エネミー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "無名の司祭",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_103",
+    "name": "無貌の形代",
+    "rarity": "",
+    "icon": "icons/npc_無貌の形代.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百物語",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_104",
+    "name": "モブキャラクター（エネミー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（エネミー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "百物語",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_105",
+    "name": "モブキャラクター（エネミー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（エネミー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ロア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_106",
+    "name": "ペロロ",
+    "rarity": "",
+    "icon": "icons/npc_ペロロ.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "モモフレンズ",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_107",
+    "name": "柴大将",
+    "rarity": "",
+    "icon": "icons/npc_柴大将.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "市民",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_108",
+    "name": "ニャン天丸",
+    "rarity": "",
+    "icon": "icons/npc_ニャン天丸.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "市民",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_109",
+    "name": "デカルト",
+    "rarity": "",
+    "icon": "icons/npc_デカルト.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "市民",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_110",
+    "name": "スズメ亭の女将",
+    "rarity": "",
+    "icon": "icons/npc_スズメ亭の女将.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "市民",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_111",
+    "name": "DJ B.o.B",
+    "rarity": "",
+    "icon": "icons/npc_DJ B.o.B.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "市民",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_112",
+    "name": "シャインキャット",
+    "rarity": "",
+    "icon": "icons/npc_シャインキャット.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "市民",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_113",
+    "name": "モブキャラクター（市民）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（市民）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "市民",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
   }
 ]

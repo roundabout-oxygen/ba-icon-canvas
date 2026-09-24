@@ -27,6 +27,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [selectedRole, setSelectedRole] = useState<string>('all');
   const [selectedClass, setSelectedClass] = useState<string>('all');
   const [selectedSchool, setSelectedSchool] = useState<string>('all');
+  const [implementationFilter, setImplementationFilter] = useState<'all' | 'playable' | 'npc'>('playable');
   const [hoveredChar, setHoveredChar] = useState<Character | null>(null);
 
   // 範囲選択用ref
@@ -47,20 +48,51 @@ export const Sidebar: React.FC<SidebarProps> = ({
   // フィルタリング ＆ デフォルトであいうえお順（日本語五十音順）にソート
   const filteredCharacters = useMemo(() => {
     const list = characters.filter((char) => {
+      // 1. 実装状況フィルター ('playable' | 'npc' | 'all')
+      if (implementationFilter === 'playable' && char.is_npc) return false;
+      if (implementationFilter === 'npc' && !char.is_npc) return false;
+
+      // 2. 検索クエリ
       if (searchQuery.trim()) {
         if (!matchFuzzyJapanese(char.name, searchQuery)) return false;
       }
-      if (selectedAttack !== 'all' && char.attack_type !== selectedAttack) return false;
-      if (selectedDefense !== 'all' && char.defense_type !== selectedDefense) return false;
-      if (selectedRole !== 'all' && char.role !== selectedRole) return false;
-      if (selectedClass !== 'all' && char.class !== selectedClass) return false;
+
+      // 3. 学校フィルター
       if (selectedSchool !== 'all' && char.school !== selectedSchool) return false;
+
+      // 4. 属性・部隊・クラスフィルター
+      if (!char.is_npc) {
+        if (selectedAttack !== 'all' && char.attack_type !== selectedAttack) return false;
+        if (selectedDefense !== 'all' && char.defense_type !== selectedDefense) return false;
+        if (selectedRole !== 'all' && char.role !== selectedRole) return false;
+        if (selectedClass !== 'all' && char.class !== selectedClass) return false;
+      } else {
+        // NPC（未実装キャラ）の場合：属性フィルターが指定されている場合は除外
+        if (
+          selectedAttack !== 'all' ||
+          selectedDefense !== 'all' ||
+          selectedRole !== 'all' ||
+          selectedClass !== 'all'
+        ) {
+          return false;
+        }
+      }
+
       return true;
     });
 
     // あいうえお順（日本語ロケール）でソート
     return list.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
-  }, [characters, searchQuery, selectedAttack, selectedDefense, selectedRole, selectedClass, selectedSchool]);
+  }, [
+    characters,
+    implementationFilter,
+    searchQuery,
+    selectedAttack,
+    selectedDefense,
+    selectedRole,
+    selectedClass,
+    selectedSchool,
+  ]);
 
   // ドラッグ開始（複数選択時は選択中の全員、未選択アイコンをドラッグした場合はその1人）
   const handleDragStart = (e: React.DragEvent, char: Character) => {
@@ -276,12 +308,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* 攻撃タイプ */}
-        <div className="flex items-center gap-1">
-          <span className="text-[10px] text-slate-400 w-12 shrink-0">攻撃:</span>
-          <div className="grid grid-cols-6 gap-1 flex-1 text-[10px]">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-400 w-9 shrink-0 text-right pr-0.5">攻撃:</span>
+          <div className="flex items-center gap-1 flex-1 min-w-0">
             <button
               onClick={() => setSelectedAttack('all')}
-              className={`py-0.5 rounded text-center transition font-medium ${
+              className={`w-7 shrink-0 py-0.5 rounded text-center transition font-medium text-[10px] ${
                 selectedAttack === 'all'
                   ? 'bg-slate-700 text-white shadow-sm'
                   : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800'
@@ -289,35 +321,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               全
             </button>
-            {(['爆発', '貫通', '神秘', '振動', '分解'] as AttackType[]).map((atk) => {
-              const col = ATTACK_COLORS[atk];
-              const isSelected = selectedAttack === atk;
-              return (
-                <button
-                  key={atk}
-                  onClick={() => setSelectedAttack(isSelected ? 'all' : atk)}
-                  className={`py-0.5 rounded text-center transition font-medium border ${
-                    isSelected ? 'border-white text-white font-bold' : 'border-transparent text-slate-300'
-                  }`}
-                  style={{
-                    backgroundColor: isSelected ? col?.border : (col ? col.border + '33' : '#334155'),
-                    color: isSelected ? '#ffffff' : (col?.border || '#cbd5e1'),
-                  }}
-                >
-                  {atk}
-                </button>
-              );
-            })}
+            <div className="flex items-center gap-1 flex-1 min-w-0">
+              {(['爆発', '貫通', '神秘', '振動', '分解'] as AttackType[]).map((atk) => {
+                const col = ATTACK_COLORS[atk];
+                const isSelected = selectedAttack === atk;
+                return (
+                  <button
+                    key={atk}
+                    onClick={() => setSelectedAttack(isSelected ? 'all' : atk)}
+                    className={`flex-1 min-w-0 py-0.5 rounded text-center transition font-medium text-[10px] border ${
+                      isSelected ? 'border-white text-white font-bold' : 'border-transparent text-slate-300'
+                    }`}
+                    style={{
+                      backgroundColor: isSelected ? col?.border : (col ? col.border + '33' : '#334155'),
+                      color: isSelected ? '#ffffff' : (col?.border || '#cbd5e1'),
+                    }}
+                  >
+                    {atk}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* 防御タイプ */}
-        <div className="flex items-center gap-1">
-          <span className="text-[10px] text-slate-400 w-12 shrink-0">防御:</span>
-          <div className="grid grid-cols-6 gap-1 flex-1 text-[10px]">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-400 w-9 shrink-0 text-right pr-0.5">防御:</span>
+          <div className="flex items-center gap-1 flex-1 min-w-0">
             <button
               onClick={() => setSelectedDefense('all')}
-              className={`py-0.5 rounded text-center transition font-medium ${
+              className={`w-7 shrink-0 py-0.5 rounded text-center transition font-medium text-[10px] ${
                 selectedDefense === 'all'
                   ? 'bg-slate-700 text-white shadow-sm'
                   : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800'
@@ -325,41 +359,43 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               全
             </button>
-            {[
-              { label: '軽装', full: '軽装備' },
-              { label: '重装', full: '重装甲' },
-              { label: '特殊', full: '特殊装甲' },
-              { label: '弾力', full: '弾力装甲' },
-              { label: '複合', full: '複合装甲' },
-            ].map(({ label, full }) => {
-              const col = DEFENSE_COLORS[full];
-              const isSelected = selectedDefense === full;
-              return (
-                <button
-                  key={full}
-                  onClick={() => setSelectedDefense(isSelected ? 'all' : full)}
-                  className={`py-0.5 rounded text-center transition font-medium border ${
-                    isSelected ? 'border-white text-white font-bold' : 'border-transparent text-slate-300'
-                  }`}
-                  style={{
-                    backgroundColor: isSelected ? col?.border : (col ? col.border + '33' : '#334155'),
-                    color: isSelected ? '#ffffff' : (col?.border || '#cbd5e1'),
-                  }}
-                >
-                  {label}
-                </button>
-              );
-            })}
+            <div className="flex items-center gap-1 flex-1 min-w-0">
+              {[
+                { label: '軽装', full: '軽装備' },
+                { label: '重装', full: '重装甲' },
+                { label: '特殊', full: '特殊装甲' },
+                { label: '弾力', full: '弾力装甲' },
+                { label: '複合', full: '複合装甲' },
+              ].map(({ label, full }) => {
+                const col = DEFENSE_COLORS[full];
+                const isSelected = selectedDefense === full;
+                return (
+                  <button
+                    key={full}
+                    onClick={() => setSelectedDefense(isSelected ? 'all' : full)}
+                    className={`flex-1 min-w-0 py-0.5 rounded text-center transition font-medium text-[10px] border ${
+                      isSelected ? 'border-white text-white font-bold' : 'border-transparent text-slate-300'
+                    }`}
+                    style={{
+                      backgroundColor: isSelected ? col?.border : (col ? col.border + '33' : '#334155'),
+                      color: isSelected ? '#ffffff' : (col?.border || '#cbd5e1'),
+                    }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* 部隊区分（役割 / Role: ストライカー / スペシャル） */}
-        <div className="flex items-center gap-1">
-          <span className="text-[10px] text-slate-400 w-10 shrink-0">部隊:</span>
-          <div className="grid grid-cols-3 gap-1 flex-1 text-[10px]">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-400 w-9 shrink-0 text-right pr-0.5">部隊:</span>
+          <div className="flex items-center gap-1 flex-1 min-w-0">
             <button
               onClick={() => setSelectedRole('all')}
-              className={`py-0.5 rounded text-center transition font-medium ${
+              className={`w-7 shrink-0 py-0.5 rounded text-center transition font-medium text-[10px] ${
                 selectedRole === 'all'
                   ? 'bg-slate-700 text-white shadow-sm'
                   : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800'
@@ -367,36 +403,38 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               全
             </button>
-            <button
-              onClick={() => setSelectedRole(selectedRole === 'STRIKER' ? 'all' : 'STRIKER')}
-              className={`py-0.5 rounded text-center transition font-medium border ${
-                selectedRole === 'STRIKER'
-                  ? 'bg-red-950 text-red-300 border-red-500 font-bold shadow'
-                  : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
-              }`}
-            >
-              STRIKER
-            </button>
-            <button
-              onClick={() => setSelectedRole(selectedRole === 'SPECIAL' ? 'all' : 'SPECIAL')}
-              className={`py-0.5 rounded text-center transition font-medium border ${
-                selectedRole === 'SPECIAL'
-                  ? 'bg-blue-950 text-blue-300 border-blue-500 font-bold shadow'
-                  : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
-              }`}
-            >
-              SPECIAL
-            </button>
+            <div className="flex items-center gap-1 flex-1 min-w-0">
+              <button
+                onClick={() => setSelectedRole(selectedRole === 'STRIKER' ? 'all' : 'STRIKER')}
+                className={`flex-1 min-w-0 py-0.5 rounded text-center transition font-medium text-[10px] border ${
+                  selectedRole === 'STRIKER'
+                    ? 'bg-red-950 text-red-300 border-red-500 font-bold shadow'
+                    : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                STRIKER
+              </button>
+              <button
+                onClick={() => setSelectedRole(selectedRole === 'SPECIAL' ? 'all' : 'SPECIAL')}
+                className={`flex-1 min-w-0 py-0.5 rounded text-center transition font-medium text-[10px] border ${
+                  selectedRole === 'SPECIAL'
+                    ? 'bg-blue-950 text-blue-300 border-blue-500 font-bold shadow'
+                    : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                SPECIAL
+              </button>
+            </div>
           </div>
         </div>
 
         {/* クラス（アタッカー・サポーター・タンク・ヒーラー・T.S） */}
-        <div className="flex items-center gap-1">
-          <span className="text-[10px] text-slate-400 w-10 shrink-0">クラス:</span>
-          <div className="grid grid-cols-6 gap-0.5 flex-1 text-[9px]">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-400 w-9 shrink-0 text-right pr-0.5">クラス:</span>
+          <div className="flex items-center gap-1 flex-1 min-w-0">
             <button
               onClick={() => setSelectedClass('all')}
-              className={`py-0.5 rounded text-center transition font-medium ${
+              className={`w-7 shrink-0 py-0.5 rounded text-center transition font-medium text-[10px] ${
                 selectedClass === 'all'
                   ? 'bg-slate-700 text-white shadow-sm'
                   : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800'
@@ -404,39 +442,41 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               全
             </button>
-            {[
-              { label: '火力', full: 'アタッカー' },
-              { label: '支援', full: 'サポーター' },
-              { label: '盾', full: 'タンク' },
-              { label: '回復', full: 'ヒーラー' },
-              { label: 'T.S', full: 'T.S' },
-            ].map(({ label, full }) => {
-              const isSelected = selectedClass === full;
-              return (
-                <button
-                  key={full}
-                  onClick={() => setSelectedClass(isSelected ? 'all' : full)}
-                  className={`py-0.5 rounded text-center transition font-medium border truncate px-0.5 ${
-                    isSelected
-                      ? 'bg-cyan-950 text-cyan-300 border-cyan-500 font-bold shadow'
-                      : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
-                  }`}
-                  title={full}
-                >
-                  {label}
-                </button>
-              );
-            })}
+            <div className="flex items-center gap-1 flex-1 min-w-0">
+              {[
+                { label: '火力', full: 'アタッカー' },
+                { label: '支援', full: 'サポーター' },
+                { label: '盾', full: 'タンク' },
+                { label: '回復', full: 'ヒーラー' },
+                { label: 'T.S', full: 'T.S' },
+              ].map(({ label, full }) => {
+                const isSelected = selectedClass === full;
+                return (
+                  <button
+                    key={full}
+                    onClick={() => setSelectedClass(isSelected ? 'all' : full)}
+                    className={`flex-1 min-w-0 py-0.5 rounded text-center transition font-medium text-[10px] border truncate px-0.5 ${
+                      isSelected
+                        ? 'bg-cyan-950 text-cyan-300 border-cyan-500 font-bold shadow'
+                        : 'border-transparent bg-slate-800/60 text-slate-300 hover:bg-slate-800'
+                    }`}
+                    title={full}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* 学校 */}
-        <div className="flex items-center gap-1 pt-0.5">
-          <span className="text-[10px] text-slate-400 w-10 shrink-0">学校:</span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-400 w-9 shrink-0 text-right pr-0.5">学校:</span>
           <select
             value={selectedSchool}
             onChange={(e) => setSelectedSchool(e.target.value)}
-            className="flex-1 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-[10px] text-slate-300 focus:outline-none focus:border-cyan-500"
+            className="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-[10px] text-slate-300 focus:outline-none focus:border-cyan-500 cursor-pointer"
           >
             <option value="all">すべての学校</option>
             {schools.map((sc) => (
@@ -445,6 +485,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </option>
             ))}
           </select>
+        </div>
+
+        {/* 実装状況（一体型3択セグメントボタン: 全・実装済・未実装） */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-400 w-9 shrink-0 text-right pr-0.5">実装:</span>
+          <div className="flex items-center gap-1 flex-1 min-w-0 bg-slate-950/50 p-0.5 rounded border border-slate-800">
+            <button
+              onClick={() => setImplementationFilter('all')}
+              className={`w-7 shrink-0 py-0.5 rounded text-center transition font-bold text-[10px] ${
+                implementationFilter === 'all'
+                  ? 'bg-teal-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+              }`}
+              title="実装済み・未実装（両方）を表示"
+            >
+              全
+            </button>
+            <div className="flex items-center gap-1 flex-1 min-w-0">
+              <button
+                onClick={() => setImplementationFilter('playable')}
+                className={`flex-1 min-w-0 py-0.5 rounded text-center transition font-bold text-[10px] ${
+                  implementationFilter === 'playable'
+                    ? 'bg-teal-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                }`}
+                title="実装済みキャラクターのみ表示 (通常)"
+              >
+                実装済
+              </button>
+              <button
+                onClick={() => setImplementationFilter('npc')}
+                className={`flex-1 min-w-0 py-0.5 rounded text-center transition font-bold text-[10px] ${
+                  implementationFilter === 'npc'
+                    ? 'bg-amber-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                }`}
+                title="未実装キャラクター (NPC) のみ表示"
+              >
+                未実装
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* 選択操作バー（複数選択・全選択・一括追加） */}
@@ -519,7 +601,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     ? 'border-cyan-700/80 ring-1 ring-cyan-600/40 opacity-90'
                     : 'border-slate-700/80 hover:border-slate-400'
                 }`}
-                title={`${char.name}\n攻撃: ${char.attack_type} / 防御: ${char.defense_type}\n(クリックで選択、ドラッグで追加)`}
+                title={
+                  char.is_npc
+                    ? `${char.name} (${char.school})\n未実装キャラクター\n(クリックで選択、ドラッグで追加)`
+                    : `${char.name}\n攻撃: ${char.attack_type} / 防御: ${char.defense_type}\n(クリックで選択、ドラッグで追加)`
+                }
               >
                 {/* アイコン画像 */}
                 <img
@@ -529,17 +615,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   loading="lazy"
                 />
 
-                {/* 攻撃・防御のインジケータードット */}
-                <div className="absolute top-0.5 left-0.5 flex gap-0.5 pointer-events-none">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full shadow border border-black/50"
-                    style={{ backgroundColor: atkColor }}
-                  />
-                  <span
-                    className="w-1.5 h-1.5 rounded-full shadow border border-black/50"
-                    style={{ backgroundColor: defColor }}
-                  />
-                </div>
+                {/* 攻撃・防御のインジケータードット (NPCの場合は未実装バッジ) */}
+                {!char.is_npc ? (
+                  <div className="absolute top-0.5 left-0.5 flex gap-0.5 pointer-events-none">
+                    <span
+                      className="w-1.5 h-1.5 rounded-full shadow border border-black/50"
+                      style={{ backgroundColor: atkColor }}
+                    />
+                    <span
+                      className="w-1.5 h-1.5 rounded-full shadow border border-black/50"
+                      style={{ backgroundColor: defColor }}
+                    />
+                  </div>
+                ) : (
+                  <div className="absolute top-0.5 left-0.5 pointer-events-none">
+                    <span className="text-[7px] font-black px-1 py-0.2 rounded bg-amber-500 text-slate-950 shadow-sm border border-amber-300/50">
+                      NPC
+                    </span>
+                  </div>
+                )}
 
                 {/* 配置済みチェック */}
                 {isPlaced && (
@@ -563,7 +657,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {filteredCharacters.length === 0 && (
           <div className="col-span-full py-12 text-center text-slate-500 text-xs">
-            該当する生徒が見つかりません
+            該当する生徒・キャラクターが見つかりません
           </div>
         )}
 
@@ -588,17 +682,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <img src={hoveredChar.icon} alt="" className="w-8 h-8 rounded object-cover border border-slate-700 shrink-0" />
             <div className="flex-1 min-w-0">
               <div className="font-bold text-slate-200 truncate text-[11px]">{hoveredChar.name}</div>
-              <div className="text-[9px] text-slate-400 flex items-center gap-1.5">
-                <span>{hoveredChar.school}</span>
-                <span className="font-bold text-slate-300">{hoveredChar.role}</span>
-                <span className="bg-slate-800 px-1 rounded text-cyan-300">{hoveredChar.class}</span>
-                <span style={{ color: ATTACK_COLORS[hoveredChar.attack_type]?.border }}>
-                  {hoveredChar.attack_type}
-                </span>
-                <span style={{ color: DEFENSE_COLORS[hoveredChar.defense_type]?.border }}>
-                  {hoveredChar.defense_type}
-                </span>
-              </div>
+              {hoveredChar.is_npc ? (
+                <div className="text-[9px] text-slate-400 flex items-center gap-1.5">
+                  <span>{hoveredChar.school}</span>
+                  <span className="bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded border border-amber-800 font-bold">
+                    未実装キャラクター
+                  </span>
+                </div>
+              ) : (
+                <div className="text-[9px] text-slate-400 flex items-center gap-1.5">
+                  <span>{hoveredChar.school}</span>
+                  <span className="font-bold text-slate-300">{hoveredChar.role}</span>
+                  <span className="bg-slate-800 px-1 rounded text-cyan-300">{hoveredChar.class}</span>
+                  <span style={{ color: ATTACK_COLORS[hoveredChar.attack_type]?.border }}>
+                    {hoveredChar.attack_type}
+                  </span>
+                  <span style={{ color: DEFENSE_COLORS[hoveredChar.defense_type]?.border }}>
+                    {hoveredChar.defense_type}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         ) : (
