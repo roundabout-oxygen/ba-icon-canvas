@@ -1,8 +1,8 @@
 import os
 import re
 import json
+import time
 import urllib.request
-from concurrent.futures import ThreadPoolExecutor
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ICONS_DIR = os.path.join(BASE_DIR, "public", "icons")
@@ -11,11 +11,14 @@ DIST_JSON = os.path.join(BASE_DIR, "dist", "characters.json")
 
 os.makedirs(ICONS_DIR, exist_ok=True)
 
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+# Wiki管理者へ配慮した User-Agent (一般的なブラウザ識別 + プロジェクト識別情報)
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 (BlueArchiveIconCanvas-SyncBot/1.0; +https://github.com/roundabout-oxygen/ba-icon-canvas)'
+}
 
-# 1. プレイアブルキャラ
+# 1. プレイアブルキャラクター一覧取得 (1リクエスト)
 url_chars = 'https://bluearchive.wikiru.jp/?%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E4%B8%80%E8%A6%A7'
-print("Fetching playable characters...")
+print("Fetching playable characters list from wiki...")
 req = urllib.request.Request(url_chars, headers=headers)
 with urllib.request.urlopen(req, timeout=15) as res:
     chars_html = res.read().decode('utf-8', errors='ignore')
@@ -68,12 +71,14 @@ for i, r in enumerate(rows[1:]):
             'is_npc': False
         })
 
-print(f"Loaded {len(playable_characters)} playable characters.")
+print(f"Loaded {len(playable_characters)} playable characters from wiki.")
 playable_names = set(c['name'] for c in playable_characters)
 
-# 2. NPCキャラ
+# 2. リクエスト間隔を空けてから NPC一覧取得 (1リクエスト)
+time.sleep(1.5)
+
 url_npc = 'https://bluearchive.wikiru.jp/?NPC%E4%B8%80%E8%A6%A7'
-print("Fetching NPC characters...")
+print("Fetching NPC characters list from wiki...")
 req_npc = urllib.request.Request(url_npc, headers=headers)
 with urllib.request.urlopen(req_npc, timeout=15) as res:
     npc_html = res.read().decode('utf-8', errors='ignore')
@@ -188,36 +193,35 @@ for n in npc_candidates:
 
 print(f"Loaded {len(unique_npcs)} unique NPC characters.")
 
-# アイコンダウンロード
+# 3. 差分アイコンダウンロード (新規キャラのみ、サーバー負荷軽減のため1件ずつ1.5秒インターバル)
 all_targets = playable_characters + unique_npcs
-print(f"Total characters to verify/download: {len(all_targets)}")
+print(f"Total characters verified: {len(all_targets)}")
 
-def download_icon(char):
+new_downloads = 0
+for char in all_targets:
     if not char['img_url']:
-        return char['name'], False
+        continue
     target_path = os.path.join(ICONS_DIR, char['filename'])
     if os.path.exists(target_path) and os.path.getsize(target_path) > 0:
-        return char['name'], True
+        continue
+    
+    # 既存ローカルに存在しない新規キャラのみダウンロード
+    print(f"New character icon found: {char['name']} -> downloading...")
+    time.sleep(1.5)  # 連続アクセスを防止しWikiへの負荷を最小限に抑える
     try:
         req = urllib.request.Request(char['img_url'], headers=headers)
         with urllib.request.urlopen(req, timeout=12) as res:
             data = res.read()
             with open(target_path, 'wb') as out_f:
                 out_f.write(data)
-        return char['name'], True
+        new_downloads += 1
     except Exception as e:
-        print(f"Error downloading {char['name']} ({char['img_url']}): {e}")
-        return char['name'], False
+        print(f"Error downloading icon for {char['name']}: {e}")
 
-with ThreadPoolExecutor(max_workers=10) as executor:
-    results = list(executor.map(download_icon, all_targets))
+print(f"Icon sync completed. Newly downloaded icons: {new_downloads}")
 
-ok_count = sum(1 for _, ok in results if ok)
-print(f"Download complete: {ok_count}/{len(all_targets)} icons present.")
-
-# 統合リスト構築
+# 4. 統合データベース保存
 final_db = []
-# 1. プレイアブルキャラ
 for idx, c in enumerate(playable_characters):
     final_db.append({
         'id': f"char_{idx+1:03d}",
@@ -235,7 +239,6 @@ for idx, c in enumerate(playable_characters):
         'is_npc': False
     })
 
-# 2. NPCキャラ
 for idx, c in enumerate(unique_npcs):
     final_db.append({
         'id': f"npc_{idx+1:03d}",
@@ -260,4 +263,4 @@ if os.path.exists(os.path.dirname(DIST_JSON)):
     with open(DIST_JSON, "w", encoding="utf-8") as f:
         json.dump(final_db, f, ensure_ascii=False, indent=2)
 
-print(f"Successfully saved {len(final_db)} characters to {OUTPUT_JSON}.")
+print(f"Database successfully updated. Total entries: {len(final_db)}")

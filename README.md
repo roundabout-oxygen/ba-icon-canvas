@@ -1,4 +1,4 @@
-# BlueArchive Icon Canvas (v1.0.24)
+# BlueArchive Icon Canvas (v1.0.25)
 
 ブルーアーカイブ（ブルアカ）のキャラクターアイコンを自由に配置・整列・枠囲み・テキスト編集できるキャンバス作成ツールです。
 

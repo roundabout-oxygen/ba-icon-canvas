@@ -1,0 +1,82 @@
+name: Monthly Character Sync
+
+on:
+  schedule:
+    # 毎月1日 日本時間 04:00 (UTC 前日19:00) に自動実行
+    - cron: '0 19 1 * *'
+  # GitHub画面の「Actions」から手動でいつでも実行可能
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Sync characters and icons from wiki
+        run: python scripts/sync_characters_and_npcs.py
+
+      - name: Check for updates
+        id: git_check
+        run: |
+          if [ -n "$(git status --porcelain public/)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "New characters or icons detected."
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No new characters found. Database is already up-to-date."
+          fi
+
+      - name: Commit and push updates to repository
+        if: steps.git_check.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/icons/ public/characters.json
+          git commit -m "chore(sync): monthly update of characters and icons from wiki"
+          git push
+
+      - name: Set up Node.js for Web deployment
+        if: steps.git_check.outputs.has_changes == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.git_check.outputs.has_changes == 'true'
+        run: npm ci
+
+      - name: Build Web Application
+        if: steps.git_check.outputs.has_changes == 'true'
+        run: npm run build
+
+      - name: Setup Pages
+        if: steps.git_check.outputs.has_changes == 'true'
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact for GitHub Pages
+        if: steps.git_check.outputs.has_changes == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        if: steps.git_check.outputs.has_changes == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
