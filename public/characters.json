@@ -4876,6 +4876,21 @@
   },
   {
     "id": "npc_049",
+    "name": "生徒",
+    "rarity": "",
+    "icon": "icons/npc_生徒.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "レッドウィンター",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_050",
     "name": "モブキャラクター（レッドウィンター）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（レッドウィンター）.png",
@@ -4890,7 +4905,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_050",
+    "id": "npc_051",
     "name": "連邦生徒会長",
     "rarity": "",
     "icon": "icons/npc_連邦生徒会長.png",
@@ -4905,7 +4920,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_051",
+    "id": "npc_052",
     "name": "リン",
     "rarity": "",
     "icon": "icons/npc_リン.png",
@@ -4920,7 +4935,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_052",
+    "id": "npc_053",
     "name": "モモカ",
     "rarity": "",
     "icon": "icons/npc_モモカ.png",
@@ -4935,7 +4950,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_053",
+    "id": "npc_054",
     "name": "アユム",
     "rarity": "",
     "icon": "icons/npc_アユム.png",
@@ -4950,7 +4965,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_054",
+    "id": "npc_055",
     "name": "カヤ",
     "rarity": "",
     "icon": "icons/npc_カヤ.png",
@@ -4965,7 +4980,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_055",
+    "id": "npc_056",
     "name": "アオイ",
     "rarity": "",
     "icon": "icons/npc_アオイ.png",
@@ -4980,7 +4995,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_056",
+    "id": "npc_057",
     "name": "ハイネ",
     "rarity": "",
     "icon": "icons/npc_ハイネ.png",
@@ -4995,7 +5010,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_057",
+    "id": "npc_058",
     "name": "スモモ",
     "rarity": "",
     "icon": "icons/npc_スモモ.png",
@@ -5010,7 +5025,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_058",
+    "id": "npc_059",
     "name": "（金髪）",
     "rarity": "",
     "icon": "icons/npc_（金髪）.png",
@@ -5025,7 +5040,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_059",
+    "id": "npc_060",
     "name": "モブキャラクター（連邦生徒会）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（連邦生徒会）.png",
@@ -5040,7 +5055,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_060",
+    "id": "npc_061",
     "name": "ユキノ",
     "rarity": "",
     "icon": "icons/npc_ユキノ.png",
@@ -5055,7 +5070,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_061",
+    "id": "npc_062",
     "name": "アキラ",
     "rarity": "",
     "icon": "icons/npc_アキラ.png",
@@ -5070,7 +5085,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_062",
+    "id": "npc_063",
     "name": "ヒロミ",
     "rarity": "",
     "icon": "icons/npc_ヒロミ.png",
@@ -5085,7 +5100,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_063",
+    "id": "npc_064",
     "name": "ツムギ",
     "rarity": "",
     "icon": "icons/npc_ツムギ.png",
@@ -5100,7 +5115,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_064",
+    "id": "npc_065",
     "name": "生徒",
     "rarity": "",
     "icon": "icons/npc_生徒.png",
@@ -5115,7 +5130,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_065",
+    "id": "npc_066",
     "name": "モブキャラクター（ワイルドハント）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（ワイルドハント）.png",
@@ -5130,7 +5145,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_066",
+    "id": "npc_067",
     "name": "カイ",
     "rarity": "",
     "icon": "icons/npc_カイ.png",
@@ -5145,7 +5160,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_067",
+    "id": "npc_068",
     "name": "アケミ",
     "rarity": "",
     "icon": "icons/npc_アケミ.png",
@@ -5160,7 +5175,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_068",
+    "id": "npc_069",
     "name": "ニヤニヤ教授",
     "rarity": "",
     "icon": "icons/npc_ニヤニヤ教授.png",
@@ -5175,7 +5190,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_069",
+    "id": "npc_070",
     "name": "スイコ",
     "rarity": "",
     "icon": "icons/npc_スイコ.png",
@@ -5190,7 +5205,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_070",
+    "id": "npc_071",
     "name": "ナゴミ",
     "rarity": "",
     "icon": "icons/npc_ナゴミ.png",
@@ -5205,7 +5220,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_071",
+    "id": "npc_072",
     "name": "ヨウコ",
     "rarity": "",
     "icon": "icons/npc_ヨウコ.png",
@@ -5220,7 +5235,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_072",
+    "id": "npc_073",
     "name": "モブキャラクター（不良）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（不良）.png",
@@ -5235,7 +5250,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_073",
+    "id": "npc_074",
     "name": "（MG）",
     "rarity": "",
     "icon": "icons/npc_（MG）.png",
@@ -5250,7 +5265,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_074",
+    "id": "npc_075",
     "name": "（SMG）",
     "rarity": "",
     "icon": "icons/npc_（SMG）.png",
@@ -5265,7 +5280,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_075",
+    "id": "npc_076",
     "name": "モブキャラクター（その他）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（その他）.png",
@@ -5280,7 +5295,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_076",
+    "id": "npc_077",
     "name": "ソラ",
     "rarity": "",
     "icon": "icons/npc_ソラ.png",
@@ -5295,7 +5310,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_077",
+    "id": "npc_078",
     "name": "カイテンジャー",
     "rarity": "",
     "icon": "icons/npc_カイテンジャー.png",
@@ -5310,7 +5325,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_078",
+    "id": "npc_079",
     "name": "プレジデント",
     "rarity": "",
     "icon": "icons/npc_プレジデント.png",
@@ -5325,7 +5340,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_079",
+    "id": "npc_080",
     "name": "ジェネラル",
     "rarity": "",
     "icon": "icons/npc_ジェネラル.png",
@@ -5340,7 +5355,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_080",
+    "id": "npc_081",
     "name": "カイザーPMC理事",
     "rarity": "",
     "icon": "icons/npc_カイザーPMC理事.png",
@@ -5355,7 +5370,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_081",
+    "id": "npc_082",
     "name": "モブキャラクター（エネミー）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（エネミー）.png",
@@ -5370,7 +5385,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_082",
+    "id": "npc_083",
     "name": "特殊部隊員",
     "rarity": "",
     "icon": "icons/npc_特殊部隊員.png",
@@ -5385,7 +5400,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_083",
+    "id": "npc_084",
     "name": "モブキャラクター（エネミー）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（エネミー）.png",
@@ -5400,7 +5415,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_084",
+    "id": "npc_085",
     "name": "黒服",
     "rarity": "",
     "icon": "icons/npc_黒服.png",
@@ -5415,7 +5430,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_085",
+    "id": "npc_086",
     "name": "マエストロ",
     "rarity": "",
     "icon": "icons/npc_マエストロ.png",
@@ -5430,7 +5445,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_086",
+    "id": "npc_087",
     "name": "デカルコマニー",
     "rarity": "",
     "icon": "icons/npc_デカルコマニー.png",
@@ -5445,7 +5460,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_087",
+    "id": "npc_088",
     "name": "フランシス",
     "rarity": "",
     "icon": "icons/npc_フランシス.png",
@@ -5460,7 +5475,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_088",
+    "id": "npc_089",
     "name": "オーウェル",
     "rarity": "",
     "icon": "icons/npc_オーウェル.png",
@@ -5475,7 +5490,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_089",
+    "id": "npc_090",
     "name": "ベアトリーチェ",
     "rarity": "",
     "icon": "icons/npc_ベアトリーチェ.png",
@@ -5490,7 +5505,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_090",
+    "id": "npc_091",
     "name": "地下生活者",
     "rarity": "",
     "icon": "icons/npc_地下生活者.png",
@@ -5505,7 +5520,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_091",
+    "id": "npc_092",
     "name": "プレナパテス",
     "rarity": "",
     "icon": "icons/npc_プレナパテス.png",
@@ -5520,7 +5535,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_092",
+    "id": "npc_093",
     "name": "デカグラマトン",
     "rarity": "",
     "icon": "icons/npc_デカグラマトン.png",
@@ -5535,7 +5550,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_093",
+    "id": "npc_094",
     "name": "マルクト",
     "rarity": "",
     "icon": "icons/npc_マルクト.png",
@@ -5550,7 +5565,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_094",
+    "id": "npc_095",
     "name": "アイン",
     "rarity": "",
     "icon": "icons/npc_アイン.png",
@@ -5565,7 +5580,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_095",
+    "id": "npc_096",
     "name": "ソフ",
     "rarity": "",
     "icon": "icons/npc_ソフ.png",
@@ -5580,7 +5595,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_096",
+    "id": "npc_097",
     "name": "オウル",
     "rarity": "",
     "icon": "icons/npc_オウル.png",
@@ -5595,7 +5610,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_097",
+    "id": "npc_098",
     "name": "兵士",
     "rarity": "",
     "icon": "icons/npc_兵士.png",
@@ -5610,7 +5625,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_098",
+    "id": "npc_099",
     "name": "モブキャラクター（エネミー）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（エネミー）.png",
@@ -5625,7 +5640,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_099",
+    "id": "npc_100",
     "name": "アランチーノ",
     "rarity": "",
     "icon": "icons/npc_アランチーノ.png",
@@ -5640,7 +5655,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_100",
+    "id": "npc_101",
     "name": "無名の司祭",
     "rarity": "",
     "icon": "icons/npc_無名の司祭.png",
@@ -5655,7 +5670,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_101",
+    "id": "npc_102",
     "name": "（ロボット）",
     "rarity": "",
     "icon": "icons/npc_（ロボット）.png",
@@ -5670,7 +5685,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_102",
+    "id": "npc_103",
     "name": "モブキャラクター（エネミー）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（エネミー）.png",
@@ -5685,25 +5700,10 @@
     "is_npc": true
   },
   {
-    "id": "npc_103",
+    "id": "npc_104",
     "name": "無貌の形代",
     "rarity": "",
     "icon": "icons/npc_無貌の形代.png",
-    "weapon": "",
-    "cover": "",
-    "role": "",
-    "pos": "",
-    "class": "",
-    "school": "百物語",
-    "attack_type": "",
-    "defense_type": "",
-    "is_npc": true
-  },
-  {
-    "id": "npc_104",
-    "name": "モブキャラクター（エネミー）",
-    "rarity": "",
-    "icon": "icons/npc_モブキャラクター（エネミー）.png",
     "weapon": "",
     "cover": "",
     "role": "",
@@ -5724,13 +5724,28 @@
     "role": "",
     "pos": "",
     "class": "",
-    "school": "ロア",
+    "school": "百物語",
     "attack_type": "",
     "defense_type": "",
     "is_npc": true
   },
   {
     "id": "npc_106",
+    "name": "モブキャラクター（エネミー）",
+    "rarity": "",
+    "icon": "icons/npc_モブキャラクター（エネミー）.png",
+    "weapon": "",
+    "cover": "",
+    "role": "",
+    "pos": "",
+    "class": "",
+    "school": "ロア",
+    "attack_type": "",
+    "defense_type": "",
+    "is_npc": true
+  },
+  {
+    "id": "npc_107",
     "name": "ペロロ",
     "rarity": "",
     "icon": "icons/npc_ペロロ.png",
@@ -5745,7 +5760,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_107",
+    "id": "npc_108",
     "name": "柴大将",
     "rarity": "",
     "icon": "icons/npc_柴大将.png",
@@ -5760,7 +5775,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_108",
+    "id": "npc_109",
     "name": "ニャン天丸",
     "rarity": "",
     "icon": "icons/npc_ニャン天丸.png",
@@ -5775,7 +5790,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_109",
+    "id": "npc_110",
     "name": "デカルト",
     "rarity": "",
     "icon": "icons/npc_デカルト.png",
@@ -5790,7 +5805,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_110",
+    "id": "npc_111",
     "name": "スズメ亭の女将",
     "rarity": "",
     "icon": "icons/npc_スズメ亭の女将.png",
@@ -5805,7 +5820,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_111",
+    "id": "npc_112",
     "name": "DJ B.o.B",
     "rarity": "",
     "icon": "icons/npc_DJ B.o.B.png",
@@ -5820,7 +5835,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_112",
+    "id": "npc_113",
     "name": "シャインキャット",
     "rarity": "",
     "icon": "icons/npc_シャインキャット.png",
@@ -5835,7 +5850,7 @@
     "is_npc": true
   },
   {
-    "id": "npc_113",
+    "id": "npc_114",
     "name": "モブキャラクター（市民）",
     "rarity": "",
     "icon": "icons/npc_モブキャラクター（市民）.png",
